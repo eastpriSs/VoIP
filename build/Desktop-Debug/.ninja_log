@@ -1,0 +1,27 @@
+# ninja log v6
+7	53	1782228878449256459	untitled_autogen/timestamp	dc77487c5bceae81
+7	53	1782228878449256459	untitled_autogen/mocs_compilation.cpp	dc77487c5bceae81
+53	3051	1782228878497085778	CMakeFiles/untitled.dir/mainwindow.cpp.o	5dbee9f87e9c1bbe
+7	53	1782228878449256459	/home/eastpris/летняя_практика/app/untitled/build/Desktop-Debug/untitled_autogen/timestamp	dc77487c5bceae81
+7	53	1782228878449256459	/home/eastpris/летняя_практика/app/untitled/build/Desktop-Debug/untitled_autogen/mocs_compilation.cpp	dc77487c5bceae81
+485	3209	1782228046165202447	CMakeFiles/untitled.dir/untitled_autogen/mocs_compilation.cpp.o	f1b1499ddd43ee5b
+82	3989	1782228071746058303	CMakeFiles/untitled.dir/main.cpp.o	6abda24a0e99f858
+3990	4513	1782228075654130861	untitled	a5aa6d63869ff8c9
+4	564	1782229009192271626	untitled_autogen/timestamp	dc77487c5bceae81
+4	564	1782229009192271626	untitled_autogen/mocs_compilation.cpp	dc77487c5bceae81
+4	564	1782229009192271626	/home/eastpris/летняя_практика/app/untitled/build/Desktop-Debug/untitled_autogen/timestamp	dc77487c5bceae81
+4	564	1782229009192271626	/home/eastpris/летняя_практика/app/untitled/build/Desktop-Debug/untitled_autogen/mocs_compilation.cpp	dc77487c5bceae81
+565	6478	1782229009208271636	CMakeFiles/untitled.dir/untitled_autogen/mocs_compilation.cpp.o	fb8bb423ce26f62e
+565	6600	1782229009210195780	CMakeFiles/untitled.dir/mainwindow.cpp.o	2835b8b109a70471
+10	77	1782229048434300395	untitled_autogen/timestamp	dc77487c5bceae81
+10	77	1782229048434300395	untitled_autogen/mocs_compilation.cpp	dc77487c5bceae81
+10	77	1782229048434300395	/home/eastpris/летняя_практика/app/untitled/build/Desktop-Debug/untitled_autogen/timestamp	dc77487c5bceae81
+10	77	1782229048434300395	/home/eastpris/летняя_практика/app/untitled/build/Desktop-Debug/untitled_autogen/mocs_compilation.cpp	dc77487c5bceae81
+78	4189	1782229048502300530	CMakeFiles/untitled.dir/mainwindow.cpp.o	2835b8b109a70471
+7	50	1782229210497675929	untitled_autogen/timestamp	dc77487c5bceae81
+7	50	1782229210497675929	untitled_autogen/mocs_compilation.cpp	dc77487c5bceae81
+7	50	1782229210497675929	/home/eastpris/летняя_практика/app/untitled/build/Desktop-Debug/untitled_autogen/timestamp	dc77487c5bceae81
+7	50	1782229210497675929	/home/eastpris/летняя_практика/app/untitled/build/Desktop-Debug/untitled_autogen/mocs_compilation.cpp	dc77487c5bceae81
+50	4490	1782229210542022174	CMakeFiles/untitled.dir/mainwindow.cpp.o	2835b8b109a70471
+50	4823	1782229210540676076	CMakeFiles/untitled.dir/main.cpp.o	f78035e422320b48
+4823	5483	1782229215313692317	untitled	a5aa6d63869ff8c9
