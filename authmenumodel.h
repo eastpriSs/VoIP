@@ -16,9 +16,6 @@ signals:
     void loginFailed(const QString& error);
     void registerSuccess();
     void registerFailed(const QString& error);
-
-private:
-    bool validateCredentials(const QString& username, const QString& password);
 };
 
 #endif // AUTHMENUMODEL_H

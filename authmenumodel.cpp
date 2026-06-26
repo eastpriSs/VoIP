@@ -1,26 +1,25 @@
-#include "authmenumodel.h"
 #include <QDebug>
+#include "authmenumodel.h"
+#include "validation.h"
+#include "lexicalvalidation.h"
+#include "databasevalidation.h"
 
 AuthMenuModel::AuthMenuModel(QObject *parent) : QObject(parent) {}
 
-bool AuthMenuModel::validateCredentials(const QString& username, const QString& password) {
-    return !username.isEmpty() && !password.isEmpty();
-}
-
 void AuthMenuModel::login(const QString& username, const QString& password) {
-    qDebug() << "Login attempt:" << username;
-    if (validateCredentials(username, password)) {
-        emit loginSuccess();
-    } else {
-        emit loginFailed("Неверный логин или пароль");
-    }
+    using namespace Validation;
+
+    std::unique_ptr<IValidation> validator =
+        std::make_unique<LexicalValidation>(
+            std::make_unique<DataBaseValidation>(nullptr)
+    );
+    QString error;
+    if ( !validator->validate(username, password, error) )
+        emit loginFailed(std::move(error));
+    else emit loginSuccess();
 }
 
 void AuthMenuModel::registerUser(const QString& username, const QString& password) {
-    qDebug() << "Register attempt:" << username;
-    if (validateCredentials(username, password)) {
-        emit registerSuccess();
-    } else {
-        emit registerFailed("Логин и пароль не могут быть пустыми");
-    }
+    using namespace Validation;
+
 }
