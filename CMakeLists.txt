@@ -27,9 +27,20 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+
     qt_add_executable(untitled
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+
+
+        authmenu.h authmenu.cpp
+        authmenupresenter.h authmenupresenter.cpp
+        authmenumodel.h authmenumodel.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET untitled APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -54,6 +65,11 @@ target_link_libraries(untitled PRIVATE
     ${OPUS_LIBRARIES}
     ${PJPROJECT_LIBRARIES}
 )
+target_link_libraries(untitled PRIVATE Qt6::Core)
+target_link_libraries(untitled PRIVATE Qt6::Core)
+target_link_libraries(untitled PRIVATE Qt6::Core Qt6::Widgets)
+target_link_libraries(untitled PRIVATE Qt6::Core)
+target_link_libraries(untitled PRIVATE Qt6::Core)
 
 target_include_directories(untitled PRIVATE
     ${OPUS_INCLUDE_DIRS}
