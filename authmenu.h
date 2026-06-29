@@ -2,7 +2,6 @@
 #define AUTHMENU_H
 
 #include <QDialog>
-#include <memory>
 
 class QLineEdit;
 class QPushButton;
@@ -16,7 +15,11 @@ public:
 
 signals:
     void loginRequested(const QString& username, const QString& password);
-    void registerRequested(const QString& username, const QString& password);
+
+    void registerRequested(const QString& username,
+                           const QString& password,
+                           const QString& sipServer,
+                           int sipPort);
     void cancelRequested();
 
 private slots:
@@ -26,6 +29,8 @@ private slots:
 private:
     QLineEdit* usernameEdit;
     QLineEdit* passwordEdit;
+    QLineEdit* sipServerEdit;
+    QLineEdit* sipPortEdit;
     QPushButton* loginButton;
     QPushButton* registerButton;
     QPushButton* cancelButton;

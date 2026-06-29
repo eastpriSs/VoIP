@@ -12,7 +12,10 @@ public:
 
 public slots:
     void onLoginRequested(const QString& username, const QString& password);
-    void onRegisterRequested(const QString& username, const QString& password);
+    void onRegisterRequested(const QString& username,
+                             const QString& password,
+                             const QString& sipServer,
+                             int sipPort);
 
     void onLoginSuccess();
     void onLoginFailed(const QString& error);

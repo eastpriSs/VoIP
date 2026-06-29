@@ -9,7 +9,6 @@ AuthMenuPresenter::AuthMenuPresenter(AuthMenu* v, QObject* parent)
             this, &AuthMenuPresenter::onLoginRequested);
     connect(view, &AuthMenu::registerRequested,
             this, &AuthMenuPresenter::onRegisterRequested);
-
     connect(model, &AuthMenuModel::loginSuccess,
             this, &AuthMenuPresenter::onLoginSuccess);
     connect(model, &AuthMenuModel::loginFailed,
@@ -24,8 +23,11 @@ void AuthMenuPresenter::onLoginRequested(const QString& username, const QString&
     model->login(username, password);
 }
 
-void AuthMenuPresenter::onRegisterRequested(const QString& username, const QString& password) {
-    model->registerUser(username, password);
+void AuthMenuPresenter::onRegisterRequested(const QString& username,
+                                            const QString& password,
+                                            const QString& sipServer,
+                                            int sipPort) {
+    model->registerUser(username, password, sipServer, sipPort);
 }
 
 void AuthMenuPresenter::onLoginSuccess() {

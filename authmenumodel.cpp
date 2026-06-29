@@ -12,14 +12,18 @@ void AuthMenuModel::login(const QString& username, const QString& password) {
     std::unique_ptr<IValidation> validator =
         std::make_unique<LexicalValidation>(
             std::make_unique<DataBaseValidation>(nullptr)
-    );
+            );
+
     QString error;
-    if ( !validator->validate(username, password, error) )
+    if (!validator->validate(username, password, error))
         emit loginFailed(std::move(error));
-    else emit loginSuccess();
+    else
+        emit loginSuccess();
 }
 
-void AuthMenuModel::registerUser(const QString& username, const QString& password) {
-    using namespace Validation;
-
+void AuthMenuModel::registerUser(const QString& username,
+                                 const QString& password,
+                                 const QString& sipServer,
+                                 int sipPort) {
+    qDebug() << "Регистрация:" << username << password << sipServer << sipPort;
 }

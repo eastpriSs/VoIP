@@ -9,7 +9,10 @@ public:
     explicit AuthMenuModel(QObject *parent = nullptr);
 
     void login(const QString& username, const QString& password);
-    void registerUser(const QString& username, const QString& password);
+    void registerUser(const QString& username,
+                      const QString& password,
+                      const QString& sipServer,
+                      int sipPort);
 
 signals:
     void loginSuccess();

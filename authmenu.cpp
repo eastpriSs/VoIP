@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QIntValidator>
 
 AuthMenu::AuthMenu(QWidget *parent)
     : QDialog(parent) {
@@ -13,6 +14,14 @@ AuthMenu::AuthMenu(QWidget *parent)
     passwordEdit = new QLineEdit;
     passwordEdit->setEchoMode(QLineEdit::Password);
 
+    sipServerEdit = new QLineEdit;
+    sipServerEdit->setPlaceholderText("например: sip.example.com");
+
+    sipPortEdit = new QLineEdit;
+    sipPortEdit->setPlaceholderText("5060");
+    sipPortEdit->setValidator(new QIntValidator(1, 65535, this));
+    sipPortEdit->setText("5060");
+
     loginButton = new QPushButton("Войти");
     registerButton = new QPushButton("Зарегистрироваться");
     cancelButton = new QPushButton("Отмена");
@@ -20,10 +29,20 @@ AuthMenu::AuthMenu(QWidget *parent)
     statusLabel->setStyleSheet("color: red;");
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
+
     mainLayout->addWidget(new QLabel("Логин:"));
     mainLayout->addWidget(usernameEdit);
     mainLayout->addWidget(new QLabel("Пароль:"));
     mainLayout->addWidget(passwordEdit);
+
+    QLabel* sipLabel = new QLabel("SIP сервер (для регистрации):");
+    mainLayout->addWidget(sipLabel);
+    mainLayout->addWidget(sipServerEdit);
+
+    QLabel* portLabel = new QLabel("SIP порт (для регистрации):");
+    mainLayout->addWidget(portLabel);
+    mainLayout->addWidget(sipPortEdit);
+
     mainLayout->addWidget(statusLabel);
 
     QHBoxLayout *btnLayout = new QHBoxLayout;
@@ -50,5 +69,7 @@ void AuthMenu::onLoginButtonClicked() {
 
 void AuthMenu::onRegisterButtonClicked() {
     emit registerRequested(usernameEdit->text().trimmed(),
-                           passwordEdit->text().trimmed());
+                           passwordEdit->text().trimmed(),
+                           sipServerEdit->text().trimmed(),
+                           sipPortEdit->text().toInt());
 }
