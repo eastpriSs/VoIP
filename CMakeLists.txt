@@ -34,6 +34,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
     qt_add_executable(untitled
         MANUAL_FINALIZATION
@@ -48,6 +50,8 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
         databasevalidation.h databasevalidation.cpp
         numbermenu.h numbermenu.cpp
         connectionsettingsmenu.h connectionsettingsmenu.cpp
+        numbermenupresenter.h numbermenupresenter.cpp
+        numbermenumodel.h numbermenumodel.cpp
 
 
     )
@@ -81,9 +85,11 @@ target_link_libraries(untitled PRIVATE Qt6::Core)
 target_link_libraries(untitled PRIVATE Qt6::Core)
 target_link_libraries(untitled PRIVATE Qt6::Widgets)
 target_link_libraries(untitled PRIVATE Qt6::Widgets)
+target_link_libraries(untitled PRIVATE Qt6::Core)
+target_link_libraries(untitled PRIVATE Qt6::Core)
 
-find_package(Qt6 COMPONENTS Widgets VirtualKeyboard REQUIRED)
-target_link_libraries(untitled PRIVATE Qt6::Widgets Qt6::VirtualKeyboard)
+#find_package(Qt6 COMPONENTS Widgets VirtualKeyboard REQUIRED)
+#target_link_libraries(untitled PRIVATE Qt6::Widgets Qt6::VirtualKeyboard)
 
 target_include_directories(untitled PRIVATE
     ${OPUS_INCLUDE_DIRS}

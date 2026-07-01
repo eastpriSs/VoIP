@@ -2,6 +2,7 @@
 #define VALIDATION_H
 
 #include <QString>
+
 namespace Validation {
 
 class IValidation {

@@ -2,12 +2,14 @@
 #include "./ui_mainwindow.h"
 #include <QDebug>
 #include "authmenupresenter.h"
+#include "numbermenupresenter.h"
 #include "connectionsettingsmenu.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , authMenu(this)
+    , numberMenu(this)
 {
     ui->setupUi(this);
 }
@@ -26,8 +28,8 @@ void MainWindow::on_authAction_triggered()
 
 void MainWindow::on_numberButton_clicked()
 {
-    NumberMenu nm = NumberMenu(this);
-    nm.exec();
+    NumberMenuPresenter nmp = NumberMenuPresenter(&numberMenu, this);
+    numberMenu.exec();
 }
 
 
