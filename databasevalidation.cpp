@@ -9,10 +9,8 @@ DataBaseValidation::DataBaseValidation(std::unique_ptr<IValidation> n)
 
 bool DataBaseValidation::validate(const QString& username, const QString& password, QString& error) {
 
-    if (next) {
-        if (!next->validate(username, password, error)) {
-            return false;
-        }
+    if (next && !next->validate(username, password, error)) {
+        return false;
     }
 
     // Проверка наличия пользователя в БД

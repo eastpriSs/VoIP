@@ -8,27 +8,29 @@ LexicalValidation::LexicalValidation(std::unique_ptr<IValidation> n)
 
 bool LexicalValidation::validate(const QString& username, const QString& password, QString& error)
 {
-    if (username.isEmpty()) {
-        error = "Логин не может быть пустым";
+    // todo
+    constexpr unsigned MIN_USERNAME_LEN = 3;
+    constexpr unsigned MIN_PASSWORD_LEN = 6;
+
+    if (username.length() < MIN_USERNAME_LEN) {
+        error = QString("Логин должен содержать минимум %1 символа").arg(MIN_USERNAME_LEN);
         return false;
     }
-    if (password.isEmpty()) {
-        error = "Пароль не может быть пустым";
+    if (password.length() < MIN_PASSWORD_LEN) {
+        error = QString("Пароль должен содержать минимум %1 символов").arg(MIN_PASSWORD_LEN);
         return false;
     }
 
-    if (username.length() < 3) {
-        error = "Логин должен содержать минимум 3 символа";
-        return false;
-    }
-    if (password.length() < 6) {
-        error = "Пароль должен содержать минимум 6 символов";
-        return false;
-    }
+    QRegularExpression internalNumberRegex("^[A-Za-z0-9_]+$");          // aka 101, 102, ...
+    QRegularExpression virtualNumberRegex("^\\+?[1-9]\\d{9,14}$");      // aka +74950000000, 74950000000, 88005553535, ...
+    QRegularExpression usernameRegex("^[a-zA-Z0-9_\\.\\*\\-@]{3,64}$"); // aka user_1234, 100567*321, ivan.ivanov, user@domain.com
+    QRegularExpression SipUriRegex("^[a-zA-Z0-9_\\-\\.\\+]+@[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)+(\\:[0-9]{1,5})?(;\\S+)?$");
 
-    QRegularExpression loginRegex("^[A-Za-z0-9_]+$");
-    if (!loginRegex.match(username).hasMatch()) {
-        error = "Логин может содержать только латинские буквы, цифры и подчёркивание";
+    if (!internalNumberRegex.match(username).hasMatch() &&
+        !virtualNumberRegex.match(username).hasMatch()  &&
+        !usernameRegex.match(username).hasMatch()  &&
+        !SipUriRegex.match(username).hasMatch()) {
+        error = "Логин должен соотвествовать одному из форматов: внутренний/виртуальный номер, логин, SIP uri.";
         return false;
     }
 

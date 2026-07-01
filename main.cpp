@@ -1,6 +1,4 @@
 #include "mainwindow.h"
-#include <opus/opus.h>
-#include <pjsua2.hpp>
 #include <QApplication>
 
 int main(int argc, char *argv[])
