@@ -6,25 +6,87 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>512</width>
+    <height>701</height>
    </rect>
+  </property>
+  <property name="acceptDrops">
+   <bool>false</bool>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>30</y>
+      <width>511</width>
+      <height>621</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLineEdit" name="searchLine"/>
+     </item>
+     <item>
+      <widget class="QListWidget" name="recentList"/>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
+       </property>
+       <item>
+        <widget class="QPushButton" name="recentButton">
+         <property name="text">
+          <string>Недавние</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="contactsButton">
+         <property name="text">
+          <string>Контакты</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="numberButton">
+         <property name="text">
+          <string>Клавиши</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>512</width>
      <height>24</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Аккаунт</string>
+    </property>
+    <addaction name="authAction"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="authAction">
+   <property name="text">
+    <string>Авторизация</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
