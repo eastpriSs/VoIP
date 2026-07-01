@@ -82,6 +82,9 @@ target_link_libraries(untitled PRIVATE Qt6::Core)
 target_link_libraries(untitled PRIVATE Qt6::Widgets)
 target_link_libraries(untitled PRIVATE Qt6::Widgets)
 
+find_package(Qt6 COMPONENTS Widgets VirtualKeyboard REQUIRED)
+target_link_libraries(untitled PRIVATE Qt6::Widgets Qt6::VirtualKeyboard)
+
 target_include_directories(untitled PRIVATE
     ${OPUS_INCLUDE_DIRS}
     ${PJPROJECT_INCLUDE_DIRS}
