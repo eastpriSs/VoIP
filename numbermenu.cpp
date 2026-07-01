@@ -14,7 +14,6 @@ NumberMenu::NumberMenu(QWidget *parent)
 
     numberLine = new QLineEdit(this);
     numberLine->setMinimumHeight(40);
-    numberLine->setReadOnly(true);
 
     confirmButton = new QPushButton("Вызов", this);
     confirmButton->setMinimumHeight(50);
