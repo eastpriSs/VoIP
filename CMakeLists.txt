@@ -32,6 +32,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
     qt_add_executable(untitled
         MANUAL_FINALIZATION
@@ -44,6 +46,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         validation.h validation.cpp
         lexicalvalidation.h lexicalvalidation.cpp
         databasevalidation.h databasevalidation.cpp
+        numbermenu.h numbermenu.cpp
+        connectionsettingsmenu.h connectionsettingsmenu.cpp
 
 
     )
@@ -75,6 +79,8 @@ target_link_libraries(untitled PRIVATE Qt6::Core)
 target_link_libraries(untitled PRIVATE Qt6::Core Qt6::Widgets)
 target_link_libraries(untitled PRIVATE Qt6::Core)
 target_link_libraries(untitled PRIVATE Qt6::Core)
+target_link_libraries(untitled PRIVATE Qt6::Widgets)
+target_link_libraries(untitled PRIVATE Qt6::Widgets)
 
 target_include_directories(untitled PRIVATE
     ${OPUS_INCLUDE_DIRS}

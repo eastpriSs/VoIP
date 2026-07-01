@@ -55,7 +55,7 @@
        <item>
         <widget class="QPushButton" name="numberButton">
          <property name="text">
-          <string>Клавиши</string>
+          <string>Набор номера</string>
          </property>
         </widget>
        </item>
@@ -79,12 +79,24 @@
     </property>
     <addaction name="authAction"/>
    </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Настройки</string>
+    </property>
+    <addaction name="actionSettings"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="authAction">
    <property name="text">
     <string>Авторизация</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Подключение</string>
    </property>
   </action>
  </widget>

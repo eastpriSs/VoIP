@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "authmenu.h"
+#include "numbermenu.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -25,8 +26,14 @@ signals:
 public slots:
     void on_authAction_triggered();
 
+private slots:
+    void on_numberButton_clicked();
+
+    void on_actionSettings_triggered();
+
 private:
     AuthMenu        authMenu;
+    NumberMenu      numberMenu;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
