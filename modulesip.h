@@ -13,17 +13,19 @@ using namespace pj;
 
 class MyAccount : public Account {
 public:
-    virtual void onRegState(OnRegStateParam &prm) {
-        AccountInfo ai = getInfo();
-        qInfo() << (ai.regIsActive? "*** Register:" : "*** Unregister:")
-                  << " code=" << prm.code << '\n';
-    }
+    virtual void onRegState(OnRegStateParam &prm);
 };
 
 class ModuleSIP
 {
 public:
-    void doRegister(char* username, char* password, char* server);
+    ModuleSIP();
+    ~ModuleSIP();
+    void doRegister(char* username, char* password, char* server, int port);
+private:
+    char* bufferIdUri;
+    char* bufferIdRegistrarUri;
+    static constexpr ushort BUFFER_SIZE = 100;
 };
 
 

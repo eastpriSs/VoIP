@@ -1,6 +1,20 @@
 #include "modulesip.h"
 
-void sip::ModuleSIP::doRegister(char *username, char *password, char *server)
+sip::ModuleSIP::ModuleSIP()
+{
+    bufferIdUri = new char[BUFFER_SIZE];
+    bufferIdRegistrarUri = new char[BUFFER_SIZE];
+}
+
+sip::ModuleSIP::~ModuleSIP()
+{
+    bufferIdUri[BUFFER_SIZE - 1] = '\0';
+    bufferIdRegistrarUri[BUFFER_SIZE - 1] = '\0';
+    delete[] bufferIdUri;
+    delete[] bufferIdRegistrarUri;
+}
+
+void sip::ModuleSIP::doRegister(char *username, char *password, char *server, int port)
 {
     Endpoint ep;
 
@@ -12,7 +26,7 @@ void sip::ModuleSIP::doRegister(char *username, char *password, char *server)
 
     // Create SIP transport. Error handling sample is shown
     TransportConfig tcfg;
-    tcfg.port = 5060;
+    tcfg.port = port;
     try {
         ep.transportCreate(PJSIP_TRANSPORT_UDP, tcfg);
     } catch (Error &err) {
@@ -24,14 +38,33 @@ void sip::ModuleSIP::doRegister(char *username, char *password, char *server)
     ep.libStart();
     qInfo() << "*** PJSUA2 STARTED ***" << '\n';
 
+    snprintf(bufferIdUri, BUFFER_SIZE, "sip:%s@%s", username, server);
+    snprintf(bufferIdRegistrarUri, BUFFER_SIZE, "sip:%s@%s:%d", username, server, tcfg.port);
+
+    qInfo() << "ID Uri : " << bufferIdUri << '\n';
+    qInfo() << "ID Reg Uri : " << bufferIdRegistrarUri << '\n';
+
     // Configure an AccountConfig
     AccountConfig acfg;
-    acfg.idUri = "sip:test@0.0.0.0";
-    acfg.regConfig.registrarUri = "sip:test@0.0.0.0:5060";
+    acfg.idUri = bufferIdUri;
+    acfg.regConfig.registrarUri = bufferIdRegistrarUri;
     AuthCredInfo cred("digest", "*", "test", 0, "secret");
     acfg.sipConfig.authCreds.push_back( cred );
 
     // Create the account
     MyAccount *acc = new MyAccount;
-    acc->create(acfg);
+    try {
+        acc->create(acfg);
+    } catch (Error& err) {
+        qInfo() << err.info().c_str() << '\n';
+        return;
+    }
+}
+
+void sip::MyAccount::onRegState(OnRegStateParam &prm)
+{
+    AccountInfo ai = getInfo();
+    qInfo() << (ai.regIsActive? "*** Register:" : "*** Unregister:")
+            << " code=" << prm.code << '\n';
+
 }

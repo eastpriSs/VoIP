@@ -34,23 +34,5 @@ void AuthMenuModel::registerUser(const QString& username,
     QString tmpPass(password);
     QString tmpServer(sipServer);
 
-    sip.doRegister(tmpUser.toUtf8().data(), tmpPass.toUtf8().data(), tmpServer.toUtf8().data());
-
-
-    // ModuleSIP sip;
-
-    // QObject::connect(&sip, &ModuleSIP::success, [](){
-    //     qInfo() << "UI: Успешная регистрация!";
-    // });
-
-    // QObject::connect(&sip, &ModuleSIP::failed, [](const QString &err){
-    //     qInfo() << "UI: Ошибка регистрации:" << err;
-    // });
-
-    // sip.start();
-    // qInfo() << "TEst" << username << password << sipServer << sipPort;
-    // sip.doRegister("0.0.0.0:5060", "alice", "alice_pass");
-    // qInfo() << "Регистрация:" << username << password << sipServer << sipPort;
-
-
+    sip.doRegister(tmpUser.toUtf8().data(), tmpPass.toUtf8().data(), tmpServer.toUtf8().data(), sipPort);
 }
