@@ -34,7 +34,7 @@ void AuthMenuPresenter::onLoginSuccess() {
     view->accept();
 }
 
-void AuthMenuPresenter::onLoginFailed(const QString& error) {
+void AuthMenuPresenter::onLoginFailed(QString error) {
     QMessageBox::warning(view, "Ошибка входа", error);
 }
 
@@ -42,6 +42,6 @@ void AuthMenuPresenter::onRegisterSuccess() {
     QMessageBox::information(view, "Регистрация", "Пользователь успешно зарегистрирован!");
 }
 
-void AuthMenuPresenter::onRegisterFailed(const QString& error) {
+void AuthMenuPresenter::onRegisterFailed(QString error) {
     QMessageBox::warning(view, "Ошибка регистрации", error);
 }

@@ -3,11 +3,14 @@
 #include "validation.h"
 #include "lexicalvalidation.h"
 #include "databasevalidation.h"
-#include "modulesip.h"
 
-AuthMenuModel::AuthMenuModel(QObject *parent) : QObject(parent) {}
+AuthMenuModel::AuthMenuModel(QObject *parent) : QObject(parent)
+{
+    connect(&sip, &sip::ModuleSIP::ErrorRegistration, this, &AuthMenuModel::onRegistrationError);
+}
 
-void AuthMenuModel::login(const QString& username, const QString& password) {
+void AuthMenuModel::login(const QString& username, const QString& password)
+{
     using namespace Validation;
 
     std::unique_ptr<IValidation> validator =
@@ -28,11 +31,24 @@ void AuthMenuModel::registerUser(const QString& username,
                                  int sipPort)
 {
     using namespace sip;
+    using namespace Validation;
 
-    ModuleSIP sip;
+    std::unique_ptr<IValidation> validator =
+        std::make_unique<LexicalValidation>();
+
+    QString error;
+    if (!validator->validate(username, password, error)) {
+        emit registerFailed(std::move(error));
+        return;
+    }
     QString tmpUser(username);
     QString tmpPass(password);
     QString tmpServer(sipServer);
 
     sip.doRegister(tmpUser.toUtf8().data(), tmpPass.toUtf8().data(), tmpServer.toUtf8().data(), sipPort);
+}
+
+void AuthMenuModel::onRegistrationError(QString text, int code)
+{
+    emit registerFailed(text);
 }

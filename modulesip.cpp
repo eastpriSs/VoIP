@@ -30,7 +30,7 @@ void sip::ModuleSIP::doRegister(char *username, char *password, char *server, in
     try {
         ep.transportCreate(PJSIP_TRANSPORT_UDP, tcfg);
     } catch (Error &err) {
-        qInfo() << err.info().c_str() << '\n';
+        emit ErrorRegistration(err.info().c_str(), err.status);
         return;
     }
 
@@ -56,7 +56,7 @@ void sip::ModuleSIP::doRegister(char *username, char *password, char *server, in
     try {
         acc->create(acfg);
     } catch (Error& err) {
-        qInfo() << err.info().c_str() << '\n';
+        emit ErrorRegistration(err.info().c_str(), err.status);
         return;
     }
 }

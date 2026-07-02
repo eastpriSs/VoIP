@@ -18,9 +18,9 @@ public slots:
                              int sipPort);
 
     void onLoginSuccess();
-    void onLoginFailed(const QString& error);
+    void onLoginFailed(QString error);
     void onRegisterSuccess();
-    void onRegisterFailed(const QString& error);
+    void onRegisterFailed(QString error);
 
 private:
     AuthMenu* view;

@@ -16,8 +16,13 @@ public:
     virtual void onRegState(OnRegStateParam &prm);
 };
 
-class ModuleSIP
+class ModuleSIP : public QObject
 {
+    Q_OBJECT
+
+signals:
+    void ErrorRegistration(QString errorInfo, int errorCode);
+
 public:
     ModuleSIP();
     ~ModuleSIP();

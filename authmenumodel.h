@@ -2,6 +2,7 @@
 #define AUTHMENUMODEL_H
 
 #include <QObject>
+#include "modulesip.h"
 
 class AuthMenuModel : public QObject {
     Q_OBJECT
@@ -14,11 +15,17 @@ public:
                       const QString& sipServer,
                       int sipPort);
 
+private slots:
+    void onRegistrationError(QString text, int code);
+
 signals:
     void loginSuccess();
-    void loginFailed(const QString& error);
+    void loginFailed(QString error);
     void registerSuccess();
-    void registerFailed(const QString& error);
+    void registerFailed(QString error);
+
+private:
+    sip::ModuleSIP sip;
 };
 
 #endif // AUTHMENUMODEL_H
