@@ -13,7 +13,9 @@ using namespace pj;
 
 class MyAccount : public Account {
 public:
-    virtual void onRegState(OnRegStateParam &prm);
+    virtual void onRegState(OnRegStateParam &prm) override;
+
+    ~MyAccount();
 };
 
 class ModuleSIP : public QObject
@@ -26,11 +28,10 @@ signals:
 public:
     ModuleSIP();
     ~ModuleSIP();
-    void doRegister(char* username, char* password, char* server, int port);
+    void doRegister(const QString& username, const QString& password, const QString& server, int port);
 private:
-    char* bufferIdUri;
-    char* bufferIdRegistrarUri;
-    static constexpr ushort BUFFER_SIZE = 100;
+    Endpoint ep;
+    std::unique_ptr<MyAccount> acc;
 };
 
 

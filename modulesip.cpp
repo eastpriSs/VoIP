@@ -1,23 +1,17 @@
 #include "modulesip.h"
 
 sip::ModuleSIP::ModuleSIP()
+    : acc(new MyAccount())
 {
-    bufferIdUri = new char[BUFFER_SIZE];
-    bufferIdRegistrarUri = new char[BUFFER_SIZE];
 }
 
 sip::ModuleSIP::~ModuleSIP()
 {
-    bufferIdUri[BUFFER_SIZE - 1] = '\0';
-    bufferIdRegistrarUri[BUFFER_SIZE - 1] = '\0';
-    delete[] bufferIdUri;
-    delete[] bufferIdRegistrarUri;
+    ep.libDestroy();
 }
 
-void sip::ModuleSIP::doRegister(char *username, char *password, char *server, int port)
+void sip::ModuleSIP::doRegister(const QString& username, const QString& password, const QString& server, int port)
 {
-    Endpoint ep;
-
     ep.libCreate();
 
     // Initialize endpoint
@@ -34,25 +28,20 @@ void sip::ModuleSIP::doRegister(char *username, char *password, char *server, in
         return;
     }
 
-    // Start the library (worker threads etc)
     ep.libStart();
     qInfo() << "*** PJSUA2 STARTED ***" << '\n';
 
-    snprintf(bufferIdUri, BUFFER_SIZE, "sip:%s@%s", username, server);
-    snprintf(bufferIdRegistrarUri, BUFFER_SIZE, "sip:%s@%s:%d", username, server, tcfg.port);
-
-    qInfo() << "ID Uri : " << bufferIdUri << '\n';
-    qInfo() << "ID Reg Uri : " << bufferIdRegistrarUri << '\n';
-
     // Configure an AccountConfig
+    QString idUri = QString("sip:%1@%2").arg(username, server);
     AccountConfig acfg;
-    acfg.idUri = bufferIdUri;
-    acfg.regConfig.registrarUri = bufferIdRegistrarUri;
-    AuthCredInfo cred("digest", "*", "test", 0, "secret");
+    acfg.idUri = idUri.toStdString();
+    acfg.regConfig.registrarUri = (idUri + QString::number(port)).toStdString();
+    AuthCredInfo cred("digest", "*", username.toStdString(), 0, password.toStdString());
     acfg.sipConfig.authCreds.push_back( cred );
 
-    // Create the account
-    MyAccount *acc = new MyAccount;
+    qInfo() << "ID Uri : " << acfg.idUri << '\n';
+    qInfo() << "ID Reg Uri : " << acfg.regConfig.registrarUri  << '\n';
+
     try {
         acc->create(acfg);
     } catch (Error& err) {
@@ -67,4 +56,9 @@ void sip::MyAccount::onRegState(OnRegStateParam &prm)
     qInfo() << (ai.regIsActive? "*** Register:" : "*** Unregister:")
             << " code=" << prm.code << '\n';
 
+}
+
+sip::MyAccount::~MyAccount()
+{
+    shutdown();
 }

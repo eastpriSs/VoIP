@@ -40,7 +40,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         authmenumodel.h authmenumodel.cpp
         validation.h validation.cpp
         lexicalvalidation.h lexicalvalidation.cpp
-        databasevalidation.h databasevalidation.cpp
+
         modulesip.h modulesip.cpp
 
 
