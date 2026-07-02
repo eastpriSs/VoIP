@@ -13,8 +13,7 @@ using namespace pj;
 
 class MyAccount : public Account {
 public:
-    virtual void onRegState(OnRegStateParam &prm) override;
-
+    void onRegState(OnRegStateParam &prm) override;
     ~MyAccount();
 };
 

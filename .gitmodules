@@ -1,6 +1,3 @@
 [submodule "utils/pjproject"]
 	path = utils/pjproject
 	url = https://github.com/pjsip/pjproject.git
-[submodule "utils/opus"]
-	path = utils/opus
-	url = https://github.com/xiph/opus.git
