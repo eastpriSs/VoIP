@@ -8,7 +8,6 @@ LexicalValidation::LexicalValidation(std::unique_ptr<IValidation> n)
 
 bool LexicalValidation::validate(const QString& username, const QString& password, QString& error)
 {
-    // todo
     constexpr unsigned MIN_USERNAME_LEN = 3;
     constexpr unsigned MIN_PASSWORD_LEN = 6;
 
@@ -21,10 +20,10 @@ bool LexicalValidation::validate(const QString& username, const QString& passwor
         return false;
     }
 
-    QRegularExpression internalNumberRegex("^[A-Za-z0-9_]+$");          // aka 101, 102, ...
-    QRegularExpression virtualNumberRegex("^\\+?[1-9]\\d{9,14}$");      // aka +74950000000, 74950000000, 88005553535, ...
-    QRegularExpression usernameRegex("^[a-zA-Z0-9_\\.\\*\\-@]{3,64}$"); // aka user_1234, 100567*321, ivan.ivanov, user@domain.com
-    QRegularExpression SipUriRegex("^[a-zA-Z0-9_\\-\\.\\+]+@[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)+(\\:[0-9]{1,5})?(;\\S+)?$");
+    const QRegularExpression internalNumberRegex("^[A-Za-z0-9_]+$");          // aka 101, 102, ...
+    const QRegularExpression virtualNumberRegex("^\\+?[1-9]\\d{9,14}$");      // aka +74950000000, 74950000000, 88005553535, ...
+    const QRegularExpression usernameRegex("^[a-zA-Z0-9_\\.\\*\\-@]{3,64}$"); // aka user_1234, 100567*321, ivan.ivanov, user@domain.com
+    const QRegularExpression SipUriRegex("^[a-zA-Z0-9_\\-\\.\\+]+@[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)+(\\:[0-9]{1,5})?(;\\S+)?$");
 
     if (!internalNumberRegex.match(username).hasMatch() &&
         !virtualNumberRegex.match(username).hasMatch()  &&

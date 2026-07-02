@@ -28,6 +28,8 @@ set(PROJECT_SOURCES
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
+    find_package(Qt6 REQUIRED COMPONENTS Core)
+
     qt_add_executable(untitled
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
@@ -39,6 +41,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         validation.h validation.cpp
         lexicalvalidation.h lexicalvalidation.cpp
         databasevalidation.h databasevalidation.cpp
+        modulesip.h modulesip.cpp
 
 
     )
@@ -67,6 +70,7 @@ target_link_libraries(untitled PRIVATE
 )
 
 target_link_libraries(untitled PRIVATE Qt::Core Qt::Widgets)
+target_link_libraries(untitled PRIVATE Qt6::Core)
 
 target_include_directories(untitled PRIVATE
     ${OPUS_INCLUDE_DIRS}
