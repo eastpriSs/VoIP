@@ -1,5 +1,6 @@
 #include "authmenupresenter.h"
-#include <QMessageBox>
+
+
 
 AuthMenuPresenter::AuthMenuPresenter(AuthMenu* v, QObject* parent)
     : QObject(parent), view(v) {
@@ -35,13 +36,10 @@ void AuthMenuPresenter::onLoginSuccess() {
 }
 
 void AuthMenuPresenter::onLoginFailed(QString error) {
-    QMessageBox::warning(view, "Ошибка входа", error);
 }
 
 void AuthMenuPresenter::onRegisterSuccess() {
-    QMessageBox::information(view, "Регистрация", "Пользователь успешно зарегистрирован!");
 }
 
 void AuthMenuPresenter::onRegisterFailed(QString error) {
-    QMessageBox::warning(view, "Ошибка регистрации", error);
 }

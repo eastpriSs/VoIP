@@ -2,8 +2,8 @@
 #define AUTHMENUPRESENTER_H
 
 #include <QObject>
-#include "authmenu.h"
 #include "authmenumodel.h"
+#include "authmenu.h"
 
 class AuthMenuPresenter : public QObject {
     Q_OBJECT
