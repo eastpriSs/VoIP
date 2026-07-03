@@ -35,7 +35,7 @@ void sip::ModuleSIP::doRegister(const QString& username, const QString& password
     QString idUri = QString("sip:%1@%2").arg(username, server);
     AccountConfig acfg;
     acfg.idUri = idUri.toStdString();
-    acfg.regConfig.registrarUri = (idUri + QString::number(port)).toStdString();
+    acfg.regConfig.registrarUri = (idUri + ':' + QString::number(port)).toStdString();
     AuthCredInfo cred("digest", "*", username.toStdString(), 0, password.toStdString());
     acfg.sipConfig.authCreds.push_back( cred );
 

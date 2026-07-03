@@ -18,7 +18,6 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_SOURCE_DIR}/app/ui/auth/
         ${CMAKE_SOURCE_DIR}/app/model/
         ${CMAKE_CURRENT_SOURCE_DIR}/logic/
-    PRIVATE
         ${PJPROJECT_BINARY_DIR}/pjsip/include
         ${PJPROJECT_BINARY_DIR}/pjmedia/include
         ${PJPROJECT_BINARY_DIR}/pjnath/include
@@ -32,5 +31,5 @@ target_include_directories(${PROJECT_NAME}
         ${PJPROJECT_SOURCE_DIR}/pjlib/include
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core Qt6::Widgets pjsua2)
+target_link_libraries(${PROJECT_NAME} PUBLIC Qt6::Core Qt6::Widgets pjsua2)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
