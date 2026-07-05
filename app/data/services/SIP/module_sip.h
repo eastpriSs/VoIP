@@ -13,11 +13,16 @@ namespace sip {
 using namespace pj;
 
 class MyAccount : public Account {
+    Q_OBJECT
 public:
     MyAccount();
-    void onRegState(OnRegStateParam &prm) override;
     ~MyAccount();
+
+    void onRegState(OnRegStateParam &prm) override;
     void setIsCreated(bool newIsCreated);
+
+signals:
+    void regStateChanged(OnRegStateParam &prm);
 
 private:
     bool isCreated;
@@ -28,7 +33,10 @@ class ModuleSIP : public QObject
     Q_OBJECT
 
 signals:
-    void ErrorRegistration(QString errorInfo, int errorCode);
+    void registrationStateChanged(int code, QString info = "");
+
+private slots:
+    void onAccountRegStateChanged(OnRegStateParam &prm);
 
 public:
     ModuleSIP();

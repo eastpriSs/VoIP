@@ -2,9 +2,15 @@
 
 using namespace sip;
 
+void ModuleSIP::onAccountRegStateChanged(OnRegStateParam &prm)
+{
+    emit registrationStateChanged(prm.code);
+}
+
 ModuleSIP::ModuleSIP()
     : acc(new MyAccount()), isEndpointInit(false)
 {
+    connect(acc.get(), &MyAccount::regStateChanged, this, &ModuleSIP::onAccountRegStateChanged);
 }
 
 ModuleSIP::~ModuleSIP()
@@ -28,7 +34,7 @@ void ModuleSIP::doRegister(const AuthCredits& authCredits)
     try {
         ep.transportCreate(PJSIP_TRANSPORT_UDP, tcfg);
     } catch (Error &err) {
-        emit ErrorRegistration(err.info().c_str(), err.status);
+        emit registrationStateChanged(err.status, err.info().c_str());
         return;
     }
 
@@ -50,7 +56,7 @@ void ModuleSIP::doRegister(const AuthCredits& authCredits)
         acc->create(acfg);
         acc->setIsCreated(true);
     } catch (Error& err) {
-        emit ErrorRegistration(err.info().c_str(), err.status);
+        emit registrationStateChanged(err.status, err.info().c_str());
         return;
     }
 }
@@ -65,12 +71,13 @@ void MyAccount::onRegState(OnRegStateParam &prm)
     AccountInfo ai = getInfo();
     qInfo() << (ai.regIsActive? "*** Register:" : "*** Unregister:")
             << " code=" << prm.code << '\n';
-
+    emit regStateChanged(prm);
 }
 
 MyAccount::~MyAccount()
 {
-    shutdown();
+    if (isCreated)
+        shutdown();
 }
 
 
