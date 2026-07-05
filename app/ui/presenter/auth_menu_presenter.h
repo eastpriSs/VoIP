@@ -2,13 +2,13 @@
 #define AUTHMENUPRESENTER_H
 
 #include <QObject>
-#include "authmenumodel.h"
-#include "authmenu.h"
+#include "auth_menu_model.h"
+#include "auth_menu.h"
 
 class AuthMenuPresenter : public QObject {
     Q_OBJECT
 public:
-    explicit AuthMenuPresenter(AuthMenu* view, QObject* parent = nullptr);
+    AuthMenuPresenter(AuthMenu* view, AuthMenuModel* model, QObject* parent = nullptr);
 
 public slots:
     void onLoginRequested(const QString& username, const QString& password);

@@ -4,20 +4,21 @@ project(siplib VERSION 0.1 LANGUAGES CXX)
 
 
 add_library(${PROJECT_NAME} STATIC
-        logic/modulesip.cpp
-        presenter/authmenupresenter.cpp
-        logic/modulesip.h
-        presenter/authmenupresenter.h
-        )
+        services/SIP/module_sip.cpp
+        services/SIP/module_sip.h
+        repositories/auth/auth_repository_impl.h
+        repositories/auth/auth_repository_impl.cpp
+)
 
 set(PJPROJECT_SOURCE_DIR "${CMAKE_SOURCE_DIR}/utils/pjproject")
 set(PJPROJECT_BINARY_DIR "${CMAKE_BINARY_DIR}/utils/pjproject")
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-        ${CMAKE_SOURCE_DIR}/app/ui/auth/
-        ${CMAKE_SOURCE_DIR}/app/model/
-        ${CMAKE_CURRENT_SOURCE_DIR}/logic/
+        ${CMAKE_CURRENT_SOURCE_DIR}/../domain/interfaces/
+        ${CMAKE_CURRENT_SOURCE_DIR}/../domain/entities/
+        ${CMAKE_CURRENT_SOURCE_DIR}/services/SIP
+
         ${PJPROJECT_BINARY_DIR}/pjsip/include
         ${PJPROJECT_BINARY_DIR}/pjmedia/include
         ${PJPROJECT_BINARY_DIR}/pjnath/include

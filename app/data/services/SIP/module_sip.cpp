@@ -1,26 +1,30 @@
-#include "modulesip.h"
+#include "module_sip.h"
 
-sip::ModuleSIP::ModuleSIP()
-    : acc(new MyAccount())
+using namespace sip;
+
+ModuleSIP::ModuleSIP()
+    : acc(new MyAccount()), isEndpointInit(false)
 {
 }
 
-sip::ModuleSIP::~ModuleSIP()
+ModuleSIP::~ModuleSIP()
 {
-    ep.libDestroy();
+    if (isEndpointInit)
+        ep.libDestroy();
 }
 
-void sip::ModuleSIP::doRegister(const QString& username, const QString& password, const QString& server, int port)
+void ModuleSIP::doRegister(const AuthCredits& authCredits)
 {
     ep.libCreate();
 
     // Initialize endpoint
     EpConfig ep_cfg;
     ep.libInit( ep_cfg );
+    isEndpointInit = true;
 
     // Create SIP transport. Error handling sample is shown
     TransportConfig tcfg;
-    tcfg.port = port;
+    tcfg.port = authCredits.getPort();
     try {
         ep.transportCreate(PJSIP_TRANSPORT_UDP, tcfg);
     } catch (Error &err) {
@@ -32,11 +36,11 @@ void sip::ModuleSIP::doRegister(const QString& username, const QString& password
     qInfo() << "*** PJSUA2 STARTED ***" << '\n';
 
     // Configure an AccountConfig
-    QString idUri = QString("sip:%1@%2").arg(username, server);
+    QString idUri = authCredits.getIDUri();
     AccountConfig acfg;
     acfg.idUri = idUri.toStdString();
-    acfg.regConfig.registrarUri = (idUri + ':' + QString::number(port)).toStdString();
-    AuthCredInfo cred("digest", "*", username.toStdString(), 0, password.toStdString());
+    acfg.regConfig.registrarUri = authCredits.getRegistrarUri().toStdString();
+    AuthCredInfo cred("digest", "*", authCredits.getLogin().toStdString(), 0, authCredits.getPassword().toStdString());
     acfg.sipConfig.authCreds.push_back( cred );
 
     qInfo() << "ID Uri : " << acfg.idUri << '\n';
@@ -44,13 +48,19 @@ void sip::ModuleSIP::doRegister(const QString& username, const QString& password
 
     try {
         acc->create(acfg);
+        acc->setIsCreated(true);
     } catch (Error& err) {
         emit ErrorRegistration(err.info().c_str(), err.status);
         return;
     }
 }
 
-void sip::MyAccount::onRegState(OnRegStateParam &prm)
+MyAccount::MyAccount()
+    : isCreated(false)
+{
+}
+
+void MyAccount::onRegState(OnRegStateParam &prm)
 {
     AccountInfo ai = getInfo();
     qInfo() << (ai.regIsActive? "*** Register:" : "*** Unregister:")
@@ -58,7 +68,13 @@ void sip::MyAccount::onRegState(OnRegStateParam &prm)
 
 }
 
-sip::MyAccount::~MyAccount()
+MyAccount::~MyAccount()
 {
     shutdown();
+}
+
+
+void MyAccount::setIsCreated(bool newIsCreated)
+{
+    isCreated = newIsCreated;
 }

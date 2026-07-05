@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <pjsua2.hpp>
 #include <QDebug>
+#include "auth_credits.h"
 
 namespace sip {
 
@@ -13,8 +14,13 @@ using namespace pj;
 
 class MyAccount : public Account {
 public:
+    MyAccount();
     void onRegState(OnRegStateParam &prm) override;
     ~MyAccount();
+    void setIsCreated(bool newIsCreated);
+
+private:
+    bool isCreated;
 };
 
 class ModuleSIP : public QObject
@@ -27,10 +33,11 @@ signals:
 public:
     ModuleSIP();
     ~ModuleSIP();
-    void doRegister(const QString& username, const QString& password, const QString& server, int port);
+    void doRegister(const AuthCredits& authCredits);
 private:
     Endpoint ep;
     std::unique_ptr<MyAccount> acc;
+    bool isEndpointInit;
 };
 
 

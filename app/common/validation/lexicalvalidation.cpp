@@ -1,7 +1,7 @@
 #include "lexicalvalidation.h"
 #include <QRegularExpression>
 
-using namespace Validation;
+using namespace validation;
 
 LexicalValidation::LexicalValidation(std::unique_ptr<IValidation> n)
     : next(std::move(n)) {}

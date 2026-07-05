@@ -2,7 +2,7 @@
 #define VALIDATION_H
 
 #include <QString>
-namespace Validation {
+namespace validation {
 
 class IValidation {
 public:

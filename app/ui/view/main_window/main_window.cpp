@@ -1,13 +1,11 @@
-#include "mainwindow.h"
+#include "main_window.h"
 #include "./ui_mainwindow.h"
 #include <QDebug>
-#include "authmenupresenter.h"
 
-
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(AuthMenu* authMenu, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , authMenu(this)
+    , authMenu(authMenu)
 {
     ui->setupUi(this);
 }
@@ -19,7 +17,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_authAction_triggered()
 {
-    AuthMenuPresenter authPres = AuthMenuPresenter(&authMenu, this);
-    authMenu.exec();
+    authMenu->exec();
 }
 

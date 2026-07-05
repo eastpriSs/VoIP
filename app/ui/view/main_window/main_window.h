@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "authmenu.h"
+#include "auth_menu.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(AuthMenu* authMenu, QWidget *parent = nullptr);
     ~MainWindow();
 
 signals:
@@ -26,7 +26,7 @@ public slots:
     void on_authAction_triggered();
 
 private:
-    AuthMenu        authMenu;
+    AuthMenu*      authMenu;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

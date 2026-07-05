@@ -1,4 +1,4 @@
-#include "authmenu.h"
+#include "auth_menu.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>

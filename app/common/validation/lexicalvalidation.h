@@ -4,8 +4,7 @@
 #include "validation.h"
 #include <memory>
 
-namespace Validation {
-
+namespace validation {
 
 class LexicalValidation : public IValidation {
 public:

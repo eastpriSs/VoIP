@@ -1,10 +1,7 @@
-#include "authmenupresenter.h"
+#include "auth_menu_presenter.h"
 
-
-
-AuthMenuPresenter::AuthMenuPresenter(AuthMenu* v, QObject* parent)
-    : QObject(parent), view(v) {
-    model = new AuthMenuModel(this);
+AuthMenuPresenter::AuthMenuPresenter(AuthMenu* v, AuthMenuModel* model, QObject* parent)
+    : QObject(parent), view(v), model(model) {
 
     connect(view, &AuthMenu::loginRequested,
             this, &AuthMenuPresenter::onLoginRequested);

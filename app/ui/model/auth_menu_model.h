@@ -2,12 +2,13 @@
 #define AUTHMENUMODEL_H
 
 #include <QObject>
-#include "modulesip.h"
+
+#include "auth_controller.h"
 
 class AuthMenuModel : public QObject {
     Q_OBJECT
 public:
-    explicit AuthMenuModel(QObject *parent = nullptr);
+    explicit AuthMenuModel(std::shared_ptr<AuthController> controller, QObject *parent = nullptr);
 
     void login(const QString& username, const QString& password);
     void registerUser(const QString& username,
@@ -25,7 +26,7 @@ signals:
     void registerFailed(QString error);
 
 private:
-    sip::ModuleSIP sip;
+    std::shared_ptr<AuthController> authController;
 };
 
 #endif // AUTHMENUMODEL_H
