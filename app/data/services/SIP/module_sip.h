@@ -1,52 +1,35 @@
 #pragma once
-
-
 #include <QObject>
 #include <QString>
-#include <QTimer>
-#include <pjsua2.hpp>
-#include <QDebug>
+#include <memory>
 #include "auth_credits.h"
+
+namespace sip_private {
+
+class SIPImpl;
+class MyAccount;
+
+} // namespace sip_private
 
 namespace sip {
 
-using namespace pj;
+using namespace sip_private;
 
-class MyAccount :  public QObject, public Account {
-    Q_OBJECT
-public:
-    MyAccount();
-    ~MyAccount();
-
-    void onRegState(OnRegStateParam &prm) override;
-    void setIsCreated(bool newIsCreated);
-
-signals:
-    void regStateChanged(int code);
-
-private:
-    bool isCreated;
-};
+constexpr int OK = 200;
 
 class ModuleSIP : public QObject
 {
     Q_OBJECT
+public:
+    explicit ModuleSIP(QObject* parent = nullptr);
+    ~ModuleSIP() override;
 
+    int doRegister(const AuthCredits& authCredits);
+    QString getTextError(int code);
 signals:
-    void registrationStateChanged(int code, QString info = "");
-
-private slots:
-    void onAccountRegStateChanged(int code);
+    void registrationStateChanged(int code, const QString& info = "");
 
 public:
-    ModuleSIP();
-    ~ModuleSIP();
-    int doRegister(const AuthCredits& authCredits);
-private:
-    Endpoint ep;
-    std::unique_ptr<MyAccount> acc;
-    bool isEndpointInit;
+    std::unique_ptr<SIPImpl> impl;
 };
-
-
-}
+} // namespace sip

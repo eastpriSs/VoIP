@@ -36,9 +36,6 @@ add_executable(${PROJECT_NAME}
         common/exceptions/server_unavailable_exception.h common/exceptions/server_unavailable_exception.cpp
 
         common/errors/auth_error.h common/errors/auth_error.cpp
-
-
-
         )
 
 

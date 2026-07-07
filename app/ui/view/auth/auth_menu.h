@@ -18,6 +18,9 @@ public:
     void setProgressVisible(bool visible);
     void setBottomStatus(const QString& text);
 
+private:
+    void resetProgress();
+
 signals:
     void loginRequested(const QString& username, const QString& password);
     void registerRequested(const QString& username,
@@ -33,7 +36,7 @@ private slots:
 public slots:
     void onRegisterFailed(QString err_text);
     void onRegisterSucces(QString err_text);
-    void onProgressChanged(QString status, int value);
+    void onProgressChanged(QString status);
 
 private:
     QLineEdit* usernameEdit;

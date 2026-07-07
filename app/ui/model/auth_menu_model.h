@@ -27,7 +27,7 @@ signals:
     void loginFailed(QString error);
     void registerSuccess();
     void registerFailed(QString error);
-    void progressChanged(QString text, int value);
+    void progressChanged(QString text);
 
 private:
     std::shared_ptr<AuthController> authController;

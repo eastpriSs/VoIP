@@ -13,27 +13,13 @@ AuthRepositoryImpl::AuthRepositoryImpl(std::shared_ptr<sip::ModuleSIP> sipServic
 void AuthRepositoryImpl::registerSipAccount(const AuthCredits &authCredits)
 {
     int code = sipService->doRegister(authCredits);
-
-    switch(code)
-    {
-    case PJ_EEXISTS:
-        throw std::runtime_error("Порт уже занят.");
-        break;
-    case PJSIP_ETPNOTSUITABLE:
-        throw std::runtime_error("Не удалось создать SIP-траспортю");
-        break;
-    case PJSIP_EINVALIDURI:
-        throw std::runtime_error("Неверный формат URI.");
-        break;
-    };
-
+    if (code != sip::OK)
+        throw std::runtime_error(sipService->getTextError(code).toStdString());
 }
 
 void AuthRepositoryImpl::onRegStateChanged(int code, QString what)
 {
-    constexpr ushort OK = 200;
-
-    if (code == OK) {
+    if (code == sip::OK) {
         emit registrationSuccess();
         return;
     }

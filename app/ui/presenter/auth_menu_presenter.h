@@ -21,12 +21,12 @@ public slots:
     void onLoginFailed(QString error);
     void onRegisterSuccess();
     void onRegisterFailed(QString error);
-    void onProgressChanged(QString status, int value);
+    void onProgressChanged(QString status);
 
 signals:
     void regFailed(QString error);
     void regSuccess(QString text);
-    void progressChanged(QString status, int value);
+    void progressChanged(QString status);
 
 private:
     AuthMenu* view;

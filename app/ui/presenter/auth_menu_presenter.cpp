@@ -49,7 +49,7 @@ void AuthMenuPresenter::onRegisterFailed(QString error) {
     emit regFailed(error);
 }
 
-void AuthMenuPresenter::onProgressChanged(QString status, int value)
+void AuthMenuPresenter::onProgressChanged(QString status)
 {
-    emit progressChanged(std::move(status), value);
+    emit progressChanged(std::move(status));
 }

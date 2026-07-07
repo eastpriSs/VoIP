@@ -34,15 +34,7 @@ AuthMenu::AuthMenu(QWidget *parent)
     progressBar = new QProgressBar;
     progressBar->setVisible(false);
 
-    /*
-     *  Проценты:
-        25 - Валидация данных
-        50 - Отправка запроса
-        75 - Получение ответа
-        100 - успешная регистрация
-    */
-    progressBar->setRange(0, 100);
-    progressBar->setValue(0);
+    progressBar->setRange(0, 0);
 
     bottomStatusLabel = new QLabel("...");
     bottomStatusLabel->setStyleSheet("color: gray; font-size: 11px; padding-top: 5px;");
@@ -90,29 +82,29 @@ void AuthMenu::onLoginButtonClicked() {
 }
 
 void AuthMenu::onRegisterButtonClicked() {
+    progressBar->setVisible(true);
     emit registerRequested(usernameEdit->text().trimmed(),
                            passwordEdit->text().trimmed(),
                            sipServerEdit->text().trimmed(),
                            sipPortEdit->text().toInt());
-    setProgress(0);
 }
 
 void AuthMenu::onRegisterFailed(QString err_text) {
     QMessageBox::critical(this, tr("Ошибка регистрации"),
                           tr(err_text.toStdString().c_str()),
                           QMessageBox::Close);
+    resetProgress();
 }
 
 void AuthMenu::onRegisterSucces(QString text) {
     QMessageBox::information(this, tr("Успешная регистрация"),
                              tr(text.toStdString().c_str()),
                              QMessageBox::Close);
+    resetProgress();
 }
 
-void AuthMenu::onProgressChanged(QString status, int value)
+void AuthMenu::onProgressChanged(QString status)
 {
-    setProgressVisible(true);
-    setProgress(progressBar->value() + value);
     setBottomStatus(status);
 }
 
@@ -133,4 +125,10 @@ void AuthMenu::setProgressVisible(bool visible) {
 
 void AuthMenu::setBottomStatus(const QString& text) {
     bottomStatusLabel->setText(text);
+}
+
+void AuthMenu::resetProgress()
+{
+    progressBar->setVisible(false);
+    setBottomStatus("");
 }

@@ -34,16 +34,16 @@ void AuthMenuModel::onRegistrationError(QString text)
 
 void AuthMenuModel::onRegistrationSuccess()
 {
+    emit progressChanged("Регистрация завершена.");
     emit registerSuccess();
-    emit progressChanged("Регистрация завершена.", 50);
 }
 
 void AuthMenuModel::onValidationDataCompleted(bool success)
 {
-    emit progressChanged(success ? "Валидация прошла успешно." : "Валидация не пройдена." , 25);
+    emit progressChanged(success ? "Валидация прошла успешно." : "Валидация не пройдена.");
 }
 
 void AuthMenuModel::onRegistrationRequestCreated()
 {
-    emit progressChanged("Запрос на регистрацию отправлен.", 25);
+    emit progressChanged("Запрос на регистрацию отправлен. Ожидаем ответ сервера...");
 }
