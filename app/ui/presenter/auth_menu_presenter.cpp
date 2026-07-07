@@ -15,6 +15,12 @@ AuthMenuPresenter::AuthMenuPresenter(AuthMenu* v, AuthMenuModel* model, QObject*
             this, &AuthMenuPresenter::onRegisterSuccess);
     connect(model, &AuthMenuModel::registerFailed,
             this, &AuthMenuPresenter::onRegisterFailed);
+    connect(model, &AuthMenuModel::progressChanged,
+            this, &AuthMenuPresenter::onProgressChanged);
+    connect(this, &AuthMenuPresenter::regSuccess, view, &AuthMenu::onRegisterSucces);
+    connect(this, &AuthMenuPresenter::regFailed, view, &AuthMenu::onRegisterFailed);
+    connect(this, &AuthMenuPresenter::progressChanged, view, &AuthMenu::onProgressChanged);
+
 }
 
 void AuthMenuPresenter::onLoginRequested(const QString& username, const QString& password) {
@@ -36,7 +42,14 @@ void AuthMenuPresenter::onLoginFailed(QString error) {
 }
 
 void AuthMenuPresenter::onRegisterSuccess() {
+    regSuccess("Пользователь зарегистрирован.");
 }
 
 void AuthMenuPresenter::onRegisterFailed(QString error) {
+    emit regFailed(error);
+}
+
+void AuthMenuPresenter::onProgressChanged(QString status, int value)
+{
+    emit progressChanged(std::move(status), value);
 }

@@ -2,9 +2,9 @@
 
 using namespace sip;
 
-void ModuleSIP::onAccountRegStateChanged(OnRegStateParam &prm)
+void ModuleSIP::onAccountRegStateChanged(int code)
 {
-    emit registrationStateChanged(prm.code);
+    emit registrationStateChanged(code);
 }
 
 ModuleSIP::ModuleSIP()
@@ -19,8 +19,9 @@ ModuleSIP::~ModuleSIP()
         ep.libDestroy();
 }
 
-void ModuleSIP::doRegister(const AuthCredits& authCredits)
+int ModuleSIP::doRegister(const AuthCredits& authCredits)
 {
+    constexpr int OK = 200;
     ep.libCreate();
 
     // Initialize endpoint
@@ -34,8 +35,7 @@ void ModuleSIP::doRegister(const AuthCredits& authCredits)
     try {
         ep.transportCreate(PJSIP_TRANSPORT_UDP, tcfg);
     } catch (Error &err) {
-        emit registrationStateChanged(err.status, err.info().c_str());
-        return;
+        return err.status;
     }
 
     ep.libStart();
@@ -54,11 +54,13 @@ void ModuleSIP::doRegister(const AuthCredits& authCredits)
 
     try {
         acc->create(acfg);
+        qInfo() << "sent create "<<'\n';
         acc->setIsCreated(true);
     } catch (Error& err) {
-        emit registrationStateChanged(err.status, err.info().c_str());
-        return;
+        qInfo() << "status: " << err.status  << '\n';
+        return err.status;
     }
+    return OK;
 }
 
 MyAccount::MyAccount()
@@ -71,7 +73,7 @@ void MyAccount::onRegState(OnRegStateParam &prm)
     AccountInfo ai = getInfo();
     qInfo() << (ai.regIsActive? "*** Register:" : "*** Unregister:")
             << " code=" << prm.code << '\n';
-    emit regStateChanged(prm);
+    emit regStateChanged(prm.code);
 }
 
 MyAccount::~MyAccount()

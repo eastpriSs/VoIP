@@ -12,7 +12,7 @@ namespace sip {
 
 using namespace pj;
 
-class MyAccount : public Account {
+class MyAccount :  public QObject, public Account {
     Q_OBJECT
 public:
     MyAccount();
@@ -22,7 +22,7 @@ public:
     void setIsCreated(bool newIsCreated);
 
 signals:
-    void regStateChanged(OnRegStateParam &prm);
+    void regStateChanged(int code);
 
 private:
     bool isCreated;
@@ -36,12 +36,12 @@ signals:
     void registrationStateChanged(int code, QString info = "");
 
 private slots:
-    void onAccountRegStateChanged(OnRegStateParam &prm);
+    void onAccountRegStateChanged(int code);
 
 public:
     ModuleSIP();
     ~ModuleSIP();
-    void doRegister(const AuthCredits& authCredits);
+    int doRegister(const AuthCredits& authCredits);
 private:
     Endpoint ep;
     std::unique_ptr<MyAccount> acc;

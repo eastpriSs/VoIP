@@ -17,6 +17,7 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/../domain/interfaces/
         ${CMAKE_CURRENT_SOURCE_DIR}/../domain/entities/
+        ${CMAKE_CURRENT_SOURCE_DIR}/../common/errors
         ${CMAKE_CURRENT_SOURCE_DIR}/services/SIP
 
         ${PJPROJECT_BINARY_DIR}/pjsip/include
@@ -32,5 +33,5 @@ target_include_directories(${PROJECT_NAME}
         ${PJPROJECT_SOURCE_DIR}/pjlib/include
 )
 
-target_link_libraries(${PROJECT_NAME} PUBLIC Qt6::Core Qt6::Widgets pjsua2)
+target_link_libraries(${PROJECT_NAME} PUBLIC Qt6::Core pjsua2)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

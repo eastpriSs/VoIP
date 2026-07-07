@@ -32,6 +32,10 @@ add_executable(${PROJECT_NAME}
         domain/entities/auth_credits.cpp
         domain/interfaces/auth_repository.h domain/interfaces/auth_repository.cpp
         domain/controllers/auth/auth_controller.h domain/controllers/auth/auth_controller.cpp
+        common/exceptions/invalid_credentials_exception.h common/exceptions/invalid_credentials_exception.cpp
+        common/exceptions/server_unavailable_exception.h common/exceptions/server_unavailable_exception.cpp
+
+        common/errors/auth_error.h common/errors/auth_error.cpp
 
 
 
@@ -44,6 +48,7 @@ add_subdirectory(data)
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/common/validation/
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/errors/
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/model
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/presenter
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/view/auth
