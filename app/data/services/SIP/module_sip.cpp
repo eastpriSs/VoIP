@@ -8,9 +8,29 @@ using namespace pj;
 
 namespace sip_private {
 
+class MyCall : public Call {
+public:
+    using StateCallback = std::function<void(int callId, int stateCode, const QString& stateText)>;
+
+    explicit MyCall(Account &acc, int call_id = PJSUA_INVALID_ID, StateCallback cb = nullptr)
+        : Call(acc, call_id), stateCallback(std::move(cb)) {}
+
+    ~MyCall() override = default;
+
+    void onCallState(OnCallStateParam &prm) override {
+        CallInfo ci = getInfo();
+        if (stateCallback) {
+            stateCallback(ci.id, ci.state, QString::fromStdString(ci.stateText));
+        }
+    }
+private:
+    StateCallback stateCallback;
+};
+
 class MyAccount : public Account {
 public:
     using RegCallback = std::function<void(int)>;
+    using IncomingCallCallback = std::function<void(const QString& remoteUri, int callId)>;
 
     explicit MyAccount(RegCallback cb) : regCallback(std::move(cb)), isCreated(false) {}
     ~MyAccount() override {

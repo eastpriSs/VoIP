@@ -3,12 +3,13 @@
 
 #include <QObject>
 #include <QString>
+#include "call_controller.h"
 
 class CallMenuModel : public QObject
 {
     Q_OBJECT
 public:
-    explicit CallMenuModel(QObject *parent = nullptr);
+    explicit CallMenuModel(std::shared_ptr<CallController> cc, QObject *parent = nullptr);
 
 public slots:
     void onKeyPressed(const QString& text);
@@ -24,6 +25,7 @@ signals:
 
 private:
     QString m_currentNumber;
+    std::shared_ptr<CallController> callController;
 };
 
 #endif // CALL_MENU_MODEL_H

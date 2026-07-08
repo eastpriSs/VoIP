@@ -15,19 +15,15 @@ public:
         Ended
     };
 
-    CallSession();
-
-    void addMember(const SipUri& uri);
-    void removeMember(const SipUri& uri);
-
-    QList<SipUri> getMembers() const;
-
+    CallSession(SipUri&& dist);
     Status getStatus() const;
+    SipUri getDist() const;
     void setStatus(Status newStatus);
+
 
 private:
     Status state;
-    QList<SipUri> members;
+    SipUri dist;
 };
 
 #endif // CALL_SESSION_H

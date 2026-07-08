@@ -7,6 +7,7 @@ add_library(${PROJECT_NAME} STATIC
         services/SIP/module_sip.h
         repositories/auth/auth_repository_impl.h
         repositories/auth/auth_repository_impl.cpp
+        repositories/calls/call_repository_impl.h repositories/calls/call_repository_impl.cpp
 )
 
 set(PJPROJECT_SOURCE_DIR "${CMAKE_SOURCE_DIR}/utils/pjproject")

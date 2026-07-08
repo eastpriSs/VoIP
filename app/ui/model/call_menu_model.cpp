@@ -1,6 +1,7 @@
 #include "call_menu_model.h"
 
-CallMenuModel::CallMenuModel(QObject *parent) : QObject(parent) {}
+CallMenuModel::CallMenuModel(std::shared_ptr<CallController> cc, QObject *parent)
+    : callController(cc), QObject(parent) {}
 
 void CallMenuModel::onKeyPressed(const QString& text) {
     m_currentNumber += text;
@@ -23,7 +24,10 @@ void CallMenuModel::onLayoutSwitchRequested(int layoutId) {
     emit layoutChanged(layoutId);
 }
 
-void CallMenuModel::onConfirmPressed(const QString& number) {
-    QString msg = QString("Здесь будет вызов по этому номеру: %1").arg(number);
-    emit warningRequested("Заглушка", msg);
+void CallMenuModel::onConfirmPressed(const QString& number)
+{
+    callController->callNumber(number);
+
+    // QString msg = QString("Здесь будет вызов по этому номеру: %1").arg(number);
+    // emit warningRequested("Заглушка", msg);
 }
