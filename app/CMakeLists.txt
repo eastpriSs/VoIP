@@ -1,5 +1,9 @@
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 add_executable(${PROJECT_NAME}
 
@@ -35,14 +39,25 @@ add_executable(${PROJECT_NAME}
         common/exceptions/invalid_credentials_exception.h common/exceptions/invalid_credentials_exception.cpp
         common/exceptions/server_unavailable_exception.h common/exceptions/server_unavailable_exception.cpp
 
-        common/errors/auth_error.h common/errors/auth_error.cpp
-        domain/entities/sip_uri.h domain/entities/sip_uri.cpp
+        common/errors/auth_error.h
+        common/errors/auth_error.cpp
+        domain/entities/sip_uri.h
+        domain/entities/sip_uri.cpp
         common/validation/regex_patterns.h
         domain/entities/call_session.h
         domain/entities/call_session.cpp
+        ui/view/call_menu/call_menu.h ui/view/call_menu/call_menu.cpp
+        ui/presenter/call_menu_presenter.h ui/presenter/call_menu_presenter.cpp
+        ui/model/call_menu_model.h ui/model/call_menu_model.cpp
+        domain/controllers/calls/call_controller.h domain/controllers/calls/call_controller.cpp
+
         )
 
 
+target_link_libraries(VoIP PRIVATE Qt6::Core)
+target_link_libraries(VoIP PRIVATE Qt6::Core)
+target_link_libraries(VoIP PRIVATE Qt6::Core)
+target_link_libraries(VoIP PRIVATE Qt6::Core)
 target_link_libraries(VoIP PRIVATE Qt6::Core)
 add_subdirectory(data)
 
@@ -62,6 +77,8 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/interfaces
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/entities
         ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/auth/
+        ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/auth/
+
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
