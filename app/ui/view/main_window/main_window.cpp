@@ -2,10 +2,11 @@
 #include "./ui_mainwindow.h"
 #include <QDebug>
 
-MainWindow::MainWindow(AuthMenu* authMenu, QWidget *parent)
+MainWindow::MainWindow(AuthMenu* authMenu, CallMenu* callMenu, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , authMenu(authMenu)
+    , callMenu(callMenu)
 {
     ui->setupUi(this);
 }
@@ -18,5 +19,11 @@ MainWindow::~MainWindow()
 void MainWindow::on_authAction_triggered()
 {
     authMenu->exec();
+}
+
+
+void MainWindow::on_numberButton_clicked()
+{
+    callMenu->exec();
 }
 

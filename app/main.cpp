@@ -8,6 +8,13 @@
 #include "auth_menu.h"
 #include "auth_menu_model.h"
 
+#include "call_menu.h"
+#include "call_menu_presenter.h"
+#include "call_menu_model.h"
+
+// TODO : template  T  makeMenu
+// where T is CallMenu or AuthMenu, ...
+
 int main(int argc, char *argv[])
 {
     using std::shared_ptr;
@@ -21,7 +28,11 @@ int main(int argc, char *argv[])
     AuthMenuModel* authMenuModel = new AuthMenuModel(authController);
     shared_ptr<AuthMenuPresenter> authMenuPresenter = make_shared<AuthMenuPresenter>(authMenu, authMenuModel);
 
-    MainWindow w(authMenu);
+    CallMenu* callMenu = new CallMenu();
+    CallMenuModel* callMenuModel = new CallMenuModel();
+    std::shared_ptr<CallMenuPresenter> callMenuPresenter = make_shared<CallMenuPresenter>(callMenu, callMenuModel);
+
+    MainWindow w(authMenu, callMenu);
     w.show();
 
     return a.exec();

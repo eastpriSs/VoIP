@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "auth_menu.h"
-
+#include "call_menu.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(AuthMenu* authMenu, QWidget *parent = nullptr);
+    MainWindow(AuthMenu* authMenu, CallMenu* callMenu, QWidget *parent = nullptr);
     ~MainWindow();
 
 signals:
@@ -25,8 +25,12 @@ signals:
 public slots:
     void on_authAction_triggered();
 
+private slots:
+    void on_numberButton_clicked();
+
 private:
     AuthMenu*      authMenu;
+    CallMenu*      callMenu;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
