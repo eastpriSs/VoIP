@@ -17,13 +17,17 @@ public:
                       int sipPort);
 
 private slots:
-    void onRegistrationError(QString text, int code);
+    void onRegistrationError(QString text);
+    void onRegistrationSuccess();
+    void onValidationDataCompleted(bool success = true);
+    void onRegistrationRequestCreated();
 
 signals:
     void loginSuccess();
     void loginFailed(QString error);
     void registerSuccess();
     void registerFailed(QString error);
+    void progressChanged(QString text);
 
 private:
     std::shared_ptr<AuthController> authController;
