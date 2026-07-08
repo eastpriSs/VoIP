@@ -47,7 +47,6 @@ add_executable(${PROJECT_NAME}
         domain/entities/call_session.h
         domain/entities/call_session.cpp
         common/errors/auth_error.h common/errors/auth_error.cpp
-
         ui/view/call_menu/call_menu.h ui/view/call_menu/call_menu.cpp
         ui/presenter/call_menu_presenter.h ui/presenter/call_menu_presenter.cpp
         ui/model/call_menu_model.h ui/model/call_menu_model.cpp
