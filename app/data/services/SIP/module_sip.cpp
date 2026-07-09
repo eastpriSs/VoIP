@@ -19,6 +19,7 @@ public:
 
     void onCallState(OnCallStateParam &prm) override {
         CallInfo ci = getInfo();
+        qInfo() << "call state:" << ci.stateText;
         if (stateCallback) {
             stateCallback(ci.id, ci.state, QString::fromStdString(ci.stateText));
         }
@@ -30,9 +31,11 @@ private:
 class MyAccount : public Account {
 public:
     using RegCallback = std::function<void(int)>;
-    using IncomingCallCallback = std::function<void(const QString& remoteUri, int callId)>;
+    using IncomingCallCallback = std::function<void(QString remoteUri, int callId)>;
 
-    explicit MyAccount(RegCallback cb) : regCallback(std::move(cb)), isCreated(false) {}
+    explicit MyAccount(RegCallback cb, IncomingCallCallback icb)
+        : regCallback(std::move(cb)), inCallback(icb), call(nullptr), isCreated(false) {}
+
     ~MyAccount() override {
         if (isCreated) shutdown();
     }
@@ -47,10 +50,30 @@ public:
         }
     }
 
+    void onIncomingCall(OnIncomingCallParam &iprm) override
+    {
+        // TODO handle call is active
+        // if (call && call->isActive())
+
+        // if (call)
+        //     delete call;
+
+        call = new MyCall(*this, iprm.callId);
+        CallInfo ci = call->getInfo();
+
+        if (inCallback)
+            inCallback(QString::fromStdString(ci.remoteUri), iprm.callId);
+    }
+
     void setIsCreated(bool v) { isCreated = v; }
+    void answerCall();
+    void rejectCall();
 
 private:
     RegCallback regCallback;
+    IncomingCallCallback inCallback;
+    Call* call;
+    CallOpParam prm;
     bool isCreated;
 };
 
@@ -59,6 +82,9 @@ public:
     SIPImpl();
     ~SIPImpl();
     int doRegister(const AuthCredits& authCredits, sip::ModuleSIP* owner);
+    int doCall(const SipUri& sipUri);
+    int acceptCall();
+    int rejectCall();
 
 private:
     Endpoint ep;
@@ -74,6 +100,7 @@ SIPImpl::~SIPImpl() {
     }
 }
 
+
 int SIPImpl::doRegister(const AuthCredits& authCredits, sip::ModuleSIP* owner)
 {
     if (!isEndpointInit) {
@@ -82,7 +109,7 @@ int SIPImpl::doRegister(const AuthCredits& authCredits, sip::ModuleSIP* owner)
         ep.libInit(ep_cfg);
 
         TransportConfig tcfg;
-        tcfg.port = authCredits.getPort();
+        tcfg.port = 0;
         try {
             ep.transportCreate(PJSIP_TRANSPORT_UDP, tcfg);
         } catch (Error &err) {
@@ -114,9 +141,15 @@ int SIPImpl::doRegister(const AuthCredits& authCredits, sip::ModuleSIP* owner)
     qInfo() << "ID Reg Uri : " << QString::fromStdString(acfg.regConfig.registrarUri);
 
     try {
-        acc = std::make_unique<MyAccount>([owner](int code) {
+        acc = std::make_unique<MyAccount>(
+            // InRegState callback
+          [owner](int code) {
             emit owner->registrationStateChanged(code);
-        });
+        },
+            // InComingCall callback
+          [owner](QString remoteUri, int callId) {
+              emit owner->incomingCallReceived(std::move(remoteUri), callId);
+          });
         acc->create(acfg);
         acc->setIsCreated(true);
     } catch (Error& err) {
@@ -125,6 +158,47 @@ int SIPImpl::doRegister(const AuthCredits& authCredits, sip::ModuleSIP* owner)
     }
 
     return sip::OK;
+}
+
+int SIPImpl::doCall(const SipUri &sipUri)
+{
+    Call *call;
+    if (acc)
+        call = new MyCall(*acc);
+    else
+        return sip::ACCOUNT_UNREGISTRED;
+
+    CallOpParam prm(true);
+    try {
+        call->makeCall(sipUri.toString().toStdString(), prm);
+    } catch(Error& err) {
+        return err.status;
+    }
+    return sip::OK;
+}
+
+int SIPImpl::acceptCall()
+{
+    acc->answerCall();
+    return sip::OK;
+}
+
+int SIPImpl::rejectCall()
+{
+    acc->rejectCall();
+    return sip::OK;
+}
+
+void MyAccount::answerCall()
+{
+    prm.statusCode = PJSIP_SC_OK;
+    call->answer(prm);
+}
+
+void MyAccount::rejectCall()
+{
+    prm.statusCode = PJSIP_SC_DECLINE;
+    call->answer(prm);
 }
 
 } // namespace sip_private
@@ -141,8 +215,26 @@ int ModuleSIP::doRegister(const AuthCredits& authCredits) {
     return impl->doRegister(authCredits, this);
 }
 
+int ModuleSIP::doCall(const SipUri &dist)
+{
+    return impl->doCall(dist);
+}
+
+int ModuleSIP::doAcceptCall()
+{
+    return impl->acceptCall();
+}
+
+int ModuleSIP::doRejectCall()
+{
+    return impl->rejectCall();
+}
+
 QString ModuleSIP::getTextError(int code)
 {
+    if (code == ACCOUNT_UNREGISTRED)
+        return QString("Аккаунт не создан. Требуется авторизация.");
+
     char buf[128];
     pj_strerror(code, buf, sizeof(buf));
     return QString::fromUtf8(buf);

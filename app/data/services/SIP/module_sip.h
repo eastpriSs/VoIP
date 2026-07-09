@@ -17,6 +17,7 @@ namespace sip {
 using namespace sip_private;
 
 constexpr int OK = 200;
+constexpr int ACCOUNT_UNREGISTRED = 100;
 
 class ModuleSIP : public QObject
 {
@@ -27,6 +28,8 @@ public:
 
     int doRegister(const AuthCredits& authCredits);
     int doCall(const SipUri& dist);
+    int doAcceptCall();
+    int doRejectCall();
 
     QString getTextError(int code);
 signals:

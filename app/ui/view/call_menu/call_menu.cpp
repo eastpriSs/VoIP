@@ -13,6 +13,10 @@ CallMenu::CallMenu(QWidget *parent)
     virtualKeyboardLayout = new QGridLayout();
     layoutSwitchLayout = new QHBoxLayout();
 
+    statusBar = new QLabel(this);
+    statusBar->setVisible(true);
+    statusBar->setText("...");
+
     numberLine = new QLineEdit(this);
     numberLine->setMinimumHeight(40);
 
@@ -43,6 +47,7 @@ CallMenu::CallMenu(QWidget *parent)
     mainLayout->addLayout(layoutSwitchLayout);
     mainLayout->addLayout(virtualKeyboardLayout);
     mainLayout->addWidget(confirmButton);
+    mainLayout->addWidget(statusBar);
 
     connect(confirmButton, &QPushButton::clicked, this, &CallMenu::on_confirmButton_clicked);
     connect(backspaceButton, &QPushButton::clicked, this, &CallMenu::on_backspace_clicked);
@@ -68,6 +73,37 @@ void CallMenu::changeLayout(int layoutId) {
 
 void CallMenu::showWarning(const QString &title, const QString &message) {
     QMessageBox::warning(this, title, message);
+}
+
+void CallMenu::showError(const QString &title, const QString &message)
+{
+    QMessageBox::critical(this, title, message);
+}
+
+void CallMenu::setStatusBarText(const QString &text)
+{
+    statusBar->setText(text);
+}
+
+void CallMenu::showIncomingCallMenu(const QString &text)
+{
+    incomingMenu = new IncomingCallMenu(this);
+    incomingMenu->setCallerInfo(text);
+
+    connect(incomingMenu, &IncomingCallMenu::acceptCall, this, &CallMenu::onAcceptCall);
+    connect(incomingMenu, &IncomingCallMenu::rejectCall, this, &CallMenu::onRejectCall);
+
+    incomingMenu->exec();
+}
+
+void CallMenu::onRequestCallingMenu()
+{
+    incomingMenu->onRequestCallingGui();
+}
+
+void CallMenu::onRequestRejectMenu()
+{
+    incomingMenu->onRequestRejectedGui();
 }
 
 void CallMenu::clearKeyboardLayout() {
@@ -104,6 +140,52 @@ void CallMenu::setupNumbersLayout() {
     virtualKeyboardLayout->addWidget(starKey, 3, 0);
     virtualKeyboardLayout->addWidget(zeroKey, 3, 1);
     virtualKeyboardLayout->addWidget(hashKey, 3, 2);
+}
+
+IncomingCallMenu::IncomingCallMenu(QWidget *parent)
+    : QDialog(parent)
+{
+    setWindowTitle("Входящий вызов");
+    setMinimumSize(300, 200);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+
+    callerLine = new QLineEdit(this);
+    callerLine->setReadOnly(true);
+    callerLine->setAlignment(Qt::AlignCenter);
+    callerLine->setStyleSheet("font-size: 18px; font-weight: bold; border: none;");
+    mainLayout->addWidget(callerLine);
+
+    QHBoxLayout *btnLayout = new QHBoxLayout();
+
+    acceptButton = new QPushButton("Ответить", this);
+    acceptButton->setMinimumHeight(50);
+    acceptButton->setStyleSheet("background-color: #28a745; color: white; font-weight: bold;");
+
+    rejectButton = new QPushButton("Отклонить", this);
+    rejectButton->setMinimumHeight(50);
+    rejectButton->setStyleSheet("background-color: #dc3545; color: white; font-weight: bold;");
+
+    btnLayout->addWidget(acceptButton);
+    btnLayout->addWidget(rejectButton);
+    mainLayout->addLayout(btnLayout);
+
+    connect(acceptButton, &QPushButton::clicked, this, &IncomingCallMenu::acceptCall);
+    connect(rejectButton, &QPushButton::clicked, this, &IncomingCallMenu::rejectCall);
+}
+
+void IncomingCallMenu::setCallerInfo(const QString &info) {
+    callerLine->setText(info);
+}
+
+void IncomingCallMenu::onRequestCallingGui()
+{
+
+}
+
+void IncomingCallMenu::onRequestRejectedGui()
+{
+
 }
 
 void CallMenu::setupLettersLayout() {
@@ -155,4 +237,14 @@ void CallMenu::on_backspace_clicked() {
 
 void CallMenu::on_clear_clicked() {
     emit clearPressed();
+}
+
+void CallMenu::onAcceptCall()
+{
+    emit callAccepted();
+}
+
+void CallMenu::onRejectCall()
+{
+    emit callRejected();
 }

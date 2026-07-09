@@ -9,9 +9,12 @@ class CallRepositoryImpl : public ICallRepository {
     Q_OBJECT
 public:
     CallRepositoryImpl(std::shared_ptr<sip::ModuleSIP> sipService);
-    void callSipAccount(const SipUri& authCredits) override;
+    void callSipAccount(const SipUri& distUri) override;
+    void acceptSipCall() override;
+    void rejectSipCall() override;
 
-public slots:
+private slots:
+    void onIncomingCall(QString remoteUri, int callID);
 
 private:
     std::shared_ptr<sip::ModuleSIP> sipService;

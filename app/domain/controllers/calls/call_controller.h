@@ -11,6 +11,18 @@ class CallController : public QObject
 public:
     explicit CallController(std::shared_ptr<ICallRepository> rep, QObject *parent = nullptr);
     void callNumber(QString number);
+    void acceptCall();
+    void rejectCall();
+
+signals:
+    void callNumberFailed(QString error);
+    void callNumberSuccess();
+    void incomingCall(QString remoteUri);
+    void validationDataCompleted(bool success = true);
+
+private slots:
+    void onIncomingCall(SipUri remoteUri, int callID);
+
 private:
     std::shared_ptr<ICallRepository> repo;
 };

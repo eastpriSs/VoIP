@@ -17,14 +17,29 @@ public slots:
     void onClearPressed();
     void onLayoutSwitchRequested(int layoutId);
     void onConfirmPressed(const QString& number);
+    void onIncomingCallAccept();
+    void onIncomingCallRejected();
+
+private slots:
+    void onCallNumberFailed(QString error);
+    void onCallNumberSuccess();
+    void onValidationDataCompleted(bool success = true);
+    void onIncomingCall(QString remoteUri);
 
 signals:
     void textChanged(const QString& text);
     void layoutChanged(int layoutId);
     void warningRequested(const QString& title, const QString& message);
+    void errorRequested(const QString& title, const QString& message);
+    void statusBarTextRequest(const QString& text);
+    void incomingCallMenuRequested(const QString& remoteUri);
+    void callingMenuRequested();
+    void rejectMenuRequested();
+    void callAccepted();
+    void callRejected();
 
 private:
-    QString m_currentNumber;
+    QString currentNumber;
     std::shared_ptr<CallController> callController;
 };
 
