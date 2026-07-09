@@ -10,6 +10,9 @@ CallController::CallController(std::shared_ptr<ICallRepository> rep, QObject *pa
 
 void CallController::callNumber(QString number)
 {
+    emit incomingCall("Смерть в нищите");
+    return;
+
     try {
         CallSession callSession = CallSession(SipUri(number));
         emit validationDataCompleted();

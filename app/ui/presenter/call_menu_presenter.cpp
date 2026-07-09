@@ -13,6 +13,7 @@ CallMenuPresenter::CallMenuPresenter(CallMenu* v, CallMenuModel* m, QObject *par
     connect(view, &CallMenu::callRejected, model.get(), &CallMenuModel::onIncomingCallRejected);
     connect(view, &CallMenu::callHangUp, model.get(), &CallMenuModel::onCallHangUp);
     connect(view, &CallMenu::muteToggled, model.get(), &CallMenuModel::onMuteToggled);
+    connect(view, &CallMenu::holdToggled, model.get(), &CallMenuModel::onHoldToggled);
 
     // Сигналы Model -> Слоты View
     connect(model.get(), &CallMenuModel::textChanged, view, &CallMenu::setTextNumber);

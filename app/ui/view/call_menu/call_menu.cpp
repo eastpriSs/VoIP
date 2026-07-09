@@ -32,6 +32,7 @@ CallMenu::CallMenu(QWidget *parent)
     connect(rejectIncomingButton, &QPushButton::clicked, this, &CallMenu::callRejected);
     connect(hangUpButton, &QPushButton::clicked, this, &CallMenu::callHangUp);
     connect(muteButton, &QPushButton::clicked, this, &CallMenu::on_muteButton_clicked);
+    connect(holdButton, &QPushButton::clicked, this, &CallMenu::on_holdButton_clicked);
 
     connect(callTimer, &QTimer::timeout, this, &CallMenu::updateCallTimer);
 
@@ -40,7 +41,6 @@ CallMenu::CallMenu(QWidget *parent)
 
 void CallMenu::setupUiPages()
 {
-
     // ==========================================
     // 1. Основная страница
     // ==========================================
@@ -114,29 +114,54 @@ void CallMenu::setupUiPages()
     activeCallPage = new QWidget(this);
     QVBoxLayout *activeLayout = new QVBoxLayout(activeCallPage);
 
-    activeCallStatusLabel = new QLabel("Разговор", activeCallPage);
+    // Стильное оформление статуса в виде бейджа со скругленными углами
+    activeCallStatusLabel = new QLabel("Разговор активен", activeCallPage);
     activeCallStatusLabel->setAlignment(Qt::AlignCenter);
+    activeCallStatusLabel->setMinimumHeight(30);
+    activeCallStatusLabel->setStyleSheet(
+        "background-color: #2E7D32; color: white; "
+        "border-radius: 12px; font-weight: bold; font-size: 13px; "
+        "padding: 4px 14px;"
+        );
 
     timerLabel = new QLabel("00:00", activeCallPage);
     timerLabel->setAlignment(Qt::AlignCenter);
     QFont timerFont = timerLabel->font();
-    timerFont.setPointSize(22);
+    timerFont.setPointSize(24);
     timerFont.setBold(true);
     timerLabel->setFont(timerFont);
+
+    QHBoxLayout *callActionsLayout = new QHBoxLayout();
 
     muteButton = new QPushButton("Без звука", activeCallPage);
     muteButton->setMinimumHeight(45);
     muteButton->setCheckable(true);
+    muteButton->setStyleSheet(
+        "QPushButton { background-color: #f5f5f5; border: 1px solid #dcdcdc; border-radius: 6px; font-weight: bold; color: #333; }"
+        "QPushButton:checked { background-color: #e0e0e0; border-color: #b0b0b0; color: #d32f2f; }"
+        );
+
+    holdButton = new QPushButton("Удержание", activeCallPage);
+    holdButton->setMinimumHeight(45);
+    holdButton->setCheckable(true);
+    holdButton->setStyleSheet(
+        "QPushButton { background-color: #f5f5f5; border: 1px solid #dcdcdc; border-radius: 6px; font-weight: bold; color: #333; }"
+        "QPushButton:checked { background-color: #e0e0e0; border-color: #b0b0b0; color: #ef6c00; }"
+        );
+
+    callActionsLayout->addWidget(muteButton);
+    callActionsLayout->addWidget(holdButton);
 
     hangUpButton = new QPushButton("Завершить вызов", activeCallPage);
     hangUpButton->setMinimumHeight(50);
-    hangUpButton->setStyleSheet("background-color: #f44336; color: white; font-weight: bold;");
+    hangUpButton->setStyleSheet("background-color: #f44336; color: white; font-weight: bold; border-radius: 6px;");
 
     activeLayout->addStretch();
-    activeLayout->addWidget(activeCallStatusLabel);
+    activeLayout->addWidget(activeCallStatusLabel, 0, Qt::AlignCenter); // Выравниваем бейдж по центру
+    activeLayout->addSpacing(10);
     activeLayout->addWidget(timerLabel);
     activeLayout->addStretch();
-    activeLayout->addWidget(muteButton);
+    activeLayout->addLayout(callActionsLayout);
     activeLayout->addWidget(hangUpButton);
 
     stackedWidget->addWidget(dialerPage);
@@ -178,7 +203,18 @@ void CallMenu::onRequestCallingMenu()
     // Сброс кнопки Mute
     isMuted = false;
     muteButton->setChecked(false);
-    muteButton->setText("Mute");
+    muteButton->setText("Без звука");
+
+    // Сброс кнопки Hold и возвращение дефолтного зеленого стиля статуса
+    isHeld = false;
+    holdButton->setChecked(false);
+    holdButton->setText("Удержание");
+    activeCallStatusLabel->setText("Разговор активен");
+    activeCallStatusLabel->setStyleSheet(
+        "background-color: #2E7D32; color: white; "
+        "border-radius: 12px; font-weight: bold; font-size: 13px; "
+        "padding: 4px 14px;"
+        );
 }
 
 void CallMenu::onRequestRejectMenu()
@@ -207,6 +243,32 @@ void CallMenu::on_muteButton_clicked() {
         setStatusBarText("Микрофон включен");
     }
     emit muteToggled(isMuted);
+}
+
+void CallMenu::on_holdButton_clicked() {
+    isHeld = holdButton->isChecked();
+    if (isHeld) {
+        holdButton->setText("Возобновить");
+        activeCallStatusLabel->setText("На удержании");
+
+        activeCallStatusLabel->setStyleSheet(
+            "background-color: #EF6C00; color: white; "
+            "border-radius: 12px; font-weight: bold; font-size: 13px; "
+            "padding: 4px 14px;"
+            );
+        setStatusBarText("Звонок поставлен на удержание");
+
+    } else {
+        holdButton->setText("Удержание");
+        activeCallStatusLabel->setText("Разговор активен");
+        activeCallStatusLabel->setStyleSheet(
+            "background-color: #2E7D32; color: white; "
+            "border-radius: 12px; font-weight: bold; font-size: 13px; "
+            "padding: 4px 14px;"
+            );
+        setStatusBarText("Разговор возобновлен");
+    }
+    emit holdToggled(isHeld);
 }
 
 void CallMenu::clearKeyboardLayout() {

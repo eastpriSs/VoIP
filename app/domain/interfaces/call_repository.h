@@ -4,6 +4,7 @@
 #include <QObject>
 #include "sip_uri.h"
 #include "call_error.h"
+#include "call_state.h"
 
 class ICallRepository : public QObject {
     Q_OBJECT
@@ -17,6 +18,7 @@ signals:
     void initCallSuccess();
     void initCallFailed(const CallError& error);
     void incomingCall(SipUri remoteSip, int callID);
+    void callStateChenged(CallState callState, const QString& state);
 };
 
 #endif // CALL_REPOSITORY_H

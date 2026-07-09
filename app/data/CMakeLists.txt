@@ -17,7 +17,8 @@ target_include_directories(${PROJECT_NAME}
    PUBLIC
        ${CMAKE_CURRENT_SOURCE_DIR}/../domain/interfaces/
        ${CMAKE_CURRENT_SOURCE_DIR}/../domain/entities/
-       ${CMAKE_CURRENT_SOURCE_DIR}/../common/errors
+       ${CMAKE_CURRENT_SOURCE_DIR}/../common/errors/
+       ${CMAKE_CURRENT_SOURCE_DIR}/../common/states/
        ${CMAKE_CURRENT_SOURCE_DIR}/services/SIP
     PRIVATE
         ${PJPROJECT_BINARY_DIR}/pjsip/include

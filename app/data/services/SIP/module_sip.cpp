@@ -29,10 +29,11 @@ public:
         CallInfo ci = getInfo();
 
         for (unsigned i = 0; i < ci.media.size(); i++) {
-            if (ci.media[i].type==PJMEDIA_TYPE_AUDIO) {
+            if (ci.media[i].type==PJMEDIA_TYPE_AUDIO &&
+                (ci.media[i].status == PJSUA_CALL_MEDIA_ACTIVE ||
+                 ci.media[i].status == PJSUA_CALL_MEDIA_REMOTE_HOLD)) {
                 try {
                     AudioMedia aud_med = getAudioMedia(i);
-
                     AudDevManager& mgr = Endpoint::instance().audDevManager();
                     aud_med.startTransmit(mgr.getPlaybackDevMedia());
                     mgr.getCaptureDevMedia().startTransmit(aud_med);
@@ -53,8 +54,8 @@ public:
     using RegCallback = std::function<void(int)>;
     using IncomingCallCallback = std::function<void(QString remoteUri, int callId)>;
 
-    explicit MyAccount(RegCallback cb, IncomingCallCallback icb)
-        : regCallback(std::move(cb)), inCallback(icb), call(nullptr), isCreated(false) {}
+    explicit MyAccount(RegCallback cb, IncomingCallCallback icb, MyCall::StateCallback stcb = nullptr)
+        : regCallback(std::move(cb)), inCallback(icb), stateCallback(stcb), call(nullptr), isCreated(false) {}
 
     ~MyAccount() override {
         if (isCreated) shutdown();
@@ -72,13 +73,20 @@ public:
 
     void onIncomingCall(OnIncomingCallParam &iprm) override
     {
-        // TODO handle call is active
-        // if (call && call->isActive())
+        if (call && call->isActive()) {
+            // todo: тут будет вызов колбэка для выставления пропущенного(к примеру)
+            std::unique_ptr<MyCall> tmp = std::make_unique<MyCall>(MyCall(*this, iprm.callId));
+            CallOpParam opPrm;
+            opPrm.statusCode = PJSIP_SC_BUSY_HERE;
+            try {
+                tmp->answer(opPrm);
+            } catch (Error& er) {
+                // todo: колбэк для критичной ситуации
+            }
+            return;
+        }
 
-        // if (call)
-        //     delete call;
-
-        call = new MyCall(*this, iprm.callId);
+        call = new MyCall(*this, iprm.callId, stateCallback);
         CallInfo ci = call->getInfo();
 
         if (inCallback)
@@ -92,6 +100,7 @@ public:
 private:
     RegCallback regCallback;
     IncomingCallCallback inCallback;
+    MyCall::StateCallback stateCallback;
     Call* call;
     CallOpParam prm;
     bool isCreated;
@@ -169,7 +178,11 @@ int SIPImpl::doRegister(const AuthCredits& authCredits, sip::ModuleSIP* owner)
             // InComingCall callback
           [owner](QString remoteUri, int callId) {
               emit owner->incomingCallReceived(std::move(remoteUri), callId);
-          });
+          },
+            // StateCall callback
+           [owner](int callId, int pjsip_state, const QString& stateText) {
+                emit owner->callStateChanged(callId, pjsip_state, stateText);
+            });
         acc->create(acfg);
         acc->setIsCreated(true);
     } catch (Error& err) {

@@ -21,6 +21,7 @@ CallRepositoryImpl::CallRepositoryImpl(std::shared_ptr<sip::ModuleSIP> sipServic
     : sipService(sipService)
 {
     connect(sipService.get(), &sip::ModuleSIP::incomingCallReceived, this, &CallRepositoryImpl::onIncomingCall);
+    connect(sipService.get(), &sip::ModuleSIP::callStateChanged, this, &CallRepositoryImpl::onCallStateChanged);
 }
 
 void CallRepositoryImpl::callSipAccount(const SipUri &distUri)
@@ -33,15 +34,21 @@ void CallRepositoryImpl::callSipAccount(const SipUri &distUri)
 
 void CallRepositoryImpl::acceptSipCall()
 {
-    int code = sipService->doAcceptCall();
+    sipService->doAcceptCall();
 }
 
 void CallRepositoryImpl::rejectSipCall()
 {
-    int code = sipService->doRejectCall();
+    sipService->doRejectCall();
 }
 
 void CallRepositoryImpl::onIncomingCall(QString remoteUri, int callID)
 {
     emit incomingCall(SipUri(extractPureSipUri(std::move(remoteUri))), callID);
+}
+
+void CallRepositoryImpl::onCallStateChanged(int callId, int pjsip_state, const QString &stateText)
+{
+    // TODO сделать идентификацию ошибок(для реализации логики в domain) и прокинуть дальше
+    emit callStateChenged(CallState(), stateText);
 }

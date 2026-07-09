@@ -20,6 +20,7 @@ public slots:
     void onIncomingCallAccept();
     void onIncomingCallRejected();
     void onMuteToggled(bool isMuted);
+    void onHoldToggled(bool isHeld);
     void onCallHangUp();
 
 private slots:

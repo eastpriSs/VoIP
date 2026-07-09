@@ -39,6 +39,7 @@ signals:
     void callRejected();
     void callHangUp();
     void muteToggled(bool isMuted);
+    void holdToggled(bool isHeld);
 
 private slots:
     void on_virtualKeyboard_pressed();
@@ -47,6 +48,7 @@ private slots:
     void on_backspace_clicked();
     void on_clear_clicked();
     void on_muteButton_clicked();
+    void on_holdButton_clicked();
     void updateCallTimer();
 
 private:
@@ -86,12 +88,14 @@ private:
     QLabel *activeCallStatusLabel;
     QLabel *timerLabel;
     QPushButton *muteButton;
+    QPushButton *holdButton;
     QPushButton *hangUpButton;
 
     QLabel  *statusBar;
     QTimer  *callTimer;
     int     callDurationSeconds = 0;
     bool    isMuted = false;
+    bool    isHeld = false;
 
     static constexpr int LETTERS_LAYOUT_ID = 1;
     static constexpr int NUMBERS_LAYOUT_ID = 2;

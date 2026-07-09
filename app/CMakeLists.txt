@@ -54,6 +54,7 @@ add_executable(${PROJECT_NAME}
         domain/controllers/calls/call_controller.h domain/controllers/calls/call_controller.cpp
         domain/interfaces/call_repository.h domain/interfaces/call_repository.cpp
         common/errors/call_error.h common/errors/call_error.cpp
+        common/states/call_state.h
         )
 
 
@@ -69,6 +70,7 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/common/validation/
         ${CMAKE_CURRENT_SOURCE_DIR}/common/errors/
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/states/
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/model
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/presenter
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/view/auth

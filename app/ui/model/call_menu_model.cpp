@@ -75,6 +75,17 @@ void CallMenuModel::onMuteToggled(bool isMuted)
     qInfo() << "Режим без звука:" << isMuted;
 }
 
+void CallMenuModel::onHoldToggled(bool isHeld)
+{
+    qInfo() << "Режим удержания звонка : " << isHeld;
+
+    // if (isHeld) {
+    //     callController->holdCall();
+    // } else {
+    //     callController->unholdCall();
+    // }
+}
+
 void CallMenuModel::onCallHangUp()
 {
     qInfo() << "Завершаем звонок";

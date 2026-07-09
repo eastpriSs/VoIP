@@ -15,6 +15,7 @@ public:
 
 private slots:
     void onIncomingCall(QString remoteUri, int callID);
+    void onCallStateChanged(int callId, int pjsip_state, const QString& stateText);
 
 private:
     std::shared_ptr<sip::ModuleSIP> sipService;
