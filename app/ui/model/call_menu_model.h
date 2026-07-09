@@ -19,6 +19,8 @@ public slots:
     void onConfirmPressed(const QString& number);
     void onIncomingCallAccept();
     void onIncomingCallRejected();
+    void onMuteToggled(bool isMuted);
+    void onCallHangUp();
 
 private slots:
     void onCallNumberFailed(QString error);

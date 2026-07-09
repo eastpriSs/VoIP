@@ -24,6 +24,26 @@ public:
             stateCallback(ci.id, ci.state, QString::fromStdString(ci.stateText));
         }
     }
+
+    void onCallMediaState(OnCallMediaStateParam &prm) override {
+        CallInfo ci = getInfo();
+
+        for (unsigned i = 0; i < ci.media.size(); i++) {
+            if (ci.media[i].type==PJMEDIA_TYPE_AUDIO) {
+                try {
+                    AudioMedia aud_med = getAudioMedia(i);
+
+                    AudDevManager& mgr = Endpoint::instance().audDevManager();
+                    aud_med.startTransmit(mgr.getPlaybackDevMedia());
+                    mgr.getCaptureDevMedia().startTransmit(aud_med);
+                }
+                catch(const Error &e) {
+                    // Handle invalid or not audio media error here
+                }
+            }
+        }
+    }
+
 private:
     StateCallback stateCallback;
 };

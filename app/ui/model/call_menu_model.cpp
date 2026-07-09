@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "call_menu_model.h"
 
 CallMenuModel::CallMenuModel(std::shared_ptr<CallController> cc, QObject *parent)
@@ -47,14 +48,14 @@ void CallMenuModel::onConfirmPressed(const QString& number)
 
 void CallMenuModel::onIncomingCallAccept()
 {
-    callController->acceptCall();
+    //callController->acceptCall();
     emit callingMenuRequested();
     emit statusBarTextRequest("Запрос на вызов принят.");
 }
 
 void CallMenuModel::onIncomingCallRejected()
 {
-    callController->rejectCall();
+    //callController->rejectCall();
     emit rejectMenuRequested();
     emit statusBarTextRequest("Запрос на вызов сброшен.");
 }
@@ -67,4 +68,15 @@ void CallMenuModel::onCallNumberFailed(QString error)
 void CallMenuModel::onCallNumberSuccess()
 {
     emit statusBarTextRequest("Звонок пользователю " + currentNumber + "...");
+}
+
+void CallMenuModel::onMuteToggled(bool isMuted)
+{
+    qInfo() << "Режим без звука:" << isMuted;
+}
+
+void CallMenuModel::onCallHangUp()
+{
+    qInfo() << "Завершаем звонок";
+    emit rejectMenuRequested();
 }

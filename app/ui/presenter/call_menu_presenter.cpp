@@ -3,6 +3,7 @@
 CallMenuPresenter::CallMenuPresenter(CallMenu* v, CallMenuModel* m, QObject *parent)
     : QObject(parent), view(v), model(m)
 {
+    // Сигналы View -> Слоты Model
     connect(view, &CallMenu::keyPressed, model.get(), &CallMenuModel::onKeyPressed);
     connect(view, &CallMenu::backspacePressed, model.get(), &CallMenuModel::onBackspacePressed);
     connect(view, &CallMenu::clearPressed, model.get(), &CallMenuModel::onClearPressed);
@@ -10,7 +11,10 @@ CallMenuPresenter::CallMenuPresenter(CallMenu* v, CallMenuModel* m, QObject *par
     connect(view, &CallMenu::confirmPressed, model.get(), &CallMenuModel::onConfirmPressed);
     connect(view, &CallMenu::callAccepted, model.get(), &CallMenuModel::onIncomingCallAccept);
     connect(view, &CallMenu::callRejected, model.get(), &CallMenuModel::onIncomingCallRejected);
+    connect(view, &CallMenu::callHangUp, model.get(), &CallMenuModel::onCallHangUp);
+    connect(view, &CallMenu::muteToggled, model.get(), &CallMenuModel::onMuteToggled);
 
+    // Сигналы Model -> Слоты View
     connect(model.get(), &CallMenuModel::textChanged, view, &CallMenu::setTextNumber);
     connect(model.get(), &CallMenuModel::layoutChanged, view, &CallMenu::changeLayout);
     connect(model.get(), &CallMenuModel::warningRequested, view, &CallMenu::showWarning);
@@ -19,5 +23,4 @@ CallMenuPresenter::CallMenuPresenter(CallMenu* v, CallMenuModel* m, QObject *par
     connect(model.get(), &CallMenuModel::incomingCallMenuRequested, view, &CallMenu::showIncomingCallMenu);
     connect(model.get(), &CallMenuModel::callingMenuRequested, view, &CallMenu::onRequestCallingMenu);
     connect(model.get(), &CallMenuModel::rejectMenuRequested, view, &CallMenu::onRequestRejectMenu);
-
 }

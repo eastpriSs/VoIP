@@ -1,5 +1,6 @@
 #include "call_controller.h"
 #include "call_session.h"
+#include <QDebug>
 
 CallController::CallController(std::shared_ptr<ICallRepository> rep, QObject *parent)
     : repo(rep), QObject{parent}
@@ -9,9 +10,6 @@ CallController::CallController(std::shared_ptr<ICallRepository> rep, QObject *pa
 
 void CallController::callNumber(QString number)
 {
-    emit incomingCall("test");
-    return;
-
     try {
         CallSession callSession = CallSession(SipUri(number));
         emit validationDataCompleted();
