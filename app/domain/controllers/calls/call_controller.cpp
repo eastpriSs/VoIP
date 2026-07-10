@@ -6,13 +6,11 @@ CallController::CallController(std::shared_ptr<ICallRepository> rep, QObject *pa
     : repo(rep), QObject{parent}
 {
     connect(repo.get(), &ICallRepository::incomingCall, this, &CallController::onIncomingCall);
+    connect(repo.get(), &ICallRepository::callStateChanged, this, &CallController::onCallStateChanged);
 }
 
 void CallController::callNumber(QString number)
 {
-    emit incomingCall("Смерть в нищите");
-    return;
-
     try {
         CallSession callSession = CallSession(SipUri(number));
         emit validationDataCompleted();
@@ -25,18 +23,45 @@ void CallController::callNumber(QString number)
     }
 }
 
-void CallController::acceptCall()
-{
-    repo->acceptSipCall();
-}
-
-void CallController::rejectCall()
-{
-    repo->rejectSipCall();
-}
+void CallController::acceptCall() { repo->acceptSipCall(); }
+void CallController::rejectCall() { repo->rejectSipCall(); }
 
 void CallController::onIncomingCall(SipUri remoteUri, int callID)
 {
+    Q_UNUSED(callID);
     emit incomingCall(remoteUri.toString());
 }
 
+void CallController::onCallStateChanged(CallState state, const QString& stateText)
+{
+    switch (state) {
+        // todo что-то придумать с этими состояниями
+    case CallState::None:
+        break;
+
+    case CallState::Incoming:
+        break;
+
+
+    case CallState::Calling:
+        emit callingCall();
+        break;
+
+
+    case CallState::Early:
+        emit earlyMediaCall();
+        break;
+
+    case CallState::Connecting:
+        emit connectingCall();
+        break;
+
+    case CallState::Active:
+        emit activeCall();
+        break;
+
+    case CallState::Disconnected:
+        emit disconnectedCall(stateText);
+        break;
+    }
+}

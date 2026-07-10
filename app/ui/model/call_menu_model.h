@@ -27,8 +27,13 @@ private slots:
     void onCallNumberFailed(QString error);
     void onCallNumberSuccess();
     void onValidationDataCompleted(bool success = true);
-    void onIncomingCall(QString remoteUri);
 
+    void onCallingCall();
+    void onIncomingCall(QString remoteUri);
+    void onEarlyMediaCall();
+    void onConnectingCall();
+    void onActiveCall();
+    void onDisconnectCall(const QString& reason = "");
 signals:
     void textChanged(const QString& text);
     void layoutChanged(int layoutId);

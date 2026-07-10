@@ -18,7 +18,7 @@ signals:
     void initCallSuccess();
     void initCallFailed(const CallError& error);
     void incomingCall(SipUri remoteSip, int callID);
-    void callStateChenged(CallState callState, const QString& state);
+    void callStateChanged(CallState callState, const QString& state);
 };
 
 #endif // CALL_REPOSITORY_H

@@ -17,6 +17,7 @@ namespace sip {
 using namespace sip_private;
 
 constexpr int OK = 200;
+constexpr int ACCOUNT_HAVE_CALL = 101;
 constexpr int ACCOUNT_UNREGISTRED = 100;
 
 class ModuleSIP : public QObject

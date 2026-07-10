@@ -93,15 +93,34 @@ public:
             inCallback(QString::fromStdString(ci.remoteUri), iprm.callId);
     }
 
+    MyCall* createOutgoingCall() {
+        if (call) {
+            if (call->isActive()) {
+                return nullptr;
+            }
+            delete call;
+            call = nullptr;
+        }
+
+        call = new MyCall(*this, PJSUA_INVALID_ID, stateCallback);
+        return call;
+    }
+
+    void realeseCallPtr() { call = nullptr; }
+
     void setIsCreated(bool v) { isCreated = v; }
     void answerCall();
     void rejectCall();
 
+
+
 private:
+    friend class SIPImpl;
+
+    MyCall* call;
     RegCallback regCallback;
     IncomingCallCallback inCallback;
     MyCall::StateCallback stateCallback;
-    Call* call;
     CallOpParam prm;
     bool isCreated;
 };
@@ -195,16 +214,20 @@ int SIPImpl::doRegister(const AuthCredits& authCredits, sip::ModuleSIP* owner)
 
 int SIPImpl::doCall(const SipUri &sipUri)
 {
-    Call *call;
-    if (acc)
-        call = new MyCall(*acc);
-    else
+    if (!acc)
         return sip::ACCOUNT_UNREGISTRED;
+
+    MyCall *outgoingCall = acc->createOutgoingCall();
+    if (!outgoingCall) {
+        return PJSIP_SC_BUSY_HERE;
+    }
 
     CallOpParam prm(true);
     try {
-        call->makeCall(sipUri.toString().toStdString(), prm);
+        outgoingCall->makeCall(sipUri.toString().toStdString(), prm);
     } catch(Error& err) {
+        delete outgoingCall;
+        acc->realeseCallPtr();
         return err.status;
     }
     return sip::OK;
@@ -248,17 +271,17 @@ int ModuleSIP::doRegister(const AuthCredits& authCredits) {
     return impl->doRegister(authCredits, this);
 }
 
-int ModuleSIP::doCall(const SipUri &dist)
+[[maybe_unused]] int ModuleSIP::doCall(const SipUri &dist)
 {
     return impl->doCall(dist);
 }
 
-int ModuleSIP::doAcceptCall()
+[[maybe_unused]] int ModuleSIP::doAcceptCall()
 {
     return impl->acceptCall();
 }
 
-int ModuleSIP::doRejectCall()
+[[maybe_unused]] int ModuleSIP::doRejectCall()
 {
     return impl->rejectCall();
 }

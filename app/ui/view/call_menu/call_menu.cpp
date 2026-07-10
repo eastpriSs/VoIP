@@ -189,6 +189,7 @@ void CallMenu::showIncomingCallMenu(const QString &text)
     callerLabel->setText(QString("Входящий вызов:\n\n%1").arg(text));
     stackedWidget->setCurrentIndex(INCOMING_CALL_PAGE);
     setStatusBarText("Ожидание ответа...");
+    this->show();
 }
 
 void CallMenu::onRequestCallingMenu()
