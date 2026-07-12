@@ -133,6 +133,9 @@ public:
     int doCall(const SipUri& sipUri);
     int acceptCall();
     int rejectCall();
+    int hangUp();
+    int holdCall();
+    int unHoldCall();
 
 private:
     Endpoint ep;
@@ -245,6 +248,30 @@ int SIPImpl::rejectCall()
     return sip::OK;
 }
 
+int SIPImpl::hangUp()
+{
+    if (acc && acc->call)
+        acc->call->hangup(acc->prm);
+    return sip::OK;
+}
+
+int SIPImpl::holdCall()
+{
+    if (acc && acc->call)
+        acc->call->setHold(acc->prm);
+    return sip::OK;
+}
+
+int SIPImpl::unHoldCall()
+{
+    if (acc && acc->call) {
+        acc->prm.opt.flag = 1;
+        acc->call->reinvite(acc->prm);
+    }
+    acc->prm.opt.flag = 0;
+    return sip::OK;
+}
+
 void MyAccount::answerCall()
 {
     prm.statusCode = PJSIP_SC_OK;
@@ -284,6 +311,21 @@ int ModuleSIP::doRegister(const AuthCredits& authCredits) {
 [[maybe_unused]] int ModuleSIP::doRejectCall()
 {
     return impl->rejectCall();
+}
+
+[[maybe_unused]] int ModuleSIP::doHangUpCall()
+{
+    return impl->hangUp();
+}
+
+[[maybe_unused]] int ModuleSIP::doHoldCall()
+{
+    return impl->holdCall();
+}
+
+[[maybe_unused]] int ModuleSIP::doUnHoldCall()
+{
+    return impl->unHoldCall();
 }
 
 QString ModuleSIP::getTextError(int code)

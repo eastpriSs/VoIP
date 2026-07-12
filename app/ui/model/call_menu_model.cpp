@@ -43,12 +43,13 @@ void CallMenuModel::onConnectingCall()
 
 void CallMenuModel::onActiveCall()
 {
-    emit statusBarTextRequest("Активный звонок (Заглушка)");
+    emit callingMenuRequested();
 }
 
 void CallMenuModel::onDisconnectCall(const QString &reason)
 {
-    emit statusBarTextRequest("Отключение.");
+    emit rejectMenuRequested();
+    emit statusBarTextRequest("Пользователь сбросил вызов.");
 }
 
 
@@ -111,15 +112,16 @@ void CallMenuModel::onHoldToggled(bool isHeld)
 {
     qInfo() << "Режим удержания звонка : " << isHeld;
 
-    // if (isHeld) {
-    //     callController->holdCall();
-    // } else {
-    //     callController->unholdCall();
-    // }
+    if (isHeld) {
+        callController->holdCall();
+    } else {
+        callController->unHoldCall();
+    }
 }
 
 void CallMenuModel::onCallHangUp()
 {
-    qInfo() << "Завершаем звонок";
+    qInfo() << "Завершаем звонок.";
+    callController->hangUpCall();
     emit rejectMenuRequested();
 }

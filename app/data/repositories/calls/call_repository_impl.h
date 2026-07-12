@@ -12,6 +12,9 @@ public:
     void callSipAccount(const SipUri& distUri) override;
     void acceptSipCall() override;
     void rejectSipCall() override;
+    void hangupSipCall() override;
+    void holdSipCall() override;
+    void unHoldSipCall() override;
 
 private slots:
     void onIncomingCall(QString remoteUri, int callID);

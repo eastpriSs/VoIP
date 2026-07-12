@@ -12,8 +12,11 @@ class CallController : public QObject
 public:
     explicit CallController(std::shared_ptr<ICallRepository> rep, QObject *parent = nullptr);
     void callNumber(QString number);
+    void hangUpCall();
     void acceptCall();
     void rejectCall();
+    void holdCall();
+    void unHoldCall();
 
 signals:
     void callNumberFailed(QString error);

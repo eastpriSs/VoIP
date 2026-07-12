@@ -72,6 +72,21 @@ void CallRepositoryImpl::rejectSipCall()
     sipService->doRejectCall();
 }
 
+void CallRepositoryImpl::hangupSipCall()
+{
+    sipService->doHangUpCall();
+}
+
+void CallRepositoryImpl::holdSipCall()
+{
+    sipService->doHoldCall();
+}
+
+void CallRepositoryImpl::unHoldSipCall()
+{
+    sipService->doUnHoldCall();
+}
+
 void CallRepositoryImpl::onIncomingCall(QString remoteUri, int callID)
 {
     emit incomingCall(SipUri(extractPureSipUri(std::move(remoteUri))), callID);

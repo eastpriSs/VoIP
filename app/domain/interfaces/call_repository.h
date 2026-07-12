@@ -13,6 +13,9 @@ public:
     virtual void callSipAccount(const SipUri& sipUri) = 0;
     virtual void acceptSipCall() = 0;
     virtual void rejectSipCall() = 0;
+    virtual void hangupSipCall() = 0;
+    virtual void holdSipCall() = 0;
+    virtual void unHoldSipCall() = 0;
 
 signals:
     void initCallSuccess();

@@ -23,8 +23,23 @@ void CallController::callNumber(QString number)
     }
 }
 
+void CallController::hangUpCall()
+{
+    repo->hangupSipCall();
+}
+
 void CallController::acceptCall() { repo->acceptSipCall(); }
 void CallController::rejectCall() { repo->rejectSipCall(); }
+
+void CallController::holdCall()
+{
+    repo->holdSipCall();
+}
+
+void CallController::unHoldCall()
+{
+    repo->unHoldSipCall();
+}
 
 void CallController::onIncomingCall(SipUri remoteUri, int callID)
 {

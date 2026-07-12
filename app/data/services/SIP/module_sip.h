@@ -31,6 +31,9 @@ public:
     int doCall(const SipUri& dist);
     int doAcceptCall();
     int doRejectCall();
+    int doHangUpCall();
+    int doHoldCall();
+    int doUnHoldCall();
 
     QString getTextError(int code);
 signals:
