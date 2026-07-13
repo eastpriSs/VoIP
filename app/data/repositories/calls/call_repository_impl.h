@@ -15,6 +15,8 @@ public:
     void hangupSipCall() override;
     void holdSipCall() override;
     void unHoldSipCall() override;
+    void muteSipCall() override;
+    void unMuteSipCall() override;
 
 private slots:
     void onIncomingCall(QString remoteUri, int callID);

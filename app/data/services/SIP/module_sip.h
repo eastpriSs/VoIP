@@ -34,6 +34,8 @@ public:
     int doHangUpCall();
     int doHoldCall();
     int doUnHoldCall();
+    int doMute();
+    int doUnMute();
 
     QString getTextError(int code);
 signals:

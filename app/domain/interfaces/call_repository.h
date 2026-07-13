@@ -16,6 +16,8 @@ public:
     virtual void hangupSipCall() = 0;
     virtual void holdSipCall() = 0;
     virtual void unHoldSipCall() = 0;
+    virtual void muteSipCall() = 0;
+    virtual void unMuteSipCall() = 0;
 
 signals:
     void initCallSuccess();

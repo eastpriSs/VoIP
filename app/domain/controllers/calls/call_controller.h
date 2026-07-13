@@ -17,6 +17,8 @@ public:
     void rejectCall();
     void holdCall();
     void unHoldCall();
+    void mute();
+    void unMute();
 
 signals:
     void callNumberFailed(QString error);

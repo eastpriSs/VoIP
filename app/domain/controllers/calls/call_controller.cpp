@@ -41,6 +41,16 @@ void CallController::unHoldCall()
     repo->unHoldSipCall();
 }
 
+void CallController::mute()
+{
+    repo->muteSipCall();
+}
+
+void CallController::unMute()
+{
+    repo->unMuteSipCall();
+}
+
 void CallController::onIncomingCall(SipUri remoteUri, int callID)
 {
     Q_UNUSED(callID);

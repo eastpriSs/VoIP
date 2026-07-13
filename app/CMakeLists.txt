@@ -13,6 +13,16 @@ add_executable(${PROJECT_NAME}
         common/validation/validation.cpp
         common/validation/lexicalvalidation.h
         common/validation/validation.h
+        common/exceptions/server_unavailable_exception.h common/exceptions/server_unavailable_exception.cpp
+        common/exceptions/invalid_credentials_exception.h common/exceptions/invalid_credentials_exception.cpp
+        common/errors/auth_error.h
+        common/errors/auth_error.cpp
+        common/validation/regex_patterns.h
+        common/errors/auth_error.h common/errors/auth_error.cpp
+        common/errors/call_error.h common/errors/call_error.cpp
+        common/states/call_state.h
+
+        # Main
 
         main.cpp
 
@@ -26,35 +36,24 @@ add_executable(${PROJECT_NAME}
         ui/view/main_window/main_window.cpp
         ui/view/main_window/main_window.h
         ui/view/main_window/mainwindow.ui
+        ui/view/call_menu/call_menu.h ui/view/call_menu/call_menu.cpp
+        ui/presenter/call_menu_presenter.h ui/presenter/call_menu_presenter.cpp
+        ui/model/call_menu_model.h ui/model/call_menu_model.cpp
 
         # Domain
 
         domain/entities/contact.cpp
         domain/entities/contact.h
-
-
         domain/entities/auth_credits.h
         domain/entities/auth_credits.cpp
         domain/interfaces/auth_repository.h domain/interfaces/auth_repository.cpp
         domain/controllers/auth/auth_controller.h domain/controllers/auth/auth_controller.cpp
-        common/exceptions/invalid_credentials_exception.h common/exceptions/invalid_credentials_exception.cpp
-        common/exceptions/server_unavailable_exception.h common/exceptions/server_unavailable_exception.cpp
-
-        common/errors/auth_error.h
-        common/errors/auth_error.cpp
         domain/entities/sip_uri.h
         domain/entities/sip_uri.cpp
-        common/validation/regex_patterns.h
         domain/entities/call_session.h
         domain/entities/call_session.cpp
-        common/errors/auth_error.h common/errors/auth_error.cpp
-        ui/view/call_menu/call_menu.h ui/view/call_menu/call_menu.cpp
-        ui/presenter/call_menu_presenter.h ui/presenter/call_menu_presenter.cpp
-        ui/model/call_menu_model.h ui/model/call_menu_model.cpp
         domain/controllers/calls/call_controller.h domain/controllers/calls/call_controller.cpp
         domain/interfaces/call_repository.h domain/interfaces/call_repository.cpp
-        common/errors/call_error.h common/errors/call_error.cpp
-        common/states/call_state.h
         )
 
 

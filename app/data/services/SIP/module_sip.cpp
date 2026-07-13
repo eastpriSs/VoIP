@@ -13,7 +13,7 @@ public:
     using StateCallback = std::function<void(int callId, int stateCode, const QString& stateText)>;
 
     explicit MyCall(Account &acc, int call_id = PJSUA_INVALID_ID, StateCallback cb = nullptr)
-        : Call(acc, call_id), stateCallback(std::move(cb)) {}
+        : Call(acc, call_id), stateCallback(std::move(cb)), muteVoice(false) {}
 
     ~MyCall() override = default;
 
@@ -25,28 +25,56 @@ public:
         }
     }
 
-    void onCallMediaState(OnCallMediaStateParam &prm) override {
+    void onCallMediaState(OnCallMediaStateParam &prm) override
+    {
         CallInfo ci = getInfo();
-
         for (unsigned i = 0; i < ci.media.size(); i++) {
-            if (ci.media[i].type==PJMEDIA_TYPE_AUDIO &&
-                (ci.media[i].status == PJSUA_CALL_MEDIA_ACTIVE ||
-                 ci.media[i].status == PJSUA_CALL_MEDIA_REMOTE_HOLD)) {
+            if (ci.media[i].type == PJMEDIA_TYPE_AUDIO) {
                 try {
                     AudioMedia aud_med = getAudioMedia(i);
                     AudDevManager& mgr = Endpoint::instance().audDevManager();
-                    aud_med.startTransmit(mgr.getPlaybackDevMedia());
-                    mgr.getCaptureDevMedia().startTransmit(aud_med);
+
+                    if (ci.media[i].status == PJSUA_CALL_MEDIA_ACTIVE ||
+                        ci.media[i].status == PJSUA_CALL_MEDIA_REMOTE_HOLD) {
+
+                        aud_med.startTransmit(mgr.getPlaybackDevMedia());
+                        mgr.getCaptureDevMedia().startTransmit(aud_med);
+                        aud_med.adjustTxLevel(muteVoice ? 0.0f : 1.0f);
+
+                    } else {
+                        aud_med.stopTransmit(mgr.getPlaybackDevMedia());
+                        mgr.getCaptureDevMedia().stopTransmit(aud_med);
+                    }
                 }
                 catch(const Error &e) {
-                    // Handle invalid or not audio media error here
                 }
             }
         }
     }
 
+    void setMuteVoice(bool v) {
+        muteVoice = v;
+        applyMute();
+    }
 private:
+
+    void applyMute() {
+        try {
+            CallInfo ci = getInfo();
+            for (unsigned i = 0; i < ci.media.size(); i++) {
+                if (ci.media[i].type == PJMEDIA_TYPE_AUDIO &&
+                    ci.media[i].status == PJSUA_CALL_MEDIA_ACTIVE) {
+
+                    AudioMedia aud_med = getAudioMedia(i);
+                    aud_med.adjustTxLevel(muteVoice ? 0.0f : 1.0f);
+                }
+            }
+        } catch (const Error &e) {
+        }
+    }
+
     StateCallback stateCallback;
+    bool muteVoice;
 };
 
 class MyAccount : public Account {
@@ -59,6 +87,7 @@ public:
 
     ~MyAccount() override {
         if (isCreated) shutdown();
+        delete call;
     }
 
     void onRegState(OnRegStateParam &prm) override {
@@ -75,7 +104,7 @@ public:
     {
         if (call && call->isActive()) {
             // todo: тут будет вызов колбэка для выставления пропущенного(к примеру)
-            std::unique_ptr<MyCall> tmp = std::make_unique<MyCall>(MyCall(*this, iprm.callId));
+            std::unique_ptr<MyCall> tmp = std::make_unique<MyCall>(*this, iprm.callId);
             CallOpParam opPrm;
             opPrm.statusCode = PJSIP_SC_BUSY_HERE;
             try {
@@ -86,6 +115,7 @@ public:
             return;
         }
 
+        delete call;
         call = new MyCall(*this, iprm.callId, stateCallback);
         CallInfo ci = call->getInfo();
 
@@ -112,8 +142,6 @@ public:
     void answerCall();
     void rejectCall();
 
-
-
 private:
     friend class SIPImpl;
 
@@ -136,6 +164,8 @@ public:
     int hangUp();
     int holdCall();
     int unHoldCall();
+    int mute();
+    int unMute();
 
 private:
     Endpoint ep;
@@ -150,7 +180,6 @@ SIPImpl::~SIPImpl() {
         ep.libDestroy();
     }
 }
-
 
 int SIPImpl::doRegister(const AuthCredits& authCredits, sip::ModuleSIP* owner)
 {
@@ -238,48 +267,123 @@ int SIPImpl::doCall(const SipUri &sipUri)
 
 int SIPImpl::acceptCall()
 {
-    acc->answerCall();
+    if (!acc)
+        return sip::ACCOUNT_UNREGISTRED;
+    if (!acc->call)
+        return PJSIP_SC_NOT_FOUND;
+
+    try {
+        acc->answerCall();
+    } catch (const Error& err) {
+        return err.status;
+    }
     return sip::OK;
 }
 
 int SIPImpl::rejectCall()
 {
-    acc->rejectCall();
+    if (!acc)
+        return sip::ACCOUNT_UNREGISTRED;
+    if (!acc->call)
+        return PJSIP_SC_NOT_FOUND;
+
+    try {
+        acc->rejectCall();
+    } catch (const Error& err) {
+        return err.status;
+    }
     return sip::OK;
 }
 
 int SIPImpl::hangUp()
 {
-    if (acc && acc->call)
-        acc->call->hangup(acc->prm);
+    if (!acc)
+        return sip::ACCOUNT_UNREGISTRED;
+    if (!acc->call)
+        return PJSIP_SC_NOT_FOUND;
+
+    try {
+        CallOpParam prm;
+        acc->call->hangup(prm);
+    } catch (const Error& err) {
+        return err.status;
+    }
     return sip::OK;
 }
 
 int SIPImpl::holdCall()
 {
-    if (acc && acc->call)
-        acc->call->setHold(acc->prm);
+    if (!acc)
+        return sip::ACCOUNT_UNREGISTRED;
+    if (!acc->call)
+        return PJSIP_SC_NOT_FOUND;
+
+    try {
+        CallOpParam prm(true);
+        acc->call->setHold(prm);
+    } catch (const Error& err) {
+        return err.status;
+    }
     return sip::OK;
 }
 
 int SIPImpl::unHoldCall()
 {
-    if (acc && acc->call) {
-        acc->prm.opt.flag = 1;
-        acc->call->reinvite(acc->prm);
+    if (!acc)
+        return sip::ACCOUNT_UNREGISTRED;
+    if (!acc->call)
+        return PJSIP_SC_NOT_FOUND;
+
+    try {
+        CallOpParam prm(true);
+        prm.opt.flag = PJSUA_CALL_UNHOLD;
+        acc->call->reinvite(prm);
+    } catch (const Error& err) {
+        return err.status;
     }
-    acc->prm.opt.flag = 0;
+    return sip::OK;
+}
+
+int SIPImpl::mute()
+{
+    if (!acc)
+        return sip::ACCOUNT_UNREGISTRED;
+    if (!acc->call)
+        return PJSIP_SC_NOT_FOUND;
+
+    try {
+        acc->call->setMuteVoice(true);
+    } catch (const Error& err) {
+        return err.status;
+    }
+    return sip::OK;
+}
+
+int SIPImpl::unMute()
+{
+    if (!acc)
+        return sip::ACCOUNT_UNREGISTRED;
+    if (!acc->call)
+        return PJSIP_SC_NOT_FOUND;
+
+    try {
+        acc->call->setMuteVoice(false);
+    } catch (const Error& err) {
+        return err.status;
+    }
     return sip::OK;
 }
 
 void MyAccount::answerCall()
 {
+    if (!call) return;
     prm.statusCode = PJSIP_SC_OK;
     call->answer(prm);
 }
 
 void MyAccount::rejectCall()
 {
+    if (!call) return;
     prm.statusCode = PJSIP_SC_DECLINE;
     call->answer(prm);
 }
@@ -298,34 +402,44 @@ int ModuleSIP::doRegister(const AuthCredits& authCredits) {
     return impl->doRegister(authCredits, this);
 }
 
-[[maybe_unused]] int ModuleSIP::doCall(const SipUri &dist)
+int ModuleSIP::doCall(const SipUri &dist)
 {
     return impl->doCall(dist);
 }
 
-[[maybe_unused]] int ModuleSIP::doAcceptCall()
+int ModuleSIP::doAcceptCall()
 {
     return impl->acceptCall();
 }
 
-[[maybe_unused]] int ModuleSIP::doRejectCall()
+int ModuleSIP::doRejectCall()
 {
     return impl->rejectCall();
 }
 
-[[maybe_unused]] int ModuleSIP::doHangUpCall()
+int ModuleSIP::doHangUpCall()
 {
     return impl->hangUp();
 }
 
-[[maybe_unused]] int ModuleSIP::doHoldCall()
+int ModuleSIP::doHoldCall()
 {
     return impl->holdCall();
 }
 
-[[maybe_unused]] int ModuleSIP::doUnHoldCall()
+int ModuleSIP::doUnHoldCall()
 {
     return impl->unHoldCall();
+}
+
+int ModuleSIP::doMute()
+{
+    return impl->mute();
+}
+
+int ModuleSIP::doUnMute()
+{
+    return impl->unMute();
 }
 
 QString ModuleSIP::getTextError(int code)

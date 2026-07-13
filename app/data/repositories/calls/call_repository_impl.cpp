@@ -27,7 +27,7 @@ CallState mapPjsipStateToDomain(int pjsip_state)
     case 2: // PJSIP_INV_STATE_INCOMING (Получен INVITE)
         return CallState::Incoming;
 
-    case 3: // PJSIP_INV_STATE_EARLY (Предварительный ответ, например 180 Ringing)
+    case 3: // PJSIP_INV_STATE_EARLY (180 Ringing)
         return CallState::Early;
 
     case 4: // PJSIP_INV_STATE_CONNECTING (Получен/отправлен ответ 200 OK)
@@ -85,6 +85,16 @@ void CallRepositoryImpl::holdSipCall()
 void CallRepositoryImpl::unHoldSipCall()
 {
     sipService->doUnHoldCall();
+}
+
+void CallRepositoryImpl::muteSipCall()
+{
+    sipService->doMute();
+}
+
+void CallRepositoryImpl::unMuteSipCall()
+{
+    sipService->doUnMute();
 }
 
 void CallRepositoryImpl::onIncomingCall(QString remoteUri, int callID)

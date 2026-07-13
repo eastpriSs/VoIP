@@ -105,6 +105,10 @@ void CallMenuModel::onCallNumberSuccess()
 
 void CallMenuModel::onMuteToggled(bool isMuted)
 {
+    if (isMuted)
+        callController->mute();
+    else
+        callController->unMute();
     qInfo() << "Режим без звука:" << isMuted;
 }
 
