@@ -20,7 +20,7 @@ target_include_directories(${PROJECT_NAME}
        ${CMAKE_CURRENT_SOURCE_DIR}/../common/errors/
        ${CMAKE_CURRENT_SOURCE_DIR}/../common/states/
        ${CMAKE_CURRENT_SOURCE_DIR}/services/SIP
-    PRIVATE
+
         ${PJPROJECT_BINARY_DIR}/pjsip/include
         ${PJPROJECT_BINARY_DIR}/pjmedia/include
         ${PJPROJECT_BINARY_DIR}/pjnath/include

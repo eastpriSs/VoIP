@@ -60,18 +60,10 @@ void CallController::onIncomingCall(SipUri remoteUri, int callID)
 void CallController::onCallStateChanged(CallState state, const QString& stateText)
 {
     switch (state) {
-        // todo что-то придумать с этими состояниями
-    case CallState::None:
-        break;
-
-    case CallState::Incoming:
-        break;
-
 
     case CallState::Calling:
         emit callingCall();
         break;
-
 
     case CallState::Early:
         emit earlyMediaCall();
@@ -87,6 +79,10 @@ void CallController::onCallStateChanged(CallState state, const QString& stateTex
 
     case CallState::Disconnected:
         emit disconnectedCall(stateText);
+        break;
+
+    case CallState::Incoming:
+    case CallState::None:
         break;
     }
 }

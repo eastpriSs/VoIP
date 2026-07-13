@@ -15,33 +15,42 @@ QString extractPureSipUri(const QString& rawUri)
     return trimmed;
 }
 
+enum PjsipInvState {
+    PjsipStateNull         = 0, // PJSIP_INV_STATE_NULL
+    PjsipStateCalling      = 1, // PJSIP_INV_STATE_CALLING
+    PjsipStateIncoming     = 2, // PJSIP_INV_STATE_INCOMING
+    PjsipStateEarly        = 3, // PJSIP_INV_STATE_EARLY
+    PjsipStateConnecting   = 4, // PJSIP_INV_STATE_CONNECTING
+    PjsipStateConfirmed    = 5, // PJSIP_INV_STATE_CONFIRMED
+    PjsipStateDisconnected = 6  // PJSIP_INV_STATE_DISCONNECTED
+};
+
 CallState mapPjsipStateToDomain(int pjsip_state)
 {
     switch (pjsip_state) {
-    case 0: // PJSIP_INV_STATE_NULL (До создания вызова)
+    case PjsipStateNull:
         return CallState::None;
 
-    case 1: // PJSIP_INV_STATE_CALLING (Отправлен INVITE)
+    case PjsipStateCalling:
         return CallState::Calling;
 
-    case 2: // PJSIP_INV_STATE_INCOMING (Получен INVITE)
+    case PjsipStateIncoming:
         return CallState::Incoming;
 
-    case 3: // PJSIP_INV_STATE_EARLY (180 Ringing)
+    case PjsipStateEarly:
         return CallState::Early;
 
-    case 4: // PJSIP_INV_STATE_CONNECTING (Получен/отправлен ответ 200 OK)
+    case PjsipStateConnecting:
         return CallState::Connecting;
 
-    case 5: // PJSIP_INV_STATE_CONFIRMED (Вызов успешно установлен, идет разговор)
+    case PjsipStateConfirmed:
         return CallState::Active;
 
-    case 6: // PJSIP_INV_STATE_DISCONNECTED (Вызов завершен или отклонен)
+    case PjsipStateDisconnected:
         return CallState::Disconnected;
 
     default:
         throw std::runtime_error("Получен неясный код звонка.");
-        return CallState::None;
     }
 }
 
