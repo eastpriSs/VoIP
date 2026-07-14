@@ -34,6 +34,11 @@ void ContactList::clearList()
     this->clear();
 }
 
+void ContactList::updateList()
+{
+    emit updateListRequested();
+}
+
 void ContactList::onContactClicked(QListWidgetItem *contact)
 {
     emit contactChoose(contact->text());

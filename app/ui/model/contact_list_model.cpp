@@ -8,3 +8,10 @@ void ContactListModel::onContactClicked(const QString &contact)
 {
 
 }
+
+void ContactListModel::onUpdateListRequested()
+{
+    contactController->updateContactList();
+}
+
+

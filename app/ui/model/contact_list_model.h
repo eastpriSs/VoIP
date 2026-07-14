@@ -2,6 +2,7 @@
 #define CONTACT_LIST_MODEL_H
 
 #include <QObject>
+#include "contact_list_controller.h"
 
 class ContactListModel : public QObject
 {
@@ -11,7 +12,7 @@ public:
 
 public slots:
     void onContactClicked(const QString& contact);
-
+    void onUpdateListRequested();
 private:
     std::shared_ptr<ContactListController> contactController;
 

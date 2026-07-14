@@ -2,12 +2,18 @@ cmake_minimum_required(VERSION 3.28)
 
 project(siplib VERSION 0.1 LANGUAGES CXX)
 
+find_package(Qt6 REQUIRED COMPONENTS Core)
+
 add_library(${PROJECT_NAME} STATIC
         services/SIP/module_sip.cpp
         services/SIP/module_sip.h
         repositories/auth/auth_repository_impl.h
         repositories/auth/auth_repository_impl.cpp
+        repositories/contacts/contact_fetcher_repository_impl.h repositories/contacts/contact_fetcher_repository_impl.cpp
+        services/PBX/contact_fetcher_pbx.h services/PBX/contact_fetcher_pbx.cpp
 )
+
+target_link_libraries(siplib PRIVATE Qt6::Core)
 
 set(PJPROJECT_SOURCE_DIR "${CMAKE_SOURCE_DIR}/utils/pjproject")
 set(PJPROJECT_BINARY_DIR "${CMAKE_BINARY_DIR}/utils/pjproject")
@@ -18,6 +24,7 @@ target_include_directories(${PROJECT_NAME}
        ${CMAKE_CURRENT_SOURCE_DIR}/../domain/entities/
        ${CMAKE_CURRENT_SOURCE_DIR}/../common/errors
        ${CMAKE_CURRENT_SOURCE_DIR}/services/SIP
+       ${CMAKE_CURRENT_SOURCE_DIR}/services/PBX
     PRIVATE
         ${PJPROJECT_BINARY_DIR}/pjsip/include
         ${PJPROJECT_BINARY_DIR}/pjmedia/include

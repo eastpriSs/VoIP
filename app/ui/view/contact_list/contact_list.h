@@ -13,10 +13,12 @@ public:
     void removeSelectedContact();
     void setContacts(const QStringList &contacts);
     void clearList();
+    void updateList();
 
 signals:
     void itemClicked(QListWidgetItem *item);
     void contactChoose(const QString& contact);
+    void updateListRequested();
 
 public slots:
     void uploadList(const QStringList& contacts);
