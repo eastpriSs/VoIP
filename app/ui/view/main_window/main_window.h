@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "auth_menu.h"
-
+#include "contact_list.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,8 +25,12 @@ signals:
 public slots:
     void on_authAction_triggered();
 
+private slots:
+    void on_contactsButton_clicked();
+
 private:
-    AuthMenu*      authMenu;
+    AuthMenu* authMenu;
+    ContactList* contactList;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

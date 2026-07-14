@@ -8,6 +8,8 @@ MainWindow::MainWindow(AuthMenu* authMenu, QWidget *parent)
     , authMenu(authMenu)
 {
     ui->setupUi(this);
+    contactList = new ContactList(this);
+    ui->verticalLayout->insertWidget(2, contactList);
 }
 
 MainWindow::~MainWindow()
@@ -18,5 +20,10 @@ MainWindow::~MainWindow()
 void MainWindow::on_authAction_triggered()
 {
     authMenu->exec();
+}
+
+void MainWindow::on_contactsButton_clicked()
+{
+    contactList->uploadList();
 }
 

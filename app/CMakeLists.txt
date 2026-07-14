@@ -1,5 +1,7 @@
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 add_executable(${PROJECT_NAME}
 
@@ -36,9 +38,13 @@ add_executable(${PROJECT_NAME}
         common/exceptions/server_unavailable_exception.h common/exceptions/server_unavailable_exception.cpp
 
         common/errors/auth_error.h common/errors/auth_error.cpp
+        ui/view/contact_list/contact_list.h ui/view/contact_list/contact_list.cpp
+        ui/presenter/contact_list_presenter.h ui/presenter/contact_list_presenter.cpp
         )
 
 
+target_link_libraries(VoIP PRIVATE Qt6::Core)
+target_link_libraries(VoIP PRIVATE Qt6::Core)
 target_link_libraries(VoIP PRIVATE Qt6::Core)
 add_subdirectory(data)
 
