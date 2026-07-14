@@ -13,25 +13,32 @@ void ContactFetcherRepositoryImpl::sendContactListRequest(const QString &clientI
                                                           const QString &server)
 {
     serverDomain = server;
-    if (!accessToken.isActive())
+    if (!accessToken.isActive()) {
         module->fetchToken(clientId, clientSecret, server);
+        // emit stateChanged(tokenRequested);
+    }
 }
 
 void ContactFetcherRepositoryImpl::onTokenRecieved(QString token, int lifeTime)
 {
+    // emit stateChanged(tokenRecieved);
+
     accessToken.setHash(std::move(token));
     accessToken.setLifeTime(lifeTime);
     module->fetchExtensions(token, serverDomain);
+
+    // emit stateChanged(extensionsRequested);
 }
 
 void ContactFetcherRepositoryImpl::onExtensionsRecieved(QStringList extensions)
 {
+    // emit stateChanged(extensionsRecieved);
     emit replyRecieved(std::move(extensions));
 }
 
 bool ContactFetcherRepositoryImpl::AccessToken::isActive()
 {
-    return QTime::currentTime().secsTo(timeActiveted) < lifeTime;
+    return !timeActiveted.isNull() && timeActiveted.secsTo(QTime::currentTime()) < lifeTime;
 }
 
 uint ContactFetcherRepositoryImpl::AccessToken::getLifeTime() const

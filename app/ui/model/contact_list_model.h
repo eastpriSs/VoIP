@@ -19,10 +19,12 @@ public slots:
 private slots:
     void onPbxAuthError(const QString &message);
     void onExtensionsRecieved(QStringList contactList);
+    void onRequestStateChanged();
 
 signals:
     void authError(const QString &message);
     void showContacts(QStringList contacts);
+    void setStatus(const QString &message);
 
 private:
     std::shared_ptr<ContactListController> contactController;

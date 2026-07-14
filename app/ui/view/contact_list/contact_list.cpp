@@ -4,9 +4,13 @@
 #include <QLineEdit>
 #include <QDialogButtonBox>
 #include <QMessageBox>
+#include <QVBoxLayout>
+#include <QLabel>
 
 ContactList::ContactList(QWidget *parent)
-    : QListWidget{parent}
+    : QListWidget{parent},
+    statusDialog(nullptr),
+    statusLabel(nullptr)
 {
     connect(this, &ContactList::itemClicked, this, &ContactList::onContactClicked);
 }
@@ -74,6 +78,22 @@ void ContactList::updateList()
         QString clientSecret = clientSecretEdit.text().trimmed();
         QString server = serverEdit.text().trimmed();
 
+        if (!statusDialog) {
+            statusDialog = new QDialog(this->window());
+            statusDialog->setWindowTitle(tr("Статус авторизации"));
+            statusDialog->resize(300, 100);
+
+            QVBoxLayout *layout = new QVBoxLayout(statusDialog);
+            statusLabel = new QLabel(tr("Инициализация..."), statusDialog);
+
+            statusLabel->setAlignment(Qt::AlignCenter);
+
+            layout->addWidget(statusLabel);
+        }
+
+        statusDialog->show();
+        statusLabel->setText(tr("Подключение к серверу..."));
+
         emit authConfigEntered(clientId, clientSecret, server);
     }
 }
@@ -86,4 +106,15 @@ void ContactList::showError(const QString &message)
 void ContactList::showContacts(QStringList contacts)
 {
     setContacts(contacts);
+}
+
+void ContactList::setStatusBarText(const QString &text)
+{
+    if (statusDialog && statusLabel) {
+        statusLabel->setText(text);
+
+        if (!statusDialog->isVisible()) {
+            statusDialog->show();
+        }
+    }
 }

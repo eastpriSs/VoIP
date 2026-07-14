@@ -8,4 +8,5 @@ ContactListPresenter::ContactListPresenter(ContactList *v, ContactListModel *m, 
     connect(view, &ContactList::authConfigEntered, model, &ContactListModel::onAuthConfigReceived);
     connect(model, &ContactListModel::authError, view, &ContactList::showError);
     connect(model, &ContactListModel::showContacts, view, &ContactList::showContacts);
+    connect(model, &ContactListModel::setStatus, view, &ContactList::setStatusBarText);
 }

@@ -6,6 +6,8 @@ ContactListController::ContactListController(std::shared_ptr<IContactFetcherRepo
     : QObject{parent}, repo(repo)
 {
     connect(repo.get(), &IContactFetcherRepository::replyRecieved, this, &ContactListController::onReplyRecieved);
+    connect(repo.get(), &IContactFetcherRepository::stateChanged, this, &ContactListController::onStateChanged);
+
 }
 
 void ContactListController::proccessSelectedNumber(const QString &number)
@@ -17,7 +19,7 @@ void ContactListController::updateContactList(const QString &clientId, const QSt
 {
     try {
         PBXAuthCredits credits(clientId, clientSecret, server);
-        repo->sendContactListRequest(credits.clientId(), credits.clientSecret(), credits.server());
+        repo->sendContactListRequest(credits.clientId(), credits.clientSecret(), credits.server());    
     }
     catch (const std::invalid_argument &e) {
         emit pbxAuthError(QString::fromUtf8(e.what()));
@@ -27,4 +29,12 @@ void ContactListController::updateContactList(const QString &clientId, const QSt
 void ContactListController::onReplyRecieved(QStringList extensions)
 {
     emit extensionsRecieved(std::move(extensions));
+}
+
+void ContactListController::onStateChanged()
+{
+    /*
+        switch(...) { ... }
+    */
+    emit requestStateChanged();
 }

@@ -18,10 +18,12 @@ private:
 
 private slots:
     void onReplyRecieved(QStringList extensions);
+    void onStateChanged();
 
 signals:
     void pbxAuthError(const QString &message);
     void extensionsRecieved(QStringList extensions);
+    void requestStateChanged();
 };
 
 #endif // CONTACT_LIST_CONTROLLER_H

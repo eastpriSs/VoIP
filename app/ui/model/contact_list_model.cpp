@@ -7,6 +7,9 @@ ContactListModel::ContactListModel(std::shared_ptr<ContactListController> c, QOb
     connect(contactController.get(), &ContactListController::pbxAuthError, this, &ContactListModel::onPbxAuthError);
     connect(contactController.get(), &ContactListController::extensionsRecieved,
             this, &ContactListModel::onExtensionsRecieved);
+    connect(contactController.get(), &ContactListController::requestStateChanged,
+            this, &ContactListModel::onRequestStateChanged);
+
 }
 
 void ContactListModel::onContactClicked(const QString &contact)
@@ -30,4 +33,9 @@ void ContactListModel::onPbxAuthError(const QString &message)
 void ContactListModel::onExtensionsRecieved(QStringList contactList)
 {
     emit showContacts(std::move(contactList));
+}
+
+void ContactListModel::onRequestStateChanged()
+{
+    emit setStatus("smth");
 }

@@ -11,6 +11,7 @@ public:
     virtual void sendContactListRequest(const QString &clientId, const QString &clientSecret, const QString &server) = 0;
 signals:
     void replyRecieved(QStringList extensions);
+    void stateChanged();
 };
 
 #endif // CONTACT_FETCHER_REPOSITORY_H
