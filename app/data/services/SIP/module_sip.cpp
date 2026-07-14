@@ -16,6 +16,8 @@ void MyCall::onCallState(OnCallStateParam &prm) {
     if (stateCallback) {
         stateCallback(ci.id, ci.state, QString::fromStdString(ci.stateText));
     }
+    if (ci.state == PJSIP_INV_STATE_DISCONNECTED)
+        delete this;
 }
 
 void MyCall::onCallMediaState(OnCallMediaStateParam &prm) {
@@ -102,7 +104,8 @@ void MyAccount::onIncomingCall(OnIncomingCallParam &iprm)
         return;
     }
 
-    call.reset(new MyCall(*this, iprm.callId, stateCallback));
+    call.reset();
+    call = std::make_unique<MyCall>(*this, iprm.callId, stateCallback);
     CallInfo ci = call->getInfo();
 
     if (inCallback)
@@ -226,7 +229,7 @@ int ModuleSIP::doCall(const SipUri &dist)
         acc->call.reset(nullptr);
     }
 
-    acc->call.reset(new MyCall(*acc, PJSUA_INVALID_ID, acc->stateCallback));
+    acc->call = std::make_unique<MyCall>(*acc, PJSUA_INVALID_ID, acc->stateCallback);
 
     CallOpParam prm(true);
     try {
