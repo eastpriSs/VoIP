@@ -36,6 +36,5 @@ target_include_directories(${PROJECT_NAME}
         ${PJPROJECT_SOURCE_DIR}/pjlib-util/include
         ${PJPROJECT_SOURCE_DIR}/pjlib/include
 )
-
 target_link_libraries(${PROJECT_NAME} PUBLIC Qt6::Core pjsua2)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
