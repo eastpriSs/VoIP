@@ -2,9 +2,11 @@
 
 ContactList::ContactList(QWidget *parent)
     : QListWidget{parent}
-{}
+{
+    connect(this, &ContactList::itemClicked, this, &ContactList::onContactClicked);
+}
 
-void ContactList::uploadList()
+void ContactList::uploadList(const QStringList& contacts)
 {
 }
 
@@ -30,4 +32,9 @@ void ContactList::setContacts(const QStringList &contacts)
 void ContactList::clearList()
 {
     this->clear();
+}
+
+void ContactList::onContactClicked(QListWidgetItem *contact)
+{
+    emit contactChoose(contact->text());
 }

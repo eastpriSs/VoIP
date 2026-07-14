@@ -24,6 +24,6 @@ void MainWindow::on_authAction_triggered()
 
 void MainWindow::on_contactsButton_clicked()
 {
-    contactList->uploadList();
+    // todo: здесь будет обновление списка(запрос данных)
 }
 

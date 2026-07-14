@@ -14,9 +14,15 @@ public:
     void setContacts(const QStringList &contacts);
     void clearList();
 
-public slots:
-    void uploadList();
+signals:
+    void itemClicked(QListWidgetItem *item);
+    void contactChoose(const QString& contact);
 
+public slots:
+    void uploadList(const QStringList& contacts);
+
+private slots:
+    void onContactClicked(QListWidgetItem* contact);
 signals:
 };
 
