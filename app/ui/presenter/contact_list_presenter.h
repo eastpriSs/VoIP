@@ -9,7 +9,7 @@ class ContactListPresenter : public QObject
 {
     Q_OBJECT
 public:
-    explicit ContactListPresenter(QObject *parent = nullptr);
+    ContactListPresenter(ContactList* v, ContactListModel* m,  QObject *parent = nullptr);
 
 signals:
 

@@ -46,6 +46,7 @@ add_executable(${PROJECT_NAME}
         ui/model/contact_list_model.h ui/model/contact_list_model.cpp
         domain/controllers/contacts/contact_list_controller.h domain/controllers/contacts/contact_list_controller.cpp
         domain/interfaces/contact_fetcher_repository.h domain/interfaces/contact_fetcher_repository.cpp
+        domain/entities/pbx_auth_credits.h domain/entities/pbx_auth_credits.cpp
         )
 
 
@@ -72,6 +73,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/interfaces
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/entities
         ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/auth/
+        ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/contacts/
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

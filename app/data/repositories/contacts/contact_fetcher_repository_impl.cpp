@@ -1,9 +1,50 @@
 #include "contact_fetcher_repository_impl.h"
 
-ContactFetcherRepositoryImpl::ContactFetcherRepositoryImpl()
-{}
-
-void ContactFetcherRepositoryImpl::sendContactListRequest()
+ContactFetcherRepositoryImpl::ContactFetcherRepositoryImpl(std::shared_ptr<ContactFetcherPBX> m)
+    : module(m)
 {
-    module->sendRequest();
+    connect(module.get(), &ContactFetcherPBX::tokenRecieved,
+            this, &ContactFetcherRepositoryImpl::onTokenRecieved);
+    connect(module.get(), &ContactFetcherPBX::extensionsRecieved,
+            this, &ContactFetcherRepositoryImpl::onExtensionsRecieved);
+}
+
+void ContactFetcherRepositoryImpl::sendContactListRequest(const QString &clientId, const QString &clientSecret,
+                                                          const QString &server)
+{
+    serverDomain = server;
+    if (!accessToken.isActive())
+        module->fetchToken(clientId, clientSecret, server);
+}
+
+void ContactFetcherRepositoryImpl::onTokenRecieved(QString token, int lifeTime)
+{
+    accessToken.setHash(std::move(token));
+    accessToken.setLifeTime(lifeTime);
+    module->fetchExtensions(token, serverDomain);
+}
+
+void ContactFetcherRepositoryImpl::onExtensionsRecieved(QStringList extensions)
+{
+    emit replyRecieved(std::move(extensions));
+}
+
+bool ContactFetcherRepositoryImpl::AccessToken::isActive()
+{
+    return QTime::currentTime().secsTo(timeActiveted) < lifeTime;
+}
+
+uint ContactFetcherRepositoryImpl::AccessToken::getLifeTime() const
+{
+    return lifeTime;
+}
+
+void ContactFetcherRepositoryImpl::AccessToken::setLifeTime(uint newLifeTime)
+{
+    lifeTime = newLifeTime;
+}
+
+void ContactFetcherRepositoryImpl::AccessToken::setHash(const QString &newHash)
+{
+    hash = newHash;
 }

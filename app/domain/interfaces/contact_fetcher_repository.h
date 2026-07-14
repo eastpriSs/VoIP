@@ -8,9 +8,9 @@ class IContactFetcherRepository : public QObject
     Q_OBJECT
 public:
     explicit IContactFetcherRepository(QObject *parent = nullptr) : QObject(parent) {};
-    virtual void sendContactListRequest() = 0;
+    virtual void sendContactListRequest(const QString &clientId, const QString &clientSecret, const QString &server) = 0;
 signals:
-    void replyRecieved();
+    void replyRecieved(QStringList extensions);
 };
 
 #endif // CONTACT_FETCHER_REPOSITORY_H

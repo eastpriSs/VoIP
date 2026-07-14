@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.28)
 
 project(siplib VERSION 0.1 LANGUAGES CXX)
 
-find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core Network)
 
 add_library(${PROJECT_NAME} STATIC
         services/SIP/module_sip.cpp
@@ -38,5 +38,5 @@ target_include_directories(${PROJECT_NAME}
         ${PJPROJECT_SOURCE_DIR}/pjlib-util/include
         ${PJPROJECT_SOURCE_DIR}/pjlib/include
 )
-target_link_libraries(${PROJECT_NAME} PUBLIC Qt6::Core pjsua2)
+target_link_libraries(${PROJECT_NAME} PUBLIC Qt6::Core Qt6::Network pjsua2)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

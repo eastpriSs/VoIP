@@ -8,6 +8,14 @@
 #include "auth_menu.h"
 #include "auth_menu_model.h"
 
+
+#include "contact_list_model.h"
+#include "contact_list_presenter.h"
+#include "contact_list.h"
+#include "contact_list_controller.h"
+#include "contact_fetcher_pbx.h"
+#include "contact_fetcher_repository_impl.h"
+
 int main(int argc, char *argv[])
 {
     using std::shared_ptr;
@@ -21,7 +29,15 @@ int main(int argc, char *argv[])
     AuthMenuModel* authMenuModel = new AuthMenuModel(authController);
     shared_ptr<AuthMenuPresenter> authMenuPresenter = make_shared<AuthMenuPresenter>(authMenu, authMenuModel);
 
-    MainWindow w(authMenu);
+    ContactList* contactMenu = new ContactList();
+    shared_ptr<ContactFetcherPBX> contactService = make_shared<ContactFetcherPBX>();
+    shared_ptr<ContactFetcherRepositoryImpl> contactRepoImpl = make_shared<ContactFetcherRepositoryImpl>(contactService);
+    shared_ptr<ContactListController> contactController = make_shared<ContactListController>(contactRepoImpl);
+    ContactListModel* contactMenuModel = new ContactListModel(contactController);
+    shared_ptr<ContactListPresenter> contactMenuPresenter = make_shared<ContactListPresenter>(contactMenu, contactMenuModel);
+
+
+    MainWindow w(authMenu, contactMenu);
     w.show();
 
     return a.exec();

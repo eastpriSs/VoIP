@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(AuthMenu* authMenu, QWidget *parent = nullptr);
+    MainWindow(AuthMenu* authMenu, ContactList* conMenu, QWidget *parent = nullptr);
     ~MainWindow();
 
 signals:

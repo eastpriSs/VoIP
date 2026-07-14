@@ -19,13 +19,15 @@ signals:
     void itemClicked(QListWidgetItem *item);
     void contactChoose(const QString& contact);
     void updateListRequested();
+    void authConfigEntered(const QString &clientId, const QString &clientSecret, const QString &server);
 
 public slots:
     void uploadList(const QStringList& contacts);
+    void showError(const QString &message);
+    void showContacts(QStringList contacts);
 
 private slots:
     void onContactClicked(QListWidgetItem* contact);
-signals:
 };
 
 #endif // CONTACT_LIST_H

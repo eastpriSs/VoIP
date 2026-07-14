@@ -2,22 +2,26 @@
 #define CONTACT_LIST_CONTROLLER_H
 
 #include <QObject>
+#include <memory>
 #include "contact_fetcher_repository.h"
-
-// todo: здесь будет callController с помощью которого мы будем
-// вызывать callNumber с выбранным номером
 
 class ContactListController : public QObject
 {
     Q_OBJECT
 public:
-    explicit ContactListController(QObject *parent = nullptr);
+    explicit ContactListController(std::shared_ptr<IContactFetcherRepository> repo, QObject *parent = nullptr);
     void proccessSelectedNumber(const QString& number);
-    void updateContactList();
+    void updateContactList(const QString &clientId, const QString &clientSecret, const QString &server);
 
 private:
     std::shared_ptr<IContactFetcherRepository> repo;
+
+private slots:
+    void onReplyRecieved(QStringList extensions);
+
 signals:
+    void pbxAuthError(const QString &message);
+    void extensionsRecieved(QStringList extensions);
 };
 
 #endif // CONTACT_LIST_CONTROLLER_H
