@@ -61,12 +61,6 @@ private:
 
 namespace sip {
 
-enum ReturningStates
-{
-    OK = 200,
-    ACCOUNT_UNREGISTRED = 100
-};
-
 class ModuleSIP : public QObject
 {
     Q_OBJECT

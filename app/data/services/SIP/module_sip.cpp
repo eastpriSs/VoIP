@@ -1,5 +1,7 @@
-#include "module_sip.h"
 #include <QDebug>
+
+#include "returning_states.h"
+#include "module_sip.h"
 
 using namespace pj;
 
@@ -16,8 +18,6 @@ void MyCall::onCallState(OnCallStateParam &prm) {
     if (stateCallback) {
         stateCallback(ci.id, ci.state, QString::fromStdString(ci.stateText));
     }
-    if (ci.state == PJSIP_INV_STATE_DISCONNECTED)
-        delete this;
 }
 
 void MyCall::onCallMediaState(OnCallMediaStateParam &prm) {
@@ -104,7 +104,6 @@ void MyAccount::onIncomingCall(OnIncomingCallParam &iprm)
         return;
     }
 
-    call.reset();
     call = std::make_unique<MyCall>(*this, iprm.callId, stateCallback);
     CallInfo ci = call->getInfo();
 
@@ -196,13 +195,20 @@ int ModuleSIP::doRegister(const AuthCredits& authCredits)
 
     try {
         acc = std::make_unique<MyAccount>(
-            [this](int code) {
+            [this](int code)
+            {
                 emit registrationStateChanged(code);
             },
-            [this](QString remoteUri, int callId) {
+
+            [this](QString remoteUri, int callId)
+            {
                 emit incomingCallReceived(std::move(remoteUri), callId);
             },
-            [this](int callId, int pjsip_state, const QString& stateText) {
+
+            [this](int callId, int pjsip_state, const QString& stateText)
+            {
+                if (pjsip_state == PJSIP_INV_STATE_DISCONNECTED)
+                    acc->call.reset(nullptr);
                 emit callStateChanged(callId, pjsip_state, stateText);
             });
 

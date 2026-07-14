@@ -1,4 +1,6 @@
+#include "returning_states.h"
 #include "call_repository_impl.h"
+#include <pjsua2.hpp>
 #include <QDebug>
 
 namespace {
@@ -15,38 +17,28 @@ QString extractPureSipUri(const QString& rawUri)
     return trimmed;
 }
 
-enum PjsipInvState {
-    PjsipStateNull         = 0, // PJSIP_INV_STATE_NULL
-    PjsipStateCalling      = 1, // PJSIP_INV_STATE_CALLING
-    PjsipStateIncoming     = 2, // PJSIP_INV_STATE_INCOMING
-    PjsipStateEarly        = 3, // PJSIP_INV_STATE_EARLY
-    PjsipStateConnecting   = 4, // PJSIP_INV_STATE_CONNECTING
-    PjsipStateConfirmed    = 5, // PJSIP_INV_STATE_CONFIRMED
-    PjsipStateDisconnected = 6  // PJSIP_INV_STATE_DISCONNECTED
-};
-
 CallState mapPjsipStateToDomain(int pjsip_state)
 {
     switch (pjsip_state) {
-    case PjsipStateNull:
+    case PJSIP_INV_STATE_NULL:
         return CallState::None;
 
-    case PjsipStateCalling:
+    case PJSIP_INV_STATE_CALLING:
         return CallState::Calling;
 
-    case PjsipStateIncoming:
+    case PJSIP_INV_STATE_INCOMING:
         return CallState::Incoming;
 
-    case PjsipStateEarly:
+    case PJSIP_INV_STATE_EARLY:
         return CallState::Early;
 
-    case PjsipStateConnecting:
+    case PJSIP_INV_STATE_CONNECTING:
         return CallState::Connecting;
 
-    case PjsipStateConfirmed:
+    case PJSIP_INV_STATE_CONFIRMED:
         return CallState::Active;
 
-    case PjsipStateDisconnected:
+    case PJSIP_INV_STATE_DISCONNECTED:
         return CallState::Disconnected;
 
     default:
