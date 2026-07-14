@@ -1,63 +1,10 @@
 #pragma once
 #include <QObject>
 #include <QString>
-#include <memory>
-#include <functional>
 #include <pjsua2.hpp>
 #include "auth_credits.h"
 #include "sip_uri.h"
-
-namespace sip {
-class ModuleSIP;
-}
-
-namespace sip_private {
-
-class MyCall : public pj::Call {
-public:
-    using StateCallback = std::function<void(int callId, int stateCode, const QString& stateText)>;
-
-    explicit MyCall(pj::Account &acc, int call_id = PJSUA_INVALID_ID, StateCallback cb = nullptr);
-    ~MyCall() override = default;
-
-    void onCallState(pj::OnCallStateParam &prm) override;
-    void onCallMediaState(pj::OnCallMediaStateParam &prm) override;
-
-    void setMuteVoice(bool v);
-
-private:
-    void applyMute();
-
-    StateCallback stateCallback;
-    bool muteVoice;
-};
-
-class MyAccount : public pj::Account {
-public:
-    using RegCallback = std::function<void(int)>;
-    using IncomingCallCallback = std::function<void(QString remoteUri, int callId)>;
-
-    explicit MyAccount(RegCallback cb, IncomingCallCallback icb, MyCall::StateCallback stcb = nullptr);
-    ~MyAccount() override;
-
-    void onRegState(pj::OnRegStateParam &prm) override;
-    void onIncomingCall(pj::OnIncomingCallParam &iprm) override;
-
-    void setIsCreated(bool v);
-    void answerCall();
-    void rejectCall();
-
-private:
-    friend class sip::ModuleSIP;
-
-    std::unique_ptr<MyCall> call;
-    RegCallback regCallback;
-    IncomingCallCallback inCallback;
-    MyCall::StateCallback stateCallback;
-    bool isCreated;
-};
-
-} // namespace sip_private
+#include "my_account.h"
 
 namespace sip {
 
