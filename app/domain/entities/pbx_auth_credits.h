@@ -12,9 +12,9 @@ public:
     QString server() const;
 
 private:
-    QString m_clientId;
-    QString m_clientSecret;
-    QString m_server;
+    QString clID;
+    QString clSecret;
+    QString srvDomain;
 };
 
 #endif // PBX_AUTH_CREDITS_H

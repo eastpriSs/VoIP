@@ -10,4 +10,5 @@ ContactListPresenter::ContactListPresenter(ContactList *v, ContactListModel *m, 
     connect(model, &ContactListModel::showContacts, view, &ContactList::showContacts);
     connect(model, &ContactListModel::setStatus, view, &ContactList::setStatusBarText);
     connect(model, &ContactListModel::callMenuRequested, view, &ContactList::callMenu);
+    connect(model, &ContactListModel::hideStatus, view, &ContactList::onHideStatus);
 }

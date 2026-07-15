@@ -61,7 +61,7 @@ void ContactList::updateList()
     clientSecretEdit.setEchoMode(QLineEdit::Password);
 
     QLineEdit serverEdit(&dialog);
-    serverEdit.setPlaceholderText("https://example.com");
+    serverEdit.setPlaceholderText("http://example.com");
 
     form.addRow(tr("Client ID:"), &clientIdEdit);
     form.addRow(tr("Client Secret:"), &clientSecretEdit);
@@ -81,7 +81,7 @@ void ContactList::updateList()
         if (!statusDialog) {
             statusDialog = new QDialog(this->window());
             statusDialog->setWindowTitle(tr("Статус авторизации"));
-            statusDialog->resize(300, 100);
+            statusDialog->resize(HEIGHT_STATUS_LABEL, WEIGHT_STATUS_LABEL);
 
             QVBoxLayout *layout = new QVBoxLayout(statusDialog);
             statusLabel = new QLabel(tr("Инициализация..."), statusDialog);
@@ -122,4 +122,10 @@ void ContactList::setStatusBarText(const QString &text)
 void ContactList::callMenu(const QString &contact)
 {
     emit callMenuShowRequested(contact);
+}
+
+void ContactList::onHideStatus()
+{
+    if (statusDialog)
+        statusDialog->hide();
 }

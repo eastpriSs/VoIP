@@ -113,10 +113,6 @@ void ContactFetcherPBX::onExtensionsReceived(QNetworkReply *reply)
 
     QByteArray responseData = reply->readAll();
 
-// debug
-//     QByteArray responseData(R"({"data":{"fetchAllExtensions":{"status":true,"totalCount":2,"extension":[{"extensionId":"1001"},{"extensionId":"1002"}]}}}
-// )");
-
     QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
 
     if (jsonDoc.isNull() || !jsonDoc.isObject()) {

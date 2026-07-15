@@ -20,10 +20,6 @@ void ContactListModel::onContactClicked(const QString &contact)
     emit callMenuRequested(number);
 }
 
-void ContactListModel::onUpdateListRequested()
-{
-}
-
 void ContactListModel::onAuthConfigReceived(const QString &clientId, const QString &clientSecret, const QString &server)
 {
     serverDomain = server;
@@ -38,10 +34,11 @@ void ContactListModel::onPbxAuthError(const QString &message)
 
 void ContactListModel::onExtensionsRecieved(QStringList contactList)
 {
+    emit hideStatus();
     emit showContacts(std::move(contactList));
 }
 
-void ContactListModel::onRequestStateChanged()
+void ContactListModel::onRequestStateChanged(QString state)
 {
-    emit setStatus("smth");
+    emit setStatus(state);
 }

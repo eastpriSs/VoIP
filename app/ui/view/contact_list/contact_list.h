@@ -30,6 +30,7 @@ public slots:
     void showContacts(QStringList contacts);
     void setStatusBarText(const QString &text);
     void callMenu(const QString &contact);
+    void onHideStatus();
 
 private slots:
     void onContactClicked(QListWidgetItem* contact);
@@ -37,6 +38,8 @@ private slots:
 private:
     QDialog *statusDialog = nullptr;
     QLabel *statusLabel = nullptr;
+    static constexpr int WEIGHT_STATUS_LABEL = 300;
+    static constexpr int HEIGHT_STATUS_LABEL = 100;
 };
 
 #endif // CONTACT_LIST_H

@@ -6,6 +6,7 @@
 #include <QString>
 #include "contact_fetcher_repository.h"
 #include "contact_fetcher_pbx.h"
+#include "pbx_auth_credits.h"
 
 
 class ContactFetcherRepositoryImpl : public IContactFetcherRepository
@@ -29,7 +30,7 @@ class ContactFetcherRepositoryImpl : public IContactFetcherRepository
 
 public:
     explicit ContactFetcherRepositoryImpl(std::shared_ptr<ContactFetcherPBX> m);
-    void sendContactListRequest(const QString &clientId, const QString &clientSecret, const QString &server) override;
+    void sendContactListRequest(PBXAuthCredits pbxCred) override;
 
 private slots:
     void onTokenRecieved(QString token, int lifeTime);

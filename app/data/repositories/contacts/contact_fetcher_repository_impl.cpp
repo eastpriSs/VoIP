@@ -1,4 +1,5 @@
 #include "contact_fetcher_repository_impl.h"
+#include "request_states.h"
 
 ContactFetcherRepositoryImpl::ContactFetcherRepositoryImpl(std::shared_ptr<ContactFetcherPBX> m)
     : module(m)
@@ -9,30 +10,28 @@ ContactFetcherRepositoryImpl::ContactFetcherRepositoryImpl(std::shared_ptr<Conta
             this, &ContactFetcherRepositoryImpl::onExtensionsRecieved);
 }
 
-void ContactFetcherRepositoryImpl::sendContactListRequest(const QString &clientId, const QString &clientSecret,
-                                                          const QString &server)
+void ContactFetcherRepositoryImpl::sendContactListRequest(PBXAuthCredits pbxCred)
 {
-    serverDomain = server;
+    serverDomain = pbxCred.server();
     if (!accessToken.isActive()) {
-        module->fetchToken(clientId, clientSecret, server);
-        // emit stateChanged(tokenRequested);
+        module->fetchToken(pbxCred.clientId(), pbxCred.clientSecret(), pbxCred.server());
+        emit stateChanged(RequestState::tokenRequested);
     }
 }
-
 void ContactFetcherRepositoryImpl::onTokenRecieved(QString token, int lifeTime)
 {
-    // emit stateChanged(tokenRecieved);
+    emit stateChanged(RequestState::tokenRecieved);
 
     accessToken.setHash(std::move(token));
     accessToken.setLifeTime(lifeTime);
     module->fetchExtensions(token, serverDomain);
 
-    // emit stateChanged(extensionsRequested);
+    emit stateChanged(RequestState::extensionsRequested);
 }
 
 void ContactFetcherRepositoryImpl::onExtensionsRecieved(QStringList extensions)
 {
-    // emit stateChanged(extensionsRecieved);
+    emit stateChanged(RequestState::extensionsRecieved);
     emit replyRecieved(std::move(extensions));
 }
 

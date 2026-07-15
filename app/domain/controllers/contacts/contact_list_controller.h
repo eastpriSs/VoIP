@@ -5,6 +5,7 @@
 #include <memory>
 #include "contact_fetcher_repository.h"
 #include "call_controller.h"
+#include "request_states.h"
 
 class ContactListController : public QObject
 {
@@ -22,12 +23,12 @@ private:
 
 private slots:
     void onReplyRecieved(QStringList extensions);
-    void onStateChanged();
+    void onStateChanged(RequestState state);
 
 signals:
     void pbxAuthError(const QString &message);
     void extensionsRecieved(QStringList extensions);
-    void requestStateChanged();
+    void requestStateChanged(QString state);
 };
 
 #endif // CONTACT_LIST_CONTROLLER_H

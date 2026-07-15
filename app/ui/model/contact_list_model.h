@@ -13,19 +13,19 @@ public:
 
 public slots:
     void onContactClicked(const QString& contact);
-    void onUpdateListRequested();
     void onAuthConfigReceived(const QString &clientId, const QString &clientSecret, const QString &server);
 
 private slots:
     void onPbxAuthError(const QString &message);
     void onExtensionsRecieved(QStringList contactList);
-    void onRequestStateChanged();
+    void onRequestStateChanged(QString state);
 
 signals:
     void authError(const QString &message);
     void showContacts(QStringList contacts);
     void setStatus(const QString &message);
     void callMenuRequested(const QString &number);
+    void hideStatus();
 
 private:
     QString serverDomain;
