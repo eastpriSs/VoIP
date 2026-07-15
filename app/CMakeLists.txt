@@ -5,6 +5,10 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 add_executable(${PROJECT_NAME}
 
@@ -54,9 +58,19 @@ add_executable(${PROJECT_NAME}
         domain/entities/call_session.cpp
         domain/controllers/calls/call_controller.h domain/controllers/calls/call_controller.cpp
         domain/interfaces/call_repository.h domain/interfaces/call_repository.cpp
+        ui/view/setting/setting_menu.h ui/view/setting/setting_menu.cpp
+        ui/presenter/setting_menu_presenter.h ui/presenter/setting_menu_presenter.cpp
+        ui/model/setting_menu_model.h ui/model/setting_menu_model.cpp
+        domain/controllers/setting/setting_controller.h domain/controllers/setting/setting_controller.cpp
+        domain/interfaces/setting_repository.h domain/interfaces/setting_repository.cpp
+        domain/entities/pbx_auth_credits.h domain/entities/pbx_auth_credits.cpp
         )
 
 
+target_link_libraries(VoIP PRIVATE Qt6::Core)
+target_link_libraries(VoIP PRIVATE Qt6::Core)
+target_link_libraries(VoIP PRIVATE Qt6::Core)
+target_link_libraries(VoIP PRIVATE Qt6::Core)
 target_link_libraries(VoIP PRIVATE Qt6::Core)
 target_link_libraries(VoIP PRIVATE Qt6::Core)
 target_link_libraries(VoIP PRIVATE Qt6::Core)
@@ -75,15 +89,18 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/view/auth
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/view/main_window
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/view/contact_list
+        ${CMAKE_CURRENT_SOURCE_DIR}/ui/view/setting
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/view/call_menu
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/controllers/auth
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/controllers/calls
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/controllers/contacts
+        ${CMAKE_CURRENT_SOURCE_DIR}/domain/controllers/setting
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/interfaces
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/entities
         ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/auth/
         ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/auth/
         ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/calls/
+        ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/setting/
 
 )
 

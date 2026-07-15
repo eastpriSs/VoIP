@@ -14,6 +14,13 @@
 #include "call_controller.h"
 #include "call_repository_impl.h"
 
+#include "setting_menu.h"
+#include "setting_menu_presenter.h"
+#include "setting_menu_model.h"
+#include "setting_controller.h"
+#include "setting_repository_impl.h"
+
+
 template<
     typename Menu,
     typename Presenter,
@@ -28,10 +35,10 @@ template<
     using std::shared_ptr;
 
     Menu* menu = new Menu();
-    shared_ptr<Repo> repo = make_shared<Repo>(service);
-    shared_ptr<Controller> contorller = make_shared<Controller>(repo);
+    shared_ptr<Repo> repo = std::make_shared<Repo>(service);
+    shared_ptr<Controller> contorller = std::make_shared<Controller>(repo);
     Model* model = new Model(contorller);
-    shared_ptr<Presenter> presenter = make_shared<Presenter>(menu, model);
+    shared_ptr<Presenter> presenter = std::make_shared<Presenter>(menu, model);
 
     return menu;
 }
@@ -46,11 +53,13 @@ int main(int argc, char *argv[])
 
     shared_ptr<sip::ModuleSIP> sipService = make_shared<sip::ModuleSIP>();
 
+
     AuthMenu* authMenu = new AuthMenu();
     shared_ptr<AuthRepositoryImpl> authRepoImpl = make_shared<AuthRepositoryImpl>(sipService);
     shared_ptr<AuthController> authController = make_shared<AuthController>(authRepoImpl);
     AuthMenuModel* authMenuModel = new AuthMenuModel(authController);
     shared_ptr<AuthMenuPresenter> authMenuPresenter = make_shared<AuthMenuPresenter>(authMenu, authMenuModel);
+
 
     CallMenu* callMenu = new CallMenu();
     shared_ptr<CallRepositoryImpl> callRepoImpl = make_shared<CallRepositoryImpl>(sipService);
@@ -58,11 +67,15 @@ int main(int argc, char *argv[])
     CallMenuModel* callMenuModel = new CallMenuModel(callController);
     std::shared_ptr<CallMenuPresenter> callMenuPresenter = make_shared<CallMenuPresenter>(callMenu, callMenuModel);
 
-    MainWindow w(authMenu, callMenu);
+
+    SettingMenu* settingMenu = new SettingMenu();
+    shared_ptr<SettingRepositoryImpl> settingRepoImpl = make_shared<SettingRepositoryImpl>();
+    shared_ptr<SettingController> settingController = make_shared<SettingController>(settingRepoImpl);
+    SettingMenuModel* settingMenuModel = new SettingMenuModel(settingController);
+    shared_ptr<SettingMenuPresenter> settingMenuPresenter = make_shared<SettingMenuPresenter>(settingMenu, settingMenuModel);
+
+    MainWindow w(authMenu, callMenu, settingMenu);
     w.show();
 
     return a.exec();
-
-    delete authMenuModel;
-    delete authMenu;
 }
