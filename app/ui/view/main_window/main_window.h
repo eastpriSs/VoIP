@@ -4,8 +4,10 @@
 #include <QMainWindow>
 #include "auth_menu.h"
 #include "contact_list.h"
+#include "call_menu.h"
 
 QT_BEGIN_NAMESPACE
+
 namespace Ui {
 class MainWindow;
 }
@@ -16,7 +18,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(AuthMenu* authMenu, ContactList* conMenu, QWidget *parent = nullptr);
+    MainWindow(AuthMenu* authMenu, CallMenu* callMenu, ContactList* conMenu, QWidget *parent = nullptr);
     ~MainWindow();
 
 signals:
@@ -24,13 +26,13 @@ signals:
 
 public slots:
     void on_authAction_triggered();
-
-private slots:
     void on_contactsButton_clicked();
+    void on_numberButton_clicked();
 
 private:
     AuthMenu* authMenu;
     ContactList* contactList;
+    CallMenu*      callMenu;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

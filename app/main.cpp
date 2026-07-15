@@ -16,14 +16,45 @@
 #include "contact_fetcher_pbx.h"
 #include "contact_fetcher_repository_impl.h"
 
+#include "call_menu.h"
+#include "call_menu_presenter.h"
+#include "call_menu_model.h"
+#include "call_controller.h"
+#include "call_repository_impl.h"
+
+template<
+    typename Menu,
+    typename Presenter,
+    typename Model,
+    typename Controller,
+    typename Repo,
+    typename Service
+    >
+// todo добавить концепты на конструкторы как минимум
+[[nodiscard]] Menu* makeStack(Service* service)
+{
+    using std::shared_ptr;
+
+    Menu* menu = new Menu();
+    shared_ptr<Repo> repo = make_shared<Repo>(service);
+    shared_ptr<Controller> contorller = make_shared<Controller>(repo);
+    Model* model = new Model(contorller);
+    shared_ptr<Presenter> presenter = make_shared<Presenter>(menu, model);
+
+    return menu;
+}
+
+
 int main(int argc, char *argv[])
 {
     using std::shared_ptr;
     using std::make_shared;
 
     QApplication a(argc, argv);
-    AuthMenu* authMenu = new AuthMenu();
+
     shared_ptr<sip::ModuleSIP> sipService = make_shared<sip::ModuleSIP>();
+
+    AuthMenu* authMenu = new AuthMenu();
     shared_ptr<AuthRepositoryImpl> authRepoImpl = make_shared<AuthRepositoryImpl>(sipService);
     shared_ptr<AuthController> authController = make_shared<AuthController>(authRepoImpl);
     AuthMenuModel* authMenuModel = new AuthMenuModel(authController);
@@ -37,7 +68,13 @@ int main(int argc, char *argv[])
     shared_ptr<ContactListPresenter> contactMenuPresenter = make_shared<ContactListPresenter>(contactMenu, contactMenuModel);
 
 
-    MainWindow w(authMenu, contactMenu);
+    CallMenu* callMenu = new CallMenu();
+    shared_ptr<CallRepositoryImpl> callRepoImpl = make_shared<CallRepositoryImpl>(sipService);
+    shared_ptr<CallController> callController = make_shared<CallController>(callRepoImpl);
+    CallMenuModel* callMenuModel = new CallMenuModel(callController);
+    std::shared_ptr<CallMenuPresenter> callMenuPresenter = make_shared<CallMenuPresenter>(callMenu, callMenuModel);
+
+    MainWindow w(authMenu, callMenu, contactMenu);
     w.show();
 
     return a.exec();

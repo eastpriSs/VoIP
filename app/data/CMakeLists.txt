@@ -11,6 +11,10 @@ add_library(${PROJECT_NAME} STATIC
         repositories/auth/auth_repository_impl.cpp
         repositories/contacts/contact_fetcher_repository_impl.h repositories/contacts/contact_fetcher_repository_impl.cpp
         services/PBX/contact_fetcher_pbx.h services/PBX/contact_fetcher_pbx.cpp
+        repositories/calls/call_repository_impl.h repositories/calls/call_repository_impl.cpp
+        services/SIP/returning_states.h
+        services/SIP/my_call.h services/SIP/my_call.cpp
+        services/SIP/my_account.h services/SIP/my_account.cpp
 )
 
 target_link_libraries(siplib PRIVATE Qt6::Core)
@@ -22,10 +26,10 @@ target_include_directories(${PROJECT_NAME}
    PUBLIC
        ${CMAKE_CURRENT_SOURCE_DIR}/../domain/interfaces/
        ${CMAKE_CURRENT_SOURCE_DIR}/../domain/entities/
-       ${CMAKE_CURRENT_SOURCE_DIR}/../common/errors
+       ${CMAKE_CURRENT_SOURCE_DIR}/../common/errors/
+       ${CMAKE_CURRENT_SOURCE_DIR}/../common/states/
        ${CMAKE_CURRENT_SOURCE_DIR}/services/SIP
        ${CMAKE_CURRENT_SOURCE_DIR}/services/PBX
-    PRIVATE
         ${PJPROJECT_BINARY_DIR}/pjsip/include
         ${PJPROJECT_BINARY_DIR}/pjmedia/include
         ${PJPROJECT_BINARY_DIR}/pjnath/include
