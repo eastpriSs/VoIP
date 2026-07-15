@@ -1,16 +1,16 @@
 #include "setting_menu_presenter.h"
 
-SettingMenuPresenter::SettingMenuPresenter(SettingMenu *view, SettingMenuModel *model, QObject *parent)
+SettingMenuPresenter::SettingMenuPresenter(std::shared_ptr<SettingMenu> view,
+                                           std::shared_ptr<SettingMenuModel> model, QObject *parent)
     : QObject{parent},
     view(view),
     model(model)
 {
-    connect(this->view, &SettingMenu::settingsSubmitted,
-                this->model, &SettingMenuModel::saveSettings);
+    connect(this->view.get(), &SettingMenu::settingsSubmitted,
+                this->model.get(), &SettingMenuModel::saveSettings);
 
-    connect(this->model, &SettingMenuModel::settingsLoaded,
-                this->view, &SettingMenu::setInitialSettings);
+    connect(this->model.get(), &SettingMenuModel::settingsLoaded,
+                this->view.get(), &SettingMenu::setInitialSettings);
 
     this->model->getSettings();
-
 }

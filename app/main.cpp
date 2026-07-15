@@ -68,13 +68,13 @@ int main(int argc, char *argv[])
     std::shared_ptr<CallMenuPresenter> callMenuPresenter = make_shared<CallMenuPresenter>(callMenu, callMenuModel);
 
 
-    SettingMenu* settingMenu = new SettingMenu();
+    shared_ptr<SettingMenu> settingMenu = make_shared<SettingMenu>(new SettingMenu());
     shared_ptr<SettingRepositoryImpl> settingRepoImpl = make_shared<SettingRepositoryImpl>();
     shared_ptr<SettingController> settingController = make_shared<SettingController>(settingRepoImpl);
-    SettingMenuModel* settingMenuModel = new SettingMenuModel(settingController);
+    shared_ptr<SettingMenuModel> settingMenuModel = make_shared<SettingMenuModel>(settingController);
     shared_ptr<SettingMenuPresenter> settingMenuPresenter = make_shared<SettingMenuPresenter>(settingMenu, settingMenuModel);
 
-    MainWindow w(authMenu, callMenu, settingMenu);
+    MainWindow w(authMenu, callMenu, settingMenu.get());
     w.show();
 
     return a.exec();

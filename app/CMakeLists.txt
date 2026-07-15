@@ -1,14 +1,4 @@
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
 
 add_executable(${PROJECT_NAME}
 
@@ -67,15 +57,6 @@ add_executable(${PROJECT_NAME}
         )
 
 
-target_link_libraries(VoIP PRIVATE Qt6::Core)
-target_link_libraries(VoIP PRIVATE Qt6::Core)
-target_link_libraries(VoIP PRIVATE Qt6::Core)
-target_link_libraries(VoIP PRIVATE Qt6::Core)
-target_link_libraries(VoIP PRIVATE Qt6::Core)
-target_link_libraries(VoIP PRIVATE Qt6::Core)
-target_link_libraries(VoIP PRIVATE Qt6::Core)
-target_link_libraries(VoIP PRIVATE Qt6::Core)
-target_link_libraries(VoIP PRIVATE Qt6::Core)
 target_link_libraries(VoIP PRIVATE Qt6::Core)
 add_subdirectory(data)
 

@@ -10,7 +10,7 @@ inline const QRegularExpression virtualNumber("^\\+?[1-9]\\d{9,14}$");
 inline const QRegularExpression username("^[a-zA-Z0-9_\\.\\*\\-@]{3,64}$");
 inline const QRegularExpression sipUri("^(sips?):([^@]+)(?:@(.+))?$");
 inline const QRegularExpression clientIdRegex("^[a-zA-Z0-9_-]{3,150}$");
-inline const QRegularExpression serverRegex(R"(^http:\/\/[a-zA-Z0-9.-]+(?::[0-9]+)?(\/.*)?$)");
+inline const QRegularExpression serverRegex(R"(^(https?:\/\/)?([a-zA-Z0-9.-]+)(:[0-9]+)?(\/.*)?$)");
 }
 
 #endif // REGEX_PATTERNS_H

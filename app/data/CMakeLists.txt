@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 3.28)
 project(siplib VERSION 0.1 LANGUAGES CXX)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
 
 add_library(${PROJECT_NAME} STATIC
         services/SIP/module_sip.cpp

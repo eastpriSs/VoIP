@@ -9,11 +9,11 @@ class SettingMenuPresenter : public QObject
 {
     Q_OBJECT
 public:
-    explicit SettingMenuPresenter(SettingMenu *view, SettingMenuModel *model, QObject *parent = nullptr);
+    explicit SettingMenuPresenter(std::shared_ptr<SettingMenu> view, std::shared_ptr<SettingMenuModel> model, QObject *parent = nullptr);
 
 private:
-    SettingMenu *view;
-    SettingMenuModel *model;
+    std::shared_ptr<SettingMenu> view;
+    std::shared_ptr<SettingMenuModel> model;
 };
 
 #endif // SETTING_MENU_PRESENTER_H
