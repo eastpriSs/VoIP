@@ -1,21 +1,12 @@
 #pragma once
 #include <QObject>
 #include <QString>
-#include <memory>
+#include <pjsua2.hpp>
 #include "auth_credits.h"
-
-namespace sip_private {
-
-class SIPImpl;
-class MyAccount;
-
-} // namespace sip_private
+#include "sip_uri.h"
+#include "my_account.h"
 
 namespace sip {
-
-using namespace sip_private;
-
-constexpr int OK = 200;
 
 class ModuleSIP : public QObject
 {
@@ -25,11 +16,29 @@ public:
     ~ModuleSIP() override;
 
     int doRegister(const AuthCredits& authCredits);
+    int doCall(const SipUri& dist);
+    int doAcceptCall();
+    int doRejectCall();
+    int doHangUpCall();
+    int doHoldCall();
+    int doUnHoldCall();
+    int doMute();
+    int doUnMute();
+
     QString getTextError(int code);
+
 signals:
     void registrationStateChanged(int code, const QString& info = "");
+    void incomingCallReceived(const QString& remoteUri, int callId);
+    void callStateChanged(int callId, int pjsip_state, const QString& stateText);
 
-public:
-    std::unique_ptr<SIPImpl> impl;
+private:
+    int checkAccountAndCall() const;
+
+private:
+    pj::Endpoint ep;
+    std::unique_ptr<sip_private::MyAccount> acc;
+    bool isEndpointInit;
 };
+
 } // namespace sip

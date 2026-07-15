@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include "auth_repository_impl.h"
+#include "returning_states.h"
 
 
 AuthRepositoryImpl::AuthRepositoryImpl(std::shared_ptr<sip::ModuleSIP> sipService)
