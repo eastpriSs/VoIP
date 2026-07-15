@@ -20,6 +20,7 @@ class ContactFetcherRepositoryImpl : public IContactFetcherRepository
         uint getLifeTime() const;
         void setLifeTime(uint newLifeTime);
         void setHash(const QString &newHash);
+        void setTimeActivated(QTime time);
 
     private:
         QString hash;

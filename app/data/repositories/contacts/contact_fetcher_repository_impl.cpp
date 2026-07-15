@@ -24,6 +24,7 @@ void ContactFetcherRepositoryImpl::onTokenRecieved(QString token, int lifeTime)
 
     accessToken.setHash(std::move(token));
     accessToken.setLifeTime(lifeTime);
+    accessToken.setTimeActivated(QTime::currentTime());
     module->fetchExtensions(token, serverDomain);
 
     emit stateChanged(RequestState::extensionsRequested);
@@ -53,4 +54,9 @@ void ContactFetcherRepositoryImpl::AccessToken::setLifeTime(uint newLifeTime)
 void ContactFetcherRepositoryImpl::AccessToken::setHash(const QString &newHash)
 {
     hash = newHash;
+}
+
+void ContactFetcherRepositoryImpl::AccessToken::setTimeActivated(QTime time)
+{
+    timeActiveted = time;
 }
