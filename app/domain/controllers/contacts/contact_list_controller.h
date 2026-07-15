@@ -4,17 +4,21 @@
 #include <QObject>
 #include <memory>
 #include "contact_fetcher_repository.h"
+#include "call_controller.h"
 
 class ContactListController : public QObject
 {
     Q_OBJECT
 public:
-    explicit ContactListController(std::shared_ptr<IContactFetcherRepository> repo, QObject *parent = nullptr);
+    explicit ContactListController(std::shared_ptr<IContactFetcherRepository> repo,
+                                   std::shared_ptr<CallController> callController = nullptr,
+                                   QObject *parent = nullptr);
     void proccessSelectedNumber(const QString& number);
     void updateContactList(const QString &clientId, const QString &clientSecret, const QString &server);
 
 private:
     std::shared_ptr<IContactFetcherRepository> repo;
+    std::shared_ptr<CallController> callController;
 
 private slots:
     void onReplyRecieved(QStringList extensions);

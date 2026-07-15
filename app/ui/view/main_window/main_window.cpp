@@ -11,6 +11,7 @@ MainWindow::MainWindow(AuthMenu* authMenu, CallMenu* callMenu, ContactList* conM
 {
     ui->setupUi(this);
     ui->verticalLayout->insertWidget(2, contactList);
+    connect(contactList, &ContactList::callMenuShowRequested, this, &MainWindow::onCallMenuRequested);
 }
 
 MainWindow::~MainWindow()
@@ -26,6 +27,12 @@ void MainWindow::on_authAction_triggered()
 void MainWindow::on_contactsButton_clicked()
 {
     contactList->updateList();
+}
+
+void MainWindow::onCallMenuRequested(const QString &number)
+{
+    callMenu->setTextNumber(number);
+    callMenu->exec();
 }
 
 void MainWindow::on_numberButton_clicked()

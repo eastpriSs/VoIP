@@ -12,7 +12,7 @@ ContactList::ContactList(QWidget *parent)
     statusDialog(nullptr),
     statusLabel(nullptr)
 {
-    connect(this, &ContactList::itemClicked, this, &ContactList::onContactClicked);
+    connect(this, &QListWidget::itemDoubleClicked, this, &ContactList::onContactClicked);
 }
 
 void ContactList::uploadList(const QStringList& contacts)
@@ -117,4 +117,9 @@ void ContactList::setStatusBarText(const QString &text)
             statusDialog->show();
         }
     }
+}
+
+void ContactList::callMenu(const QString &contact)
+{
+    emit callMenuShowRequested(contact);
 }

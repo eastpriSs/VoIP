@@ -22,12 +22,14 @@ signals:
     void contactChoose(const QString& contact);
     void updateListRequested();
     void authConfigEntered(const QString &clientId, const QString &clientSecret, const QString &server);
+    void callMenuShowRequested(const QString &contact);
 
 public slots:
     void uploadList(const QStringList& contacts);
     void showError(const QString &message);
     void showContacts(QStringList contacts);
     void setStatusBarText(const QString &text);
+    void callMenu(const QString &contact);
 
 private slots:
     void onContactClicked(QListWidgetItem* contact);

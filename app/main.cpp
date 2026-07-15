@@ -60,19 +60,20 @@ int main(int argc, char *argv[])
     AuthMenuModel* authMenuModel = new AuthMenuModel(authController);
     shared_ptr<AuthMenuPresenter> authMenuPresenter = make_shared<AuthMenuPresenter>(authMenu, authMenuModel);
 
-    ContactList* contactMenu = new ContactList();
-    shared_ptr<ContactFetcherPBX> contactService = make_shared<ContactFetcherPBX>();
-    shared_ptr<ContactFetcherRepositoryImpl> contactRepoImpl = make_shared<ContactFetcherRepositoryImpl>(contactService);
-    shared_ptr<ContactListController> contactController = make_shared<ContactListController>(contactRepoImpl);
-    ContactListModel* contactMenuModel = new ContactListModel(contactController);
-    shared_ptr<ContactListPresenter> contactMenuPresenter = make_shared<ContactListPresenter>(contactMenu, contactMenuModel);
-
-
     CallMenu* callMenu = new CallMenu();
     shared_ptr<CallRepositoryImpl> callRepoImpl = make_shared<CallRepositoryImpl>(sipService);
     shared_ptr<CallController> callController = make_shared<CallController>(callRepoImpl);
     CallMenuModel* callMenuModel = new CallMenuModel(callController);
     std::shared_ptr<CallMenuPresenter> callMenuPresenter = make_shared<CallMenuPresenter>(callMenu, callMenuModel);
+
+
+    ContactList* contactMenu = new ContactList();
+    shared_ptr<ContactFetcherPBX> contactService = make_shared<ContactFetcherPBX>();
+    shared_ptr<ContactFetcherRepositoryImpl> contactRepoImpl = make_shared<ContactFetcherRepositoryImpl>(contactService);
+    shared_ptr<ContactListController> contactController = make_shared<ContactListController>(contactRepoImpl, callController);
+    ContactListModel* contactMenuModel = new ContactListModel(contactController);
+    shared_ptr<ContactListPresenter> contactMenuPresenter = make_shared<ContactListPresenter>(contactMenu, contactMenuModel);
+
 
     MainWindow w(authMenu, callMenu, contactMenu);
     w.show();

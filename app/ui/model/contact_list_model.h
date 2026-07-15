@@ -25,8 +25,10 @@ signals:
     void authError(const QString &message);
     void showContacts(QStringList contacts);
     void setStatus(const QString &message);
+    void callMenuRequested(const QString &number);
 
 private:
+    QString serverDomain;
     std::shared_ptr<ContactListController> contactController;
 };
 

@@ -14,6 +14,10 @@ ContactListModel::ContactListModel(std::shared_ptr<ContactListController> c, QOb
 
 void ContactListModel::onContactClicked(const QString &contact)
 {
+
+    QString number = QString("sip:%1@%2").arg(contact, serverDomain);
+    contactController->proccessSelectedNumber(number);
+    emit callMenuRequested(number);
 }
 
 void ContactListModel::onUpdateListRequested()
@@ -22,6 +26,8 @@ void ContactListModel::onUpdateListRequested()
 
 void ContactListModel::onAuthConfigReceived(const QString &clientId, const QString &clientSecret, const QString &server)
 {
+    serverDomain = server;
+    serverDomain.replace("http://", "");
     contactController->updateContactList(clientId, clientSecret, server);
 }
 

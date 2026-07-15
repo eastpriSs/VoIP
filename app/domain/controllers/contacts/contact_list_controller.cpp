@@ -2,8 +2,10 @@
 #include "pbx_auth_credits.h"
 #include <stdexcept>
 
-ContactListController::ContactListController(std::shared_ptr<IContactFetcherRepository> repo, QObject *parent)
-    : QObject{parent}, repo(repo)
+ContactListController::ContactListController(std::shared_ptr<IContactFetcherRepository> repo,
+                                             std::shared_ptr<CallController> callController,
+                                             QObject *parent)
+    : QObject{parent}, repo(repo), callController(callController)
 {
     connect(repo.get(), &IContactFetcherRepository::replyRecieved, this, &ContactListController::onReplyRecieved);
     connect(repo.get(), &IContactFetcherRepository::stateChanged, this, &ContactListController::onStateChanged);
@@ -12,7 +14,8 @@ ContactListController::ContactListController(std::shared_ptr<IContactFetcherRepo
 
 void ContactListController::proccessSelectedNumber(const QString &number)
 {
-    // осуществляется звонок
+    if (callController)
+        callController->callNumber(number);
 }
 
 void ContactListController::updateContactList(const QString &clientId, const QString &clientSecret, const QString &server)

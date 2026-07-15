@@ -29,6 +29,9 @@ public slots:
     void on_contactsButton_clicked();
     void on_numberButton_clicked();
 
+private slots:
+    void onCallMenuRequested(const QString& number);
+
 private:
     AuthMenu* authMenu;
     ContactList* contactList;
