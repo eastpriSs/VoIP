@@ -1,4 +1,9 @@
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 add_executable(${PROJECT_NAME}
 
@@ -54,9 +59,20 @@ add_executable(${PROJECT_NAME}
         domain/controllers/setting/setting_controller.h domain/controllers/setting/setting_controller.cpp
         domain/interfaces/setting_repository.h domain/interfaces/setting_repository.cpp
         domain/entities/pbx_auth_credits.h domain/entities/pbx_auth_credits.cpp
+        ui/view/recent_calls/recent_calls.h ui/view/recent_calls/recent_calls.cpp
+        ui/presenter/recent_call_presenter.h ui/presenter/recent_call_presenter.cpp
+        ui/model/recent_call_model.h ui/model/recent_call_model.cpp
+        domain/controllers/recent_calls/recent_call_controller.h domain/controllers/recent_calls/recent_call_controller.cpp
+        domain/interfaces/recent_call_repository.h domain/interfaces/recent_call_repository.cpp
+        domain/entities/recent_call.h
         )
 
 
+target_link_libraries(VoIP PRIVATE Qt6::Core)
+target_link_libraries(VoIP PRIVATE Qt6::Core)
+target_link_libraries(VoIP PRIVATE Qt6::Core)
+target_link_libraries(VoIP PRIVATE Qt6::Core)
+target_link_libraries(VoIP PRIVATE Qt6::Core)
 target_link_libraries(VoIP PRIVATE Qt6::Core)
 add_subdirectory(data)
 
@@ -72,10 +88,12 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/view/contact_list
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/view/setting
         ${CMAKE_CURRENT_SOURCE_DIR}/ui/view/call_menu
+        ${CMAKE_CURRENT_SOURCE_DIR}/ui/view/recent_calls
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/controllers/auth
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/controllers/calls
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/controllers/contacts
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/controllers/setting
+        ${CMAKE_CURRENT_SOURCE_DIR}/domain/controllers/recent_calls
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/interfaces
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/entities
         ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/auth/
