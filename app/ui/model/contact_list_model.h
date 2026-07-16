@@ -14,6 +14,7 @@ public:
 public slots:
     void onContactClicked(const QString& contact);
     void onAuthConfigReceived(const QString &clientId, const QString &clientSecret, const QString &server);
+    void onUpdateListRequested();
 
 private slots:
     void onPbxAuthError(const QString &message);
@@ -26,6 +27,7 @@ signals:
     void setStatus(const QString &message);
     void callMenuRequested(const QString &number);
     void hideStatus();
+    void showSettingsMenuRequested();
 
 private:
     QString serverDomain;

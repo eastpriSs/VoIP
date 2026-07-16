@@ -1,6 +1,9 @@
 #include "contact_list_model.h"
 #include <QDebug>
 
+#include "contact_list_model.h"
+#include <QDebug>
+
 ContactListModel::ContactListModel(std::shared_ptr<ContactListController> c, QObject *parent)
     : QObject{parent}, contactController(c)
 {
@@ -9,7 +12,13 @@ ContactListModel::ContactListModel(std::shared_ptr<ContactListController> c, QOb
             this, &ContactListModel::onExtensionsRecieved);
     connect(contactController.get(), &ContactListController::requestStateChanged,
             this, &ContactListModel::onRequestStateChanged);
+    connect(contactController.get(), &ContactListController::settingsRequired,
+            this, &ContactListModel::showSettingsMenuRequested);
+}
 
+void ContactListModel::onUpdateListRequested()
+{
+    contactController->tryUpdateFromSettings();
 }
 
 void ContactListModel::onContactClicked(const QString &contact)

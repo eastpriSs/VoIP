@@ -4,6 +4,8 @@
 #include <QListWidget>
 #include <QDialog>
 #include <QLabel>
+#include <memory>
+#include "setting_menu.h"
 
 class ContactList : public QListWidget
 {
@@ -16,6 +18,9 @@ public:
     void setContacts(const QStringList &contacts);
     void clearList();
     void updateList();
+
+    // Метод для передачи SettingMenu
+    void setSettingMenu(std::shared_ptr<SettingMenu> menu);
 
 signals:
     void itemClicked(QListWidgetItem *item);
@@ -30,14 +35,19 @@ public slots:
     void showContacts(QStringList contacts);
     void setStatusBarText(const QString &text);
     void callMenu(const QString &contact);
+    void authMenuRequested();
     void onHideStatus();
 
 private slots:
     void onContactClicked(QListWidgetItem* contact);
+    void onSettingsSubmitted(const QString &clientId, const QString &clientSecret, const QString &httpServer);
 
 private:
     QDialog *statusDialog = nullptr;
     QLabel *statusLabel = nullptr;
+
+    std::shared_ptr<SettingMenu> settingMenu;
+
     static constexpr int WEIGHT_STATUS_LABEL = 300;
     static constexpr int HEIGHT_STATUS_LABEL = 100;
 };

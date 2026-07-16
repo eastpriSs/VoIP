@@ -64,6 +64,7 @@ add_executable(${PROJECT_NAME}
         ui/model/setting_menu_model.h ui/model/setting_menu_model.cpp
         domain/controllers/setting/setting_controller.h domain/controllers/setting/setting_controller.cpp
         domain/interfaces/setting_repository.h domain/interfaces/setting_repository.cpp
+        domain/interfaces/call_initiator.h domain/interfaces/call_initiator.cpp
         )
 
 

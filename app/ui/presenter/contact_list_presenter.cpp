@@ -5,6 +5,8 @@ ContactListPresenter::ContactListPresenter(ContactList *v, ContactListModel *m, 
 {
     connect(view, &ContactList::contactChoose, model, &ContactListModel::onContactClicked);
     connect(view, &ContactList::authConfigEntered, model, &ContactListModel::onAuthConfigReceived);
+    connect(view, &ContactList::updateListRequested, model, &ContactListModel::onUpdateListRequested);
+    connect(model, &ContactListModel::showSettingsMenuRequested, view, &ContactList::authMenuRequested);
     connect(model, &ContactListModel::authError, view, &ContactList::showError);
     connect(model, &ContactListModel::showContacts, view, &ContactList::showContacts);
     connect(model, &ContactListModel::setStatus, view, &ContactList::setStatusBarText);

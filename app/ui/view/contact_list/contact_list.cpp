@@ -1,4 +1,5 @@
 #include "contact_list.h"
+#include "setting_menu.h"
 #include <QDialog>
 #include <QFormLayout>
 #include <QLineEdit>
@@ -13,6 +14,16 @@ ContactList::ContactList(QWidget *parent)
     statusLabel(nullptr)
 {
     connect(this, &QListWidget::itemDoubleClicked, this, &ContactList::onContactClicked);
+}
+
+void ContactList::setSettingMenu(std::shared_ptr<SettingMenu> menu)
+{
+    settingMenu = menu;
+}
+
+void ContactList::onSettingsSubmitted(const QString &clientId, const QString &clientSecret, const QString &httpServer)
+{
+    emit authConfigEntered(clientId, clientSecret, httpServer);
 }
 
 void ContactList::uploadList(const QStringList& contacts)
@@ -50,52 +61,7 @@ void ContactList::onContactClicked(QListWidgetItem *contact)
 
 void ContactList::updateList()
 {
-    QDialog dialog(this->window());
-    dialog.setWindowTitle(tr("Настройки подключения PBX"));
-
-    QFormLayout form(&dialog);
-
-    QLineEdit clientIdEdit(&dialog);
-
-    QLineEdit clientSecretEdit(&dialog);
-    clientSecretEdit.setEchoMode(QLineEdit::Password);
-
-    QLineEdit serverEdit(&dialog);
-    serverEdit.setPlaceholderText("http://example.com");
-
-    form.addRow(tr("Client ID:"), &clientIdEdit);
-    form.addRow(tr("Client Secret:"), &clientSecretEdit);
-    form.addRow(tr("Server HTTPS:"), &serverEdit);
-
-    QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, &dialog);
-    form.addRow(&buttonBox);
-
-    connect(&buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
-    connect(&buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
-
-    if (dialog.exec() == QDialog::Accepted) {
-        QString clientId = clientIdEdit.text().trimmed();
-        QString clientSecret = clientSecretEdit.text().trimmed();
-        QString server = serverEdit.text().trimmed();
-
-        if (!statusDialog) {
-            statusDialog = new QDialog(this->window());
-            statusDialog->setWindowTitle(tr("Статус авторизации"));
-            statusDialog->resize(HEIGHT_STATUS_LABEL, WEIGHT_STATUS_LABEL);
-
-            QVBoxLayout *layout = new QVBoxLayout(statusDialog);
-            statusLabel = new QLabel(tr("Инициализация..."), statusDialog);
-
-            statusLabel->setAlignment(Qt::AlignCenter);
-
-            layout->addWidget(statusLabel);
-        }
-
-        statusDialog->show();
-        statusLabel->setText(tr("Подключение к серверу..."));
-
-        emit authConfigEntered(clientId, clientSecret, server);
-    }
+    emit updateListRequested();
 }
 
 void ContactList::showError(const QString &message)
@@ -112,7 +78,6 @@ void ContactList::setStatusBarText(const QString &text)
 {
     if (statusDialog && statusLabel) {
         statusLabel->setText(text);
-
         if (!statusDialog->isVisible()) {
             statusDialog->show();
         }
@@ -122,6 +87,15 @@ void ContactList::setStatusBarText(const QString &text)
 void ContactList::callMenu(const QString &contact)
 {
     emit callMenuShowRequested(contact);
+}
+
+void ContactList::authMenuRequested()
+{
+    if (settingMenu) {
+        settingMenu->exec();
+    } else {
+        qInfo() << "where setting menu??";
+    }
 }
 
 void ContactList::onHideStatus()

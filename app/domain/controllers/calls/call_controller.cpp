@@ -2,14 +2,18 @@
 #include "call_session.h"
 #include <QDebug>
 
+#include "call_controller.h"
+#include "call_session.h"
+#include <QDebug>
+
 CallController::CallController(std::shared_ptr<ICallRepository> rep, QObject *parent)
-    : repo(rep), QObject{parent}
+    : QObject{parent}, repo(rep)
 {
     connect(repo.get(), &ICallRepository::incomingCall, this, &CallController::onIncomingCall);
     connect(repo.get(), &ICallRepository::callStateChanged, this, &CallController::onCallStateChanged);
 }
 
-void CallController::callNumber(QString number)
+void CallController::initiateCall(const QString& number)
 {
     try {
         CallSession callSession = CallSession(SipUri(number));
