@@ -20,6 +20,7 @@
 #include "setting_controller.h"
 #include "setting_repository_impl.h"
 
+#include "setting_saver.h"
 
 template<
     typename Menu,
@@ -76,6 +77,9 @@ int main(int argc, char *argv[])
 
     MainWindow w(authMenu, callMenu, settingMenu.get());
 
+    SettingSaver saver;
+    w.setRecentCalls(saver.getRecentCalls());
+
     // реализация примитивного списка
     QObject::connect(callController.get(), &CallController::incomingCall,
          [&](QString  dist)
@@ -95,6 +99,8 @@ int main(int argc, char *argv[])
 
 
     w.show();
+    int res = a.exec();
+    saver.saveRecentCalls(w.getRecentCalls());
 
-    return a.exec();
+    return res;
 }

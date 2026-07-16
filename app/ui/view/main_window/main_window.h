@@ -21,7 +21,8 @@ public:
     ~MainWindow();
 
     void appendRecentCall(QString record);
-
+    void setRecentCalls(const QStringList& calls);
+    QStringList getRecentCalls() const;
 signals:
     void authActionTriggered();
 

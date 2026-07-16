@@ -17,6 +17,22 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::setRecentCalls(const QStringList& calls)
+{
+    ui->recentList->clear();
+    ui->recentList->addItems(calls);
+}
+
+QStringList MainWindow::getRecentCalls() const
+{
+    QStringList calls;
+    for (int i = 0; i < ui->recentList->count(); ++i) {
+        calls.append(ui->recentList->item(i)->text());
+    }
+    return calls;
+}
+
 void MainWindow::appendRecentCall(QString record)
 {
     ui->recentList->addItem(record);
