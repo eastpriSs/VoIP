@@ -1,5 +1,5 @@
 #include "recent_call_presenter.h"
 
-RecentCallPresenter::RecentCallPresenter(QObject *parent)
-    : QObject{parent}
-{}
+// RecentCallPresenter::RecentCallPresenter(QObject *parent)
+//     : QObject{parent}
+// {}

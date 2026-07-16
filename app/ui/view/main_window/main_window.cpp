@@ -17,6 +17,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::appendRecentCall(QString record)
+{
+    ui->recentList->addItem(record);
+}
+
 void MainWindow::on_authAction_triggered()
 {
     authMenu->exec();

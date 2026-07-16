@@ -25,6 +25,7 @@ signals:
     void callNumberSuccess();
     void incomingCall(QString remoteUri);
     void validationDataCompleted(bool success = true);
+    void outComingCall(QString remoteUri);
 
     void callingCall();
     void incomingCallState();

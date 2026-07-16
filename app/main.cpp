@@ -75,6 +75,25 @@ int main(int argc, char *argv[])
     shared_ptr<SettingMenuPresenter> settingMenuPresenter = make_shared<SettingMenuPresenter>(settingMenu, settingMenuModel);
 
     MainWindow w(authMenu, callMenu, settingMenu.get());
+
+    // реализация примитивного списка
+    QObject::connect(callController.get(), &CallController::incomingCall,
+         [&](QString  dist)
+         {
+            QString record = QString("%1 | %2 ").arg(dist, "Входящий");
+            w.appendRecentCall(record);
+         }
+    );
+
+    QObject::connect(callController.get(), &CallController::outComingCall,
+         [&](QString  dist)
+         {
+             QString record = QString("%1 | %2 ").arg(dist, "Исходящий");
+             w.appendRecentCall(record);
+         }
+    );
+
+
     w.show();
 
     return a.exec();

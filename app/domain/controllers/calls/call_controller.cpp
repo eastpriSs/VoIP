@@ -16,6 +16,7 @@ void CallController::callNumber(QString number)
         emit validationDataCompleted();
         repo->callSipAccount(callSession.getDist());
         emit callNumberSuccess();
+        emit outComingCall(number);
     } catch (const std::invalid_argument& e) {
         emit validationDataCompleted(false);
     } catch (const std::runtime_error& e) {

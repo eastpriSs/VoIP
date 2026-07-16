@@ -20,6 +20,8 @@ public:
     MainWindow(AuthMenu* authMenu, CallMenu* callMenu, SettingMenu* settMenu, QWidget *parent = nullptr);
     ~MainWindow();
 
+    void appendRecentCall(QString record);
+
 signals:
     void authActionTriggered();
 
