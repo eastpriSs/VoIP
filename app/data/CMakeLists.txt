@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.28)
 
 project(siplib VERSION 0.1 LANGUAGES CXX)
 
+find_package(Qt6 REQUIRED COMPONENTS Core)
+
 add_library(${PROJECT_NAME} STATIC
         services/SIP/module_sip.cpp
         services/SIP/module_sip.h
@@ -11,8 +13,13 @@ add_library(${PROJECT_NAME} STATIC
         services/SIP/returning_states.h
         services/SIP/my_call.h services/SIP/my_call.cpp
         services/SIP/my_account.h services/SIP/my_account.cpp
+        services/crypto/crypto.h services/crypto/crypto.cpp
+        services/setting_saver/setting_saver.h services/setting_saver/setting_saver.cpp
+        repositories/setting/setting_repository_impl.h repositories/setting/setting_repository_impl.cpp
+
 )
 
+target_link_libraries(siplib PRIVATE Qt6::Core)
 set(PJPROJECT_SOURCE_DIR "${CMAKE_SOURCE_DIR}/utils/pjproject")
 set(PJPROJECT_BINARY_DIR "${CMAKE_BINARY_DIR}/utils/pjproject")
 
@@ -23,6 +30,8 @@ target_include_directories(${PROJECT_NAME}
        ${CMAKE_CURRENT_SOURCE_DIR}/../common/errors/
        ${CMAKE_CURRENT_SOURCE_DIR}/../common/states/
        ${CMAKE_CURRENT_SOURCE_DIR}/services/SIP
+       ${CMAKE_CURRENT_SOURCE_DIR}/services/crypto
+       ${CMAKE_CURRENT_SOURCE_DIR}/services/setting_saver
 
         ${PJPROJECT_BINARY_DIR}/pjsip/include
         ${PJPROJECT_BINARY_DIR}/pjmedia/include
