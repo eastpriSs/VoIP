@@ -21,6 +21,7 @@ add_library(${PROJECT_NAME} STATIC
 
 target_link_libraries(siplib PRIVATE Qt6::Core)
 set(PJPROJECT_SOURCE_DIR "${CMAKE_SOURCE_DIR}/utils/pjproject")
+set(PJPROJECT_BINARY_DIR "${CMAKE_BINARY_DIR}/utils/pjproject")
 
 target_include_directories(${PROJECT_NAME}
    PUBLIC
