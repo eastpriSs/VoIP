@@ -1,4 +1,3 @@
-// setting_controller.cpp
 #include "setting_controller.h"
 #include "pbx_auth_credits.h"
 #include <stdexcept>

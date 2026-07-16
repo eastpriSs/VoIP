@@ -33,6 +33,7 @@ void ContactListModel::onAuthConfigReceived(const QString &clientId, const QStri
 {
     serverDomain = server;
     serverDomain.replace("http://", "");
+    serverDomain.replace("https://", "");
     contactController->updateContactList(clientId, clientSecret, server);
 }
 

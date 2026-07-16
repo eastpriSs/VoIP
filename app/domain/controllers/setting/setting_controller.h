@@ -1,4 +1,3 @@
-// setting_controller.h
 #ifndef SETTING_CONTROLLER_H
 #define SETTING_CONTROLLER_H
 #include <QObject>

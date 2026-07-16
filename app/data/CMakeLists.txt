@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(siplib VERSION 0.1 LANGUAGES CXX)
+project(api VERSION 0.1 LANGUAGES CXX)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Network)
 
@@ -19,10 +19,11 @@ add_library(${PROJECT_NAME} STATIC
         services/crypto/crypto.h services/crypto/crypto.cpp
         services/setting_saver/setting_saver.h services/setting_saver/setting_saver.cpp
         repositories/setting/setting_repository_impl.h repositories/setting/setting_repository_impl.cpp
+        services/PBX/pbx_api_constants.h
 
 )
 
-target_link_libraries(siplib PRIVATE Qt6::Core)
+target_link_libraries(api PRIVATE Qt6::Core)
 
 set(PJPROJECT_SOURCE_DIR "${CMAKE_SOURCE_DIR}/utils/pjproject")
 set(PJPROJECT_BINARY_DIR "${CMAKE_BINARY_DIR}/utils/pjproject")
