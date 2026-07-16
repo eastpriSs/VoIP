@@ -2,6 +2,7 @@
 #define CONTACT_LIST_PRESENTER_H
 
 #include <QObject>
+#include <memory>
 #include "contact_list.h"
 #include "contact_list_model.h"
 
@@ -9,13 +10,13 @@ class ContactListPresenter : public QObject
 {
     Q_OBJECT
 public:
-    ContactListPresenter(ContactList* v, ContactListModel* m,  QObject *parent = nullptr);
+    ContactListPresenter(ContactList* v, std::shared_ptr<ContactListModel> m, QObject *parent = nullptr);
 
 signals:
 
 private:
     ContactList* view;
-    ContactListModel* model;
+    std::shared_ptr<ContactListModel> model;
 };
 
 #endif // CONTACT_LIST_PRESENTER_H

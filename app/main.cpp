@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
         settingRepoImpl
         );
 
-    ContactListModel* contactMenuModel = new ContactListModel(contactController);
+    shared_ptr<ContactListModel> contactMenuModel = make_shared<ContactListModel>(contactController);
     shared_ptr<ContactListPresenter> contactMenuPresenter = make_shared<ContactListPresenter>(contactMenu, contactMenuModel);
     shared_ptr<SettingMenu> settingMenu = make_shared<SettingMenu>();
     shared_ptr<SettingController> settingController = make_shared<SettingController>(settingRepoImpl);
