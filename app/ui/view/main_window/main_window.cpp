@@ -2,12 +2,14 @@
 #include "./ui_mainwindow.h"
 #include <QDebug>
 
-MainWindow::MainWindow(AuthMenu* authMenu, CallMenu* callMenu, ContactList* conMenu, QWidget *parent)
+MainWindow::MainWindow(AuthMenu* authMenu, CallMenu* callMenu,
+                       ContactList* conMenu, SettingMenu* settMenu, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , authMenu(authMenu)
     , contactList(conMenu)
     , callMenu(callMenu)
+    , settMenu(settMenu)
 {
     ui->setupUi(this);
     ui->verticalLayout->insertWidget(2, contactList);
@@ -38,5 +40,10 @@ void MainWindow::onCallMenuRequested(const QString &number)
 void MainWindow::on_numberButton_clicked()
 {
     callMenu->exec();
+}
+
+void MainWindow::on_clientAction_triggered()
+{
+    settMenu->exec();
 }
 

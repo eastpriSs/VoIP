@@ -5,6 +5,7 @@
 #include "auth_menu.h"
 #include "contact_list.h"
 #include "call_menu.h"
+#include "setting_menu.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -18,7 +19,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(AuthMenu* authMenu, CallMenu* callMenu, ContactList* conMenu, QWidget *parent = nullptr);
+    MainWindow(AuthMenu* authMenu, CallMenu* callMenu,
+               ContactList* conMenu, SettingMenu* settMenu, QWidget *parent = nullptr);
     ~MainWindow();
 
 signals:
@@ -31,11 +33,13 @@ public slots:
 
 private slots:
     void onCallMenuRequested(const QString& number);
+    void on_clientAction_triggered();
 
 private:
     AuthMenu* authMenu;
     ContactList* contactList;
     CallMenu*      callMenu;
+    SettingMenu*   settMenu;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
