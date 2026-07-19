@@ -30,6 +30,8 @@ signals:
     void callNumberSuccess();
     void incomingCall(const QString& remoteUri);
     void validationDataCompleted(bool success = true);
+    void outComingCall(QString remoteUri);
+
     void callingCall();
     void incomingCallState();
     void earlyMediaCall();

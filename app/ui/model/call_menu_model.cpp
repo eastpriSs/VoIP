@@ -29,6 +29,7 @@ void CallMenuModel::onCallingCall()
 void CallMenuModel::onIncomingCall(QString remoteUri)
 {
     emit incomingCallMenuRequested(remoteUri);
+
 }
 
 void CallMenuModel::onEarlyMediaCall()
@@ -50,6 +51,7 @@ void CallMenuModel::onDisconnectCall(const QString &reason)
 {
     emit rejectMenuRequested();
     emit statusBarTextRequest("Пользователь сбросил вызов.");
+
 }
 
 

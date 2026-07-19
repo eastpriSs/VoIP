@@ -23,6 +23,9 @@ public:
                ContactList* conMenu, SettingMenu* settMenu, QWidget *parent = nullptr);
     ~MainWindow();
 
+    void appendRecentCall(QString record);
+    void setRecentCalls(const QStringList& calls);
+    QStringList getRecentCalls() const;
 signals:
     void authActionTriggered();
 

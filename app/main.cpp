@@ -28,6 +28,7 @@
 #include "setting_controller.h"
 #include "setting_repository_impl.h"
 
+#include "setting_saver.h"
 
 int main(int argc, char *argv[])
 {
@@ -67,10 +68,35 @@ int main(int argc, char *argv[])
     shared_ptr<SettingMenuModel> settingMenuModel = make_shared<SettingMenuModel>(settingController);
     shared_ptr<SettingMenuPresenter> settingMenuPresenter = make_shared<SettingMenuPresenter>(settingMenu, settingMenuModel);
 
+    MainWindow w(authMenu, callMenu, settingMenu.get());
+
+    SettingSaver saver;
+    w.setRecentCalls(saver.getRecentCalls());
+
+    // реализация примитивного списка
+    QObject::connect(callController.get(), &CallController::incomingCall,
+         [&](QString  dist)
+         {
+            QString record = QString("%1 | %2 ").arg(dist, "Входящий");
+            w.appendRecentCall(record);
+         }
+    );
+
+    QObject::connect(callController.get(), &CallController::outComingCall,
+         [&](QString  dist)
+         {
+             QString record = QString("%1 | %2 ").arg(dist, "Исходящий");
+             w.appendRecentCall(record);
+         }
+    );
+
+
     contactMenu->setSettingMenu(settingMenu);
 
     MainWindow w(authMenu, callMenu, contactMenu, settingMenu.get());
     w.show();
+    int res = a.exec();
+    saver.saveRecentCalls(w.getRecentCalls());
 
-    return a.exec();
+    return res;
 }
