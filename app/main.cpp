@@ -68,9 +68,8 @@ int main(int argc, char *argv[])
     shared_ptr<SettingMenuModel> settingMenuModel = make_shared<SettingMenuModel>(settingController);
     shared_ptr<SettingMenuPresenter> settingMenuPresenter = make_shared<SettingMenuPresenter>(settingMenu, settingMenuModel);
 
-    MainWindow w(authMenu, callMenu, settingMenu.get());
-
     SettingSaver saver;
+    MainWindow w(authMenu, callMenu, contactMenu, settingMenu.get());
     w.setRecentCalls(saver.getRecentCalls());
 
     // реализация примитивного списка
@@ -93,7 +92,6 @@ int main(int argc, char *argv[])
 
     contactMenu->setSettingMenu(settingMenu);
 
-    MainWindow w(authMenu, callMenu, contactMenu, settingMenu.get());
     w.show();
     int res = a.exec();
     saver.saveRecentCalls(w.getRecentCalls());
