@@ -11,6 +11,8 @@ public:
     QString clientSecret() const;
     QString server() const;
 
+    bool isEmpty() const;
+
 private:
     QString clID;
     QString clSecret;

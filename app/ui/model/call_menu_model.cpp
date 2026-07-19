@@ -76,7 +76,7 @@ void CallMenuModel::onLayoutSwitchRequested(int layoutId) {
 
 void CallMenuModel::onConfirmPressed(const QString& number)
 {
-    callController->callNumber(number);
+    callController->initiateCall(number);
 }
 
 void CallMenuModel::onIncomingCallAccept()

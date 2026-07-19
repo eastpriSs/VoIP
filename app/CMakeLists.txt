@@ -42,18 +42,29 @@ add_executable(${PROJECT_NAME}
         domain/entities/auth_credits.cpp
         domain/interfaces/auth_repository.h domain/interfaces/auth_repository.cpp
         domain/controllers/auth/auth_controller.h domain/controllers/auth/auth_controller.cpp
+
+        common/errors/auth_error.h common/errors/auth_error.cpp
+        ui/view/contact_list/contact_list.h ui/view/contact_list/contact_list.cpp
+        ui/presenter/contact_list_presenter.h ui/presenter/contact_list_presenter.cpp
+        ui/model/contact_list_model.h ui/model/contact_list_model.cpp
+        domain/controllers/contacts/contact_list_controller.h domain/controllers/contacts/contact_list_controller.cpp
+        domain/interfaces/contact_fetcher_repository.h domain/interfaces/contact_fetcher_repository.cpp
+        domain/entities/pbx_auth_credits.h domain/entities/pbx_auth_credits.cpp
+
         domain/entities/sip_uri.h
         domain/entities/sip_uri.cpp
         domain/entities/call_session.h
         domain/entities/call_session.cpp
         domain/controllers/calls/call_controller.h domain/controllers/calls/call_controller.cpp
         domain/interfaces/call_repository.h domain/interfaces/call_repository.cpp
+
+        common/states/request_states.h
         ui/view/setting/setting_menu.h ui/view/setting/setting_menu.cpp
         ui/presenter/setting_menu_presenter.h ui/presenter/setting_menu_presenter.cpp
         ui/model/setting_menu_model.h ui/model/setting_menu_model.cpp
         domain/controllers/setting/setting_controller.h domain/controllers/setting/setting_controller.cpp
         domain/interfaces/setting_repository.h domain/interfaces/setting_repository.cpp
-        domain/entities/pbx_auth_credits.h domain/entities/pbx_auth_credits.cpp
+        domain/interfaces/call_initiator.h domain/interfaces/call_initiator.cpp
         )
 
 
@@ -79,7 +90,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/interfaces
         ${CMAKE_CURRENT_SOURCE_DIR}/domain/entities
         ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/auth/
-        ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/auth/
+        ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/contacts/
         ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/calls/
         ${CMAKE_CURRENT_SOURCE_DIR}/data/repositories/setting/
 
@@ -88,7 +99,7 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Core
     Qt6::Widgets
-    siplib
+    api
     )
 
 

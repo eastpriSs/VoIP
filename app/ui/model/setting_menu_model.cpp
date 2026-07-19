@@ -1,14 +1,16 @@
-#include <QDebug>
 #include "setting_menu_model.h"
+#include <QDebug>
 
 SettingMenuModel::SettingMenuModel(std::shared_ptr<SettingController> controller, QObject *parent)
     : QObject{parent}, controller(controller)
-{}
+{
+    connect(controller.get(), &SettingController::settingsSaved, this, &SettingMenuModel::settingsSaved);
+    connect(controller.get(), &SettingController::saveError, this, &SettingMenuModel::saveError);
+}
 
-void SettingMenuModel::saveSettings(const QString &clientId, const QString &clientSecret, const QString &httpServer)
+void SettingMenuModel::requestSaveSettings(const QString &clientId, const QString &clientSecret, const QString &httpServer)
 {
     controller->saveSettings(clientId, clientSecret, httpServer);
-    emit settingsSaved();
 }
 
 void SettingMenuModel::getSettings()

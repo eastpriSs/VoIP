@@ -1,16 +1,16 @@
+// setting_menu.cpp
 #include "setting_menu.h"
 #include <QFormLayout>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 SettingMenu::SettingMenu(QWidget *parent) : QDialog(parent)
 {
     clientIdEdit = new QLineEdit(this);
-
     clientSecretEdit = new QLineEdit(this);
     clientSecretEdit->setEchoMode(QLineEdit::Password);
-
     httpServerEdit = new QLineEdit(this);
-    httpServerEdit->setPlaceholderText("http://");
+    httpServerEdit->setPlaceholderText("https://");
 
     submitButton = new QPushButton(tr("Сохранить"), this);
 
@@ -28,11 +28,9 @@ SettingMenu::SettingMenu(QWidget *parent) : QDialog(parent)
 
 void SettingMenu::onSubmitClicked()
 {
-    emit settingsSubmitted(clientIdEdit->text(),
-                           clientSecretEdit->text(),
-                           httpServerEdit->text());
-
-    accept();
+    emit submitRequested(clientIdEdit->text(),
+                         clientSecretEdit->text(),
+                         httpServerEdit->text());
 }
 
 void SettingMenu::setInitialSettings(const QString &clientId, const QString &clientSecret, const QString &httpServer)
@@ -40,4 +38,14 @@ void SettingMenu::setInitialSettings(const QString &clientId, const QString &cli
     clientIdEdit->setText(clientId);
     clientSecretEdit->setText(clientSecret);
     httpServerEdit->setText(httpServer);
+}
+
+void SettingMenu::showValidationError(const QString &message)
+{
+    QMessageBox::critical(this, tr("Ошибка ввода"), message);
+}
+
+void SettingMenu::closeOnSuccess()
+{
+    this->accept();
 }
