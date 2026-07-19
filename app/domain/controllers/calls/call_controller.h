@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <memory>
 #include "call_repository.h"
 #include "call_state.h"
 #include "call_initiator.h"
@@ -13,6 +14,7 @@ class CallController : public QObject, public ICallInitiator
 public:
     explicit CallController(std::shared_ptr<ICallRepository> rep, QObject *parent = nullptr);
 
+    void initiateCall(const QString& number, const QString& serverDomain) override;
     void initiateCall(const QString& number) override;
 
     void hangUpCall();
@@ -24,9 +26,9 @@ public:
     void unMute();
 
 signals:
-    void callNumberFailed(QString error);
+    void callNumberFailed(const QString& error);
     void callNumberSuccess();
-    void incomingCall(QString remoteUri);
+    void incomingCall(const QString& remoteUri);
     void validationDataCompleted(bool success = true);
     void callingCall();
     void incomingCallState();

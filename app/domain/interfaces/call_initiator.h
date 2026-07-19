@@ -7,6 +7,7 @@
 class ICallInitiator {
 public:
     virtual ~ICallInitiator() = default;
+    virtual void initiateCall(const QString& number, const QString& serverDomain) = 0;
     virtual void initiateCall(const QString& number) = 0;
 };
 

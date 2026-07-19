@@ -1,8 +1,7 @@
 #include "contact_list_model.h"
+#include "regex_patterns.h"
 #include <QDebug>
 
-#include "contact_list_model.h"
-#include <QDebug>
 
 ContactListModel::ContactListModel(std::shared_ptr<ContactListController> c, QObject *parent)
     : QObject{parent}, contactController(c)
@@ -23,17 +22,14 @@ void ContactListModel::onUpdateListRequested()
 
 void ContactListModel::onContactClicked(const QString &contact)
 {
-
-    QString number = QString("sip:%1@%2").arg(contact, serverDomain);
-    contactController->proccessSelectedNumber(number);
-    emit callMenuRequested(number);
+    contactController->proccessSelectedNumber(contact, serverDomain);
+    emit callMenuRequested(contact);
 }
 
 void ContactListModel::onAuthConfigReceived(const QString &clientId, const QString &clientSecret, const QString &server)
 {
     serverDomain = server;
-    serverDomain.replace("http://", "");
-    serverDomain.replace("https://", "");
+    serverDomain.remove(RegexPatterns::httpsHttpsRegex);
     contactController->updateContactList(clientId, clientSecret, server);
 }
 

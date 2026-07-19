@@ -16,7 +16,7 @@ public:
                                    std::shared_ptr<ICallInitiator> callInitiator = nullptr,                                    std::shared_ptr<ISettingRepository> settingRepo = nullptr,
                                    QObject *parent = nullptr);
 
-    void proccessSelectedNumber(const QString& number);
+    void proccessSelectedNumber(const QString& number, const QString& server);
     void updateContactList(const QString &clientId, const QString &clientSecret, const QString &server);
     void tryUpdateFromSettings();
 

@@ -13,10 +13,10 @@ ContactListController::ContactListController(std::shared_ptr<IContactFetcherRepo
     connect(repo.get(), &IContactFetcherRepository::stateChanged, this, &ContactListController::onStateChanged);
 }
 
-void ContactListController::proccessSelectedNumber(const QString &number)
+void ContactListController::proccessSelectedNumber(const QString &number, const QString& server)
 {
     if (callInitiator) {
-        callInitiator->initiateCall(number);
+        callInitiator->initiateCall(number, server);
     }
 }
 
