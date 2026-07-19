@@ -1,6 +1,5 @@
 #ifndef SETTING_CONTROLLER_H
 #define SETTING_CONTROLLER_H
-
 #include <QObject>
 #include <memory>
 #include <QString>
@@ -18,6 +17,7 @@ private:
     std::shared_ptr<ISettingRepository> repo;
 
 signals:
+    void settingsSaved();
+    void saveError(const QString &message);
 };
-
 #endif // SETTING_CONTROLLER_H

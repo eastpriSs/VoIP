@@ -8,6 +8,14 @@
 #include "auth_menu.h"
 #include "auth_menu_model.h"
 
+
+#include "contact_list_model.h"
+#include "contact_list_presenter.h"
+#include "contact_list.h"
+#include "contact_list_controller.h"
+#include "contact_fetcher_pbx.h"
+#include "contact_fetcher_repository_impl.h"
+
 #include "call_menu.h"
 #include "call_menu_presenter.h"
 #include "call_menu_model.h"
@@ -22,38 +30,13 @@
 
 #include "setting_saver.h"
 
-template<
-    typename Menu,
-    typename Presenter,
-    typename Model,
-    typename Controller,
-    typename Repo,
-    typename Service
-    >
-// todo добавить концепты на конструкторы как минимум
-[[nodiscard]] Menu* makeStack(Service* service)
-{
-    using std::shared_ptr;
-
-    Menu* menu = new Menu();
-    shared_ptr<Repo> repo = std::make_shared<Repo>(service);
-    shared_ptr<Controller> contorller = std::make_shared<Controller>(repo);
-    Model* model = new Model(contorller);
-    shared_ptr<Presenter> presenter = std::make_shared<Presenter>(menu, model);
-
-    return menu;
-}
-
-
 int main(int argc, char *argv[])
 {
     using std::shared_ptr;
     using std::make_shared;
-
     QApplication a(argc, argv);
 
     shared_ptr<sip::ModuleSIP> sipService = make_shared<sip::ModuleSIP>();
-
 
     AuthMenu* authMenu = new AuthMenu();
     shared_ptr<AuthRepositoryImpl> authRepoImpl = make_shared<AuthRepositoryImpl>(sipService);
@@ -61,16 +44,26 @@ int main(int argc, char *argv[])
     AuthMenuModel* authMenuModel = new AuthMenuModel(authController);
     shared_ptr<AuthMenuPresenter> authMenuPresenter = make_shared<AuthMenuPresenter>(authMenu, authMenuModel);
 
-
     CallMenu* callMenu = new CallMenu();
     shared_ptr<CallRepositoryImpl> callRepoImpl = make_shared<CallRepositoryImpl>(sipService);
     shared_ptr<CallController> callController = make_shared<CallController>(callRepoImpl);
     CallMenuModel* callMenuModel = new CallMenuModel(callController);
     std::shared_ptr<CallMenuPresenter> callMenuPresenter = make_shared<CallMenuPresenter>(callMenu, callMenuModel);
 
+    ContactList* contactMenu = new ContactList();
+    shared_ptr<ContactFetcherPBX> contactService = make_shared<ContactFetcherPBX>();
+    shared_ptr<ContactFetcherRepositoryImpl> contactRepoImpl = make_shared<ContactFetcherRepositoryImpl>(contactService);
 
-    shared_ptr<SettingMenu> settingMenu = make_shared<SettingMenu>(new SettingMenu());
     shared_ptr<SettingRepositoryImpl> settingRepoImpl = make_shared<SettingRepositoryImpl>();
+    shared_ptr<ContactListController> contactController = make_shared<ContactListController>(
+        contactRepoImpl,
+        callController,
+        settingRepoImpl
+        );
+
+    shared_ptr<ContactListModel> contactMenuModel = make_shared<ContactListModel>(contactController);
+    shared_ptr<ContactListPresenter> contactMenuPresenter = make_shared<ContactListPresenter>(contactMenu, contactMenuModel);
+    shared_ptr<SettingMenu> settingMenu = make_shared<SettingMenu>();
     shared_ptr<SettingController> settingController = make_shared<SettingController>(settingRepoImpl);
     shared_ptr<SettingMenuModel> settingMenuModel = make_shared<SettingMenuModel>(settingController);
     shared_ptr<SettingMenuPresenter> settingMenuPresenter = make_shared<SettingMenuPresenter>(settingMenu, settingMenuModel);
@@ -98,6 +91,9 @@ int main(int argc, char *argv[])
     );
 
 
+    contactMenu->setSettingMenu(settingMenu);
+
+    MainWindow w(authMenu, callMenu, contactMenu, settingMenu.get());
     w.show();
     int res = a.exec();
     saver.saveRecentCalls(w.getRecentCalls());

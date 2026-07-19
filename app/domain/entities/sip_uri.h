@@ -6,11 +6,14 @@
 class SipUri {
 public:
     explicit SipUri(const QString& uri);
+    SipUri(const QString& contact, const QString& serverDomain);
+
     QString toString() const;
     bool operator==(const SipUri& other) const;
 
 private:
-    QString uri;
     void validate() const;
+    QString uri;
 };
+
 #endif // SIP_URI_H
